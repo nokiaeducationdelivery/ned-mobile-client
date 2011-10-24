@@ -1,0 +1,26 @@
+<html>
+  <head>
+    <style type="text/css">
+body
+{
+background-color:#e1e1e1;
+}
+h1
+{
+color:#6225;
+text-align:left;
+}
+p
+{	
+color:#69b510;
+}
+</style>
+  </head> 
+  <body>
+   <p> This is login screen. Here you can login with your username and password.</p>
+	<h1>Remove user</h1> <p>Enter user login and password to remove all data of this user.</p>
+	<h1>Factory reset</h1> <p>Returns NED to initial state. All the data is deleted.<p>
+	<h1>Login</h1><p>Press to login with username and password.</p>
+	<h1></h1><p></p>
+  </body>
+</html>

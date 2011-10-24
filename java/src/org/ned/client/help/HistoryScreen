@@ -1,0 +1,25 @@
+<html>
+  <head>
+    <style type="text/css">
+body
+{
+background-color:#e1e1e1;
+}
+h1
+{
+color:#6225;
+text-align:left;
+}
+p
+{	
+color:#69b510;
+}
+</style>
+  </head> 
+  <body>
+   <p> This is history screen. It shows media files from older NED versions.</p>
+	<h1>Open</h1> <p>Opens and plays media.</p>
+	<h1>Delete</h1> <p>Delete this media file from hard memory.<p>
+	<h1></h1><p></p>
+  </body>
+</html>

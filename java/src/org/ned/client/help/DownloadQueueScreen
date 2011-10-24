@@ -1,0 +1,25 @@
+<html>
+  <head>
+    <style type="text/css">
+body
+{
+background-color:#e1e1e1;
+}
+h1
+{
+color:#6225;
+text-align:left;
+}
+p
+{	
+color:#69b510;
+}
+</style>
+  </head> 
+  <body>
+   <p> Here You can view all waiting downloads.</p>
+	<h1>Start/Stop</h1> Starts or stops download<p></p>
+	<h1>Remove</h1> <p>Removes this download from the queue. Also removes partially downloaded file if exists.<p>
+	<h1></h1><p></p>
+  </body>
+</html>

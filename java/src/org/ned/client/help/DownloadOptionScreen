@@ -1,0 +1,25 @@
+<html>
+  <head>
+    <style type="text/css">
+body
+{
+background-color:#e1e1e1;
+}
+h1
+{
+color:#6225;
+text-align:left;
+}
+p
+{	
+color:#69b510;
+}
+</style>
+  </head> 
+  <body>
+   <p> Select download mode.</p>
+	<h1>Manual</h1> <p>Manage downloads using Downloads screen. You chose when download starts. </p>
+	<h1>Auto</h1> <p>NED takes care for downloading files.<p>
+	<h1></h1><p></p>
+  </body>
+</html>

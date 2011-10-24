@@ -1,0 +1,25 @@
+<html>
+  <head>
+    <style type="text/css">
+body
+{
+background-color:#e1e1e1;
+}
+h1
+{
+color:#6225;
+text-align:left;
+}
+p
+{	
+color:#69b510;
+}
+</style>
+  </head> 
+  <body>
+   <p> This is server screen. Here You enter your NED server address. You do it only once.</p>
+	<h1>Then You press Check Server to proceed.</p>
+    <h1>For example: http://nokiacsr.com:8080</p>
+	<h1></h1><p></p>
+  </body>
+</html>

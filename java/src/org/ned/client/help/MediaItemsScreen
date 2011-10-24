@@ -1,0 +1,30 @@
+<html>
+  <head>
+    <style type="text/css">
+body
+{
+background-color:#e1e1e1;
+}
+h1
+{
+color:#6225;
+text-align:left;
+}
+p
+{	
+color:#69b510;
+}
+</style>
+  </head> 
+  <body>
+   <p> View with all media items in the category.</p>
+    <h1>Go to start</h1> <p>Return to main screen.</p>
+    <h1>Show details</h1> <p>Show additional description.</p>
+   	<h1>Show links</h1> <p>Shows internet links connected to this video.</p>
+	<h1>Download now</h1> <p>Start download item immediately.</p>
+	<h1>Add to queue</h1> <p>Add item to download queue.</p>
+	<h1>Delete</h1> <p>Delete this item from library and hard disk.<p>
+	<h1>Search</h1> <p>Search under this category for media containing text.</p>
+	<h1></h1><p></p>
+  </body>
+</html>
