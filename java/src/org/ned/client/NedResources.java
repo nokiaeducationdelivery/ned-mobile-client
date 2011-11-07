@@ -60,10 +60,6 @@ public class NedResources {
     public static final String MID_ANSWER_YES = Localization.getMessage("MID_ANSWER_YES");
     public static final String MID_ANSWER_NO = Localization.getMessage("MID_ANSWER_NO");
 
-    public static final String MID_LOCAL_LIBRARY = Localization.getMessage("MID_LOCAL_LIBRARY");
-    public static final String MID_REMOTE_LIBRARY = Localization.getMessage("MID_REMOTE_LIBRARY");
-    public static final String MID_EMPTY_LOCAL_LIBRARY = Localization.getMessage("MID_EMPTY_LOCAL_LIBRARY");
-
     public static final String MID_EMPTY_CATALOGUE = Localization.getMessage("MID_EMPTY_CATALOGUE");
     public static final String MID_EMPTY_CATEGORY = Localization.getMessage("MID_EMPTY_CATEGORY");
 
