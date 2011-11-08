@@ -23,6 +23,7 @@ import org.ned.client.command.PauseAudioCommand;
 public class AudioPlayerView extends NedFormBase implements ActionListener, PlayerListener, Runnable {
 
     private static final int INIT_VOLUME_LEVEL = 80;
+    private static int currentVolume = -1;
 
     private VolumeControl volume = null;
     private String audioFile;
@@ -68,12 +69,14 @@ public class AudioPlayerView extends NedFormBase implements ActionListener, Play
                     break;
                 case (Display.GAME_DOWN):
                     if (volume != null) {
-                        volume.setLevel(volume.getLevel() - 5);
+                        currentVolume = volume.getLevel() - 5;
+                        volume.setLevel( currentVolume );
                     }
                     break;
                 case (Display.GAME_UP):
                     if (volume != null) {
-                        volume.setLevel(volume.getLevel() + 5);
+                        currentVolume = volume.getLevel() + 5;
+                        volume.setLevel( currentVolume );
                     }
                     break;
                 default:
@@ -159,7 +162,7 @@ public class AudioPlayerView extends NedFormBase implements ActionListener, Play
             player.realize();
             volume = (VolumeControl)player.getControl( "VolumeControl" );
             if (volume != null) {
-                volume.setLevel( INIT_VOLUME_LEVEL );
+                volume.setLevel( currentVolume == -1 ? INIT_VOLUME_LEVEL : currentVolume );
             }
             player.prefetch();
             player.start();

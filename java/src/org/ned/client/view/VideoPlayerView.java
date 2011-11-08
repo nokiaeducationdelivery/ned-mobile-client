@@ -1,15 +1,23 @@
 package org.ned.client.view;
 
+import com.sun.lwuit.Button;
+import com.sun.lwuit.Command;
+import com.sun.lwuit.Component;
+import com.sun.lwuit.Container;
 import com.sun.lwuit.Display;
+import com.sun.lwuit.Font;
 import com.sun.lwuit.MediaComponent;
 import com.sun.lwuit.events.ActionEvent;
 import com.sun.lwuit.events.ActionListener;
 import com.sun.lwuit.layouts.BorderLayout;
+import com.sun.lwuit.layouts.BoxLayout;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.DataInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Timer;
+import java.util.TimerTask;
 import javax.microedition.io.Connector;
 import javax.microedition.io.HttpConnection;
 import javax.microedition.media.Control;
@@ -22,17 +30,36 @@ import javax.microedition.media.control.VolumeControl;
 import org.ned.client.IContent;
 import org.ned.client.NedResources;
 import org.ned.client.command.BackVideoCommand;
-import org.ned.client.command.PauseVideoCommand;
+import org.ned.client.view.customComponents.ProgressBar;
 
 public class VideoPlayerView extends NedFormBase implements PlayerListener, ActionListener, Runnable {
 
     private static final int INIT_VOLUME_LEVEL = 80;
+    private static int currentVolume = -1;
     private VolumeControl volume = null;
     private MediaComponent mediaComponent;
     private Player player;
     private FramePositioningControl frame = null;
     private String videoFile;
     private KeyListetener mKeyListener;
+    private Container controlUI = null;
+    private ProgressBar progress = null;
+
+    private boolean ignoreEvent = false;
+
+    private Button rewindButton;
+    private Button playButton;
+    private Button fastForwardButton;
+    private Button fullScreenButton;
+    private Button backButton;
+    private UpdateProgessbarTimerTask updateProgressBar;
+
+    private static Command playCommand = new Command( "Play" );
+    private static Command fastForwardCommand = new Command( "FF" );
+    private static Command rewindCommanf = new Command( "Rew" );
+    private static Command fullScreenCommand = new Command( "Full" );
+    private static Command exitPlayerCommand = new Command( "Exit" );
+
 
     public VideoPlayerView(IContent content) {
         currentElement = content;
@@ -44,30 +71,48 @@ public class VideoPlayerView extends NedFormBase implements PlayerListener, Acti
         addGameKeyListener(Display.GAME_UP, mKeyListener);
         addGameKeyListener(Display.GAME_DOWN, mKeyListener);
         addGameKeyListener(Display.GAME_FIRE, mKeyListener);
-        addGameKeyListener(Display.GAME_LEFT, mKeyListener);
-        addGameKeyListener(Display.GAME_RIGHT, mKeyListener);
 
-        addCommand(BackVideoCommand.getInstance().getCommand());
-        addCommand(PauseVideoCommand.getInstance().getCommand());
         addCommandListener(this);
+
         addPointerReleasedListener(new ActionListener() {
 
             public void actionPerformed( ActionEvent evt ) {
-                if( player != null && player.getState() == Player.STARTED ) {
-                    PauseVideoCommand.getInstance().execute(null);
+                if( player!= null && mediaComponent!= null && mediaComponent.isFullScreen() ) {
+                    showControlPanel();
                 }
             }
         });
+        initControlUI();
+        updateProgressBar = new UpdateProgessbarTimerTask();
     }
 
     public void prepareToPlay() {
         start();
     }
 
+    private void showControlPanel() {
+        mediaComponent.setFullScreen(false);
+        removeGameKeyListener( Display.GAME_FIRE, mKeyListener );
+        if( !contains( controlUI ) ) {
+            addComponent( BorderLayout.SOUTH, controlUI );
+        }
+        controlUI.requestFocus();
+        repaint();
+        updateProgressBar.startTimer();
+    }
+
+    private synchronized void updateProgressBar() {
+        long time = player.getMediaTime();
+        long duration = player.getDuration();
+        if ( time != Player.TIME_UNKNOWN && duration != Player.TIME_UNKNOWN && duration > 0 ) {
+            progress.setProgress( (int)( 100 * time / duration ) );
+        }
+    }
+
     /**
      * Reads the content from the specified HTTP URL and returns InputStream
      * where the contents are read.
-     * 
+     *
      * @return InputStream
      * @throws IOException
      */
@@ -101,13 +146,29 @@ public class VideoPlayerView extends NedFormBase implements PlayerListener, Acti
         return byteIn;
     }
 
-    public void actionPerformed(ActionEvent evt) {
+    public synchronized void actionPerformed(ActionEvent evt) {
         Object source = evt.getSource();
 
         if (source == BackVideoCommand.getInstance().getCommand()) {
             BackVideoCommand.getInstance().execute(currentElement.getParentId());
-        } else if (source == PauseVideoCommand.getInstance().getCommand()) {
-            PauseVideoCommand.getInstance().execute(null);
+        } else if ( source == fastForwardCommand || source == rewindCommanf ) {
+            if (frame != null) {
+                frame.skip( 25 * ( source == fastForwardCommand ? 1 : -1 ) );//fast forward or rew
+                updateProgressBar();
+            }
+        } else if ( source == playCommand ) {
+            pause();
+        } else if ( source == fullScreenCommand ) {
+            evt.consume();
+            removeComponent( controlUI );
+            ignoreEvent = true;
+            addGameKeyListener(Display.GAME_FIRE, mKeyListener);
+            mediaComponent.setFullScreen(true);
+            repaint();
+            updateProgressBar.cancelTimer();
+        } else if ( source == exitPlayerCommand ) {
+            updateProgressBar.cancelTimer();
+            BackVideoCommand.getInstance().execute(currentElement.getParentId());
         }
     }
 
@@ -178,20 +239,17 @@ public class VideoPlayerView extends NedFormBase implements PlayerListener, Acti
             return;
         }
         if (event.equals(PlayerListener.END_OF_MEDIA)) {
-            mediaComponent.setFullScreen(false);
-            PauseVideoCommand.getInstance().getCommand().setCommandName(NedResources.AC_PLAY);
-            removeAllCommands();
-            addCommand(BackVideoCommand.getInstance().getCommand());
-            addCommand(PauseVideoCommand.getInstance().getCommand());
+            playButton.setText( "Play" );
+            playButton.repaint();
+            showControlPanel();
         } else if (event.equals(PlayerListener.STARTED)) {
-            mediaComponent.setFullScreen(true);
-            removeAllCommands();
+            addGameKeyListener( Display.GAME_FIRE, mKeyListener );
+            playButton.setText( "Pause");
+            playButton.repaint();
         } else if (event.equals(PlayerListener.STOPPED)) {
-            mediaComponent.setFullScreen(false);
-            PauseVideoCommand.getInstance().getCommand().setCommandName(NedResources.AC_PLAY);
-            removeAllCommands();
-            addCommand(BackVideoCommand.getInstance().getCommand());
-            addCommand(PauseVideoCommand.getInstance().getCommand());
+            playButton.setText( "Play");
+            playButton.repaint();
+            showControlPanel();
         }
     }
 
@@ -216,29 +274,117 @@ public class VideoPlayerView extends NedFormBase implements PlayerListener, Acti
             player.realize();
             player.prefetch();
             mediaComponent = new MediaComponent(player);
-            mediaComponent.setPreferredH(getContentPane().getHeight());
+            mediaComponent.setPreferredH( getContentPane().getHeight() - 3 * Font.getDefaultFont().getHeight() );
             mediaComponent.getStyle().setMargin(0, 0, 0, 0);
             mediaComponent.setFullScreen(true);
             mediaComponent.setVisible(true);
 
             addComponent(BorderLayout.CENTER, mediaComponent);
+
             player.addPlayerListener(this);
 
             Control[] cs = player.getControls();
             for (int i = 0; i < cs.length; i++) {
                 if (cs[i] instanceof VolumeControl) {
                     volume = (VolumeControl) cs[i];
-                    volume.setLevel(INIT_VOLUME_LEVEL);
+                    volume.setLevel( currentVolume == -1 ? INIT_VOLUME_LEVEL : currentVolume );
                 } else if (cs[i] instanceof FramePositioningControl) {
                     frame = (FramePositioningControl) cs[i];
                 }
             }
             player.start();
             repaint();
+
+            //if media does not support framecontrol, disable buttons ff and rew
+            fastForwardButton.setEnabled( frame != null );
+            rewindButton.setEnabled( frame!= null );
+            progress.setProgress( 0 );
         } catch (IOException ex) {
             ex.printStackTrace();
         } catch (MediaException ex) {
             GeneralAlert.show(NedResources.UNSUPPORTED_MEDIA_FORMAT, GeneralAlert.WARNING);
+        }
+    }
+
+    private void initControlUI() {
+        if( controlUI == null  ) {
+            controlUI = new Container( new BoxLayout( (BoxLayout.Y_AXIS) ) );
+            Container controlUIButton = new Container( new BoxLayout( (BoxLayout.X_AXIS) ) );
+            int prefH = Font.getDefaultFont().getHeight();
+
+            rewindButton = new Button( rewindCommanf );
+            int prefW = ( Display.getInstance().getDisplayWidth() - 10 * rewindButton.getStyle().getMargin( Component.LEFT ) ) / 5;
+            rewindButton.setPreferredW( prefW );
+            rewindButton.setAlignment( Component.CENTER );
+            rewindButton.setPreferredH( 2 * prefH );
+
+            playButton = new Button( playCommand );
+            playButton.setPreferredW( prefW );
+            playButton.setPreferredH( 2 * prefH );
+            playButton.setAlignment( Component.CENTER );
+
+            fastForwardButton = new Button( fastForwardCommand );
+            fastForwardButton.setPreferredW( prefW );
+            fastForwardButton.setPreferredH( 2 * prefH );
+            fastForwardButton.setAlignment( Component.CENTER );
+
+            fullScreenButton = new Button( fullScreenCommand );
+            fullScreenButton.setPreferredW( prefW );
+            fullScreenButton.setPreferredH( 2 * prefH );
+            fullScreenButton.setAlignment( Component.CENTER );
+
+            backButton = new Button( exitPlayerCommand );
+            backButton.setPreferredW( prefW );
+            backButton.setPreferredH( 2 * prefH );
+            backButton.setAlignment( Component.CENTER );
+
+            progress = new ProgressBar();
+            progress.setFocusable( false );
+            controlUIButton.addComponent( rewindButton );
+            controlUIButton.addComponent( playButton );
+            controlUIButton.addComponent( fastForwardButton );
+            controlUIButton.addComponent( fullScreenButton );
+            controlUIButton.addComponent( backButton );
+            controlUI.addComponent( progress );
+            controlUI.addComponent( controlUIButton );
+            controlUI.setPreferredH( 3 * prefH );
+        }
+    }
+
+    private class UpdateProgessbarTimerTask {
+
+        private static final long SEC = 1000;
+
+        private Timer timer;
+        private TimerTask task;
+
+        public void startTimer() {
+            cancelTimer();
+            timer = new Timer();
+            task = new TimerTask() {
+
+                public void run() {
+                    try {
+                        updateProgressBar();
+                    } catch ( Exception ex ){}
+                }
+            };
+            timer.schedule( task, SEC, SEC );
+        }
+
+        public void cancelTimer() {
+            if( task != null ) {
+                task.cancel();
+                task = null;
+            }
+            if( timer != null ) {
+                timer.cancel();
+                timer = null;
+            }
+        }
+
+        protected void finalize() throws Throwable {
+            cancelTimer();
         }
     }
 
@@ -248,26 +394,22 @@ public class VideoPlayerView extends NedFormBase implements PlayerListener, Acti
             int keyCode = evt.getKeyEvent();
             switch (keyCode) {
                 case Display.GAME_FIRE:
-                    pause();
+                    if( mediaComponent.isFullScreen() && !ignoreEvent ) {
+                        showControlPanel();
+                    } else {
+                        ignoreEvent = false;
+                    }
                     break;
                 case Display.GAME_UP:
                     if (volume != null) {
-                        volume.setLevel(volume.getLevel() + 5);
+                        currentVolume = volume.getLevel() + 5;
+                        volume.setLevel(currentVolume);
                     }
                     break;
                 case Display.GAME_DOWN:
                     if (volume != null) {
-                        volume.setLevel(volume.getLevel() - 5);
-                    }
-                    break;
-                case Display.GAME_LEFT:
-                    if (frame != null) {
-                        frame.skip(-25);  //rewind
-                    }
-                    break;
-                case Display.GAME_RIGHT:
-                    if (frame != null) {
-                        frame.skip(25);  //fast forward
+                        currentVolume = volume.getLevel() - 5;
+                        volume.setLevel(currentVolume);
                     }
                     break;
                 default:
