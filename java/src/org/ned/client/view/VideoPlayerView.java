@@ -6,6 +6,7 @@ import com.sun.lwuit.Component;
 import com.sun.lwuit.Container;
 import com.sun.lwuit.Display;
 import com.sun.lwuit.Font;
+import com.sun.lwuit.Image;
 import com.sun.lwuit.MediaComponent;
 import com.sun.lwuit.events.ActionEvent;
 import com.sun.lwuit.events.ActionListener;
@@ -35,6 +36,13 @@ import org.ned.client.view.customComponents.ProgressBar;
 public class VideoPlayerView extends NedFormBase implements PlayerListener, ActionListener, Runnable {
 
     private static final int INIT_VOLUME_LEVEL = 80;
+    private static final Image playIcon = NedResources.getRes().getImage( "Play" );
+    private static final Image pauseIcon = NedResources.getRes().getImage( "Pause" );
+    private static final Image ffIcon = NedResources.getRes().getImage( "FF" );
+    private static final Image rewIcon = NedResources.getRes().getImage( "Rew" );
+    private static final Image fullIcon = NedResources.getRes().getImage( "Fullscreen" );
+    private static final Image exitIcon = NedResources.getRes().getImage( "BackIcon" );
+
     private static int currentVolume = -1;
     private VolumeControl volume = null;
     private MediaComponent mediaComponent;
@@ -239,15 +247,15 @@ public class VideoPlayerView extends NedFormBase implements PlayerListener, Acti
             return;
         }
         if (event.equals(PlayerListener.END_OF_MEDIA)) {
-            playButton.setText( "Play" );
+            playButton.setIcon( playIcon );
             playButton.repaint();
             showControlPanel();
         } else if (event.equals(PlayerListener.STARTED)) {
             addGameKeyListener( Display.GAME_FIRE, mKeyListener );
-            playButton.setText( "Pause");
+            playButton.setIcon( pauseIcon );
             playButton.repaint();
         } else if (event.equals(PlayerListener.STOPPED)) {
-            playButton.setText( "Play");
+            playButton.setIcon( playIcon );
             playButton.repaint();
             showControlPanel();
         }
@@ -313,27 +321,37 @@ public class VideoPlayerView extends NedFormBase implements PlayerListener, Acti
             int prefH = Font.getDefaultFont().getHeight();
 
             rewindButton = new Button( rewindCommanf );
+            rewindButton.setIcon( rewIcon );
+            rewindButton.setText("");
             int prefW = ( Display.getInstance().getDisplayWidth() - 10 * rewindButton.getStyle().getMargin( Component.LEFT ) ) / 5;
             rewindButton.setPreferredW( prefW );
             rewindButton.setAlignment( Component.CENTER );
             rewindButton.setPreferredH( 2 * prefH );
 
             playButton = new Button( playCommand );
+            playButton.setIcon( playIcon );
+            playButton.setText( "" );
             playButton.setPreferredW( prefW );
             playButton.setPreferredH( 2 * prefH );
             playButton.setAlignment( Component.CENTER );
 
             fastForwardButton = new Button( fastForwardCommand );
+            fastForwardButton.setIcon( ffIcon );
+            fastForwardButton.setText("");
             fastForwardButton.setPreferredW( prefW );
             fastForwardButton.setPreferredH( 2 * prefH );
             fastForwardButton.setAlignment( Component.CENTER );
 
             fullScreenButton = new Button( fullScreenCommand );
+            fullScreenButton.setIcon( fullIcon );
+            fullScreenButton.setText("");
             fullScreenButton.setPreferredW( prefW );
             fullScreenButton.setPreferredH( 2 * prefH );
             fullScreenButton.setAlignment( Component.CENTER );
 
             backButton = new Button( exitPlayerCommand );
+            backButton.setIcon( exitIcon );
+            backButton.setText("");
             backButton.setPreferredW( prefW );
             backButton.setPreferredH( 2 * prefH );
             backButton.setAlignment( Component.CENTER );
