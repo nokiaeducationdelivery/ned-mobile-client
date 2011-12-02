@@ -165,7 +165,7 @@ public class DownloadManager implements IDownloadTaskManager {
         boolean downloaded = false;
 
         try {
-            
+
             if(!NedIOUtils.fileExists(library.getDirUri())){
                 NedIOUtils.createDirectory(library.getDirUri());
             }
@@ -200,7 +200,7 @@ public class DownloadManager implements IDownloadTaskManager {
                 try{
                     Thread.sleep(500);
                 }catch(Exception ex){}
-                
+
                 while ( (bytesread = is.read(databyte, 0, MTU)) != -1) {
                     dos.write(databyte, 0, bytesread);
                 }
@@ -244,7 +244,7 @@ public class DownloadManager implements IDownloadTaskManager {
         }
         if(downloadListUpdater != null )
         {
-        downloadListUpdater.sourceDestroyed(transfer);
+            downloadListUpdater.sourceDestroyed(transfer);
         }
         Display.getInstance().getCurrent().repaint();
         StatisticsManager.logEvent(StatType.DOWNLOAD_COMPLETED, "Url=" + transfer.getUrlPath()
@@ -277,13 +277,15 @@ public class DownloadManager implements IDownloadTaskManager {
         }
     }
 
-    public void taskCancelled(DownloadTask taskCancelled) {
+    public synchronized void taskCancelled(DownloadTask taskCancelled) {
         NedMidlet.getInstance().getXmlManager().removeDownloadsEntry(taskCancelled.getFile());
 
         vectorDownloadTasks.removeElement(taskCancelled);
-        downloadListUpdater.sourceDestroyed(taskCancelled);
-         Display.getInstance().getCurrent().repaint();
-         if (midlet.getSettingsManager().getDlAutomatic()) {
+        if (downloadListUpdater != null) {
+            downloadListUpdater.sourceDestroyed(taskCancelled);
+        }
+        Display.getInstance().getCurrent().repaint();
+        if (midlet.getSettingsManager().getDlAutomatic()) {
             startDownloads();
         } else {
             startInstantDownloads();

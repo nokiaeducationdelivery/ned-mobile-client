@@ -23,6 +23,7 @@ public class DownloadQueueScreen extends NedFormBase implements ActionListener, 
     private final Command mStartCommnad = new Command( NedResources.START );
     private final Command mPauseCommand = new Command( NedResources.PAUSE );
     private final Command mRemoveCommand = new Command( NedResources.REMOVE );
+    private final Command mRemoveAllCommand = new Command( NedResources.REMOVEALL );
 
     private DownloadList mTransfersList;
     private Label mNoDowloadsLabel;
@@ -45,6 +46,7 @@ public class DownloadQueueScreen extends NedFormBase implements ActionListener, 
         if( mTransfersList.size() > 0 ) {
             addComponent( mTransfersList );
             addCommand( mRemoveCommand );
+            addCommand( mRemoveAllCommand );
         } else {
             addComponent( mNoDowloadsLabel );
         }
@@ -75,6 +77,18 @@ public class DownloadQueueScreen extends NedFormBase implements ActionListener, 
                         tr.CancelAndRemove();
                         StatisticsManager.logEvent( StatType.DOWNLOAD_REMOVE, "Url=" + tr.getUrlPath()
                                                                             + "Progress=" + tr.getPercentDownloaded() + ";");
+                    }
+                }
+            }
+        } else if ( src == mRemoveAllCommand ) {
+            if (GeneralAlert.showQuestion(NedResources.REMOVEALL_DOWNLOAD_DIALOG) == GeneralAlert.RESULT_YES) {
+                int size = mTransfersList.getModel().getSize();
+                for( int i = size - 1; i >= 0; i-- ) {
+                    DownloadTask tr = (DownloadTask)mTransfersList.getModel().getItemAt( i );
+                    if( tr != null ) {
+                        tr.CancelAndRemove();
+                        StatisticsManager.logEvent( StatType.DOWNLOAD_REMOVE, "Url=" + tr.getUrlPath()
+                                                                        + "Progress=" + tr.getPercentDownloaded() + ";");
                     }
                 }
             }
@@ -128,9 +142,11 @@ public class DownloadQueueScreen extends NedFormBase implements ActionListener, 
             DownloadTask tr = (DownloadTask)mTransfersList.getModel().getItemAt( mTransfersList.getSelectedIndex() );
             if( tr != null && tr.isDownloading() ) {
                 addCommand( mRemoveCommand );
+                addCommand( mRemoveAllCommand );
                 addCommand( mPauseCommand );
             } else {
                 addCommand( mRemoveCommand );
+                addCommand( mRemoveAllCommand );
                 addCommand( mStartCommnad );
             }
         } else if ( mTransfersList.size() == 0 ) {

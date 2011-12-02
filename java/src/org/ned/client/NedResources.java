@@ -231,6 +231,8 @@ public class NedResources {
     public static final String ABOUT = Localization.getMessage("ABOUT");
     public static final String VERSION = Localization.getMessage("VERSION");
     public static final String REMEMBERME = Localization.getMessage("REMEMBERME");
+    public static final String REMOVEALL = Localization.getMessage("REMOVEALL");
+    public static final String REMOVEALL_DOWNLOAD_DIALOG = Localization.getMessage("TRA_REMOVEALL_DOWNLOAD_DIALOG");
 
     public NedResources() {
     }

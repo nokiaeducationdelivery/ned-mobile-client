@@ -142,8 +142,10 @@ public class DownloadTask implements Runnable {
             ex.printStackTrace();
         } finally {
             if(status.equals(NedResources.TRA_COMPLETED_STATUS) ) {
-                downloadTaskManager.taskCompleted(this);
-                downloadTaskManager = null;
+                if( downloadTaskManager != null ) {
+                    downloadTaskManager.taskCompleted(this);
+                    downloadTaskManager = null;
+                }
             } else if(status.equals(NedResources.TRA_CANCELLING_STATUS)) {
                 removeFile();
             }
@@ -280,7 +282,7 @@ public class DownloadTask implements Runnable {
                 ex.printStackTrace();
             }
         }
-        
+
         setStatus(NedResources.TRA_CANCELLING_STATUS);
         stopped = true;
 
@@ -290,8 +292,10 @@ public class DownloadTask implements Runnable {
     }
 
     private void removeFile(){
-        downloadTaskManager.taskCancelled( this );
-        downloadTaskManager = null;
+        if ( downloadTaskManager != null ) {
+            downloadTaskManager.taskCancelled( this );
+            downloadTaskManager = null;
+        }
         FileConnection fc = null;
         try {
             fc = (FileConnection)Connector.open(filename + NedLocalConst.TMP, Connector.READ_WRITE);
