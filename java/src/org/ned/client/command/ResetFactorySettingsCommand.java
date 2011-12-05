@@ -1,6 +1,7 @@
 package org.ned.client.command;
 
 import com.sun.lwuit.Command;
+import org.ned.client.NedConsts.LoginError;
 import org.ned.client.NedMidlet;
 import org.ned.client.NedResources;
 import org.ned.client.utils.NedIOUtils;
@@ -25,7 +26,8 @@ public class ResetFactorySettingsCommand extends NedCommand {
         Object[] login = (Object[]) param;
         String userName = (String) login[0];
         String pass = (String) login[1];
-        if (NedMidlet.getAccountManager().login(userName, pass)) {
+        int retval = NedMidlet.getAccountManager().login(userName, pass);
+        if ( retval == LoginError.SUCCESS ) {
             if (GeneralAlert.RESULT_YES == GeneralAlert.showQuestion(NedResources.QUESTION_FACTORY)) {
                 if (GeneralAlert.RESULT_YES == GeneralAlert.showQuestion(NedResources.QUESTION_FACTORY2)) {
 

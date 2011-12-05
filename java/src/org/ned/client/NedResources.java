@@ -234,6 +234,12 @@ public class NedResources {
     public static final String REMOVEALL = Localization.getMessage("REMOVEALL");
     public static final String REMOVEALL_DOWNLOAD_DIALOG = Localization.getMessage("TRA_REMOVEALL_DOWNLOAD_DIALOG");
 
+    public static final String CONNECTIONERROR = Localization.getMessage("CONNECTIONERROR");
+    public static final String LOCALSECURITY = Localization.getMessage("LOCALSECURITY");
+    public static final String ABORTED = Localization.getMessage("ABORTED");
+    public static final String OTHERCONNECTIONPROBLEM = Localization.getMessage("OTHERCONNECTIONPROBLEM");
+    public static final String UNKNOWN = Localization.getMessage("UNKNOWN");
+
     public NedResources() {
     }
 }

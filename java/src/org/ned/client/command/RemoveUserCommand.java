@@ -1,6 +1,7 @@
 package org.ned.client.command;
 
 import com.sun.lwuit.Command;
+import org.ned.client.NedConsts.LoginError;
 import org.ned.client.NedMidlet;
 import org.ned.client.NedResources;
 import org.ned.client.statistics.StatType;
@@ -27,8 +28,8 @@ public class RemoveUserCommand extends NedCommand {
         Object[] login = (Object[]) param;
         String userName = (String) login[0];
         String pass = (String) login[1];
-        boolean result = NedMidlet.getAccountManager().login(userName, pass);
-        if (result) {
+        int result = NedMidlet.getAccountManager().login(userName, pass);
+        if ( result == LoginError.SUCCESS ) {
             if (GeneralAlert.RESULT_YES == GeneralAlert.showQuestion(NedResources.QUESTION_REMOVE_USER
                     + " " + userName + "?")) {
                 NedMidlet.getAccountManager().removeUser(userName);

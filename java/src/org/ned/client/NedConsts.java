@@ -73,4 +73,14 @@ public class NedConsts{
     public class NedTransitions{
         public static final int TRANSITION_TIME = 500;
     }
+
+    public class LoginError {
+        public static final int SUCCESS = 0;
+        public static final int UNAUTHORIZED = -1;
+        public static final int LOCALSECURITY = -2;
+        public static final int CONNECTIONERROR = -3;
+        public static final int ABORTED = -4;
+        public static final int OTHERCONNECTIONPROBLEM = -5;
+        public static final int UNKNOWN = -9999;
+    }
 }

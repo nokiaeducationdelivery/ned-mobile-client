@@ -78,6 +78,9 @@ public class StatisticsManager {
     }
 
     public static boolean isStatsChanged() {
+        if( mInstance == null ) {
+            return false;
+        }
         mInstance.save();
         boolean changed = false;
         FileConnection fc = null;

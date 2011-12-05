@@ -1,10 +1,9 @@
 package org.ned.client.command;
 
 import com.sun.lwuit.Command;
+import org.ned.client.NedConsts.LoginError;
 import org.ned.client.NedMidlet;
 import org.ned.client.NedResources;
-import org.ned.client.view.GeneralAlert;
-
 
 
 public class LoginOnStartCommand extends NedCommand{
@@ -27,8 +26,8 @@ public class LoginOnStartCommand extends NedCommand{
         String pass = (String)login[1];
         Boolean remember = (Boolean)login[2];
 
-        boolean result = NedMidlet.getAccountManager().login( logAs, pass );
-        if ( result ) {
+        int result = NedMidlet.getAccountManager().login( logAs, pass );
+        if ( result == LoginError.SUCCESS ) {
             NedMidlet.getAccountManager().savePassword(logAs, remember.booleanValue());
             NedMidlet.getInstance().continueApploading();
         }

@@ -3,6 +3,7 @@ package org.ned.client;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.util.Vector;
+import javax.microedition.io.ConnectionNotFoundException;
 import javax.microedition.io.Connector;
 import javax.microedition.io.HttpConnection;
 import org.ned.client.statistics.StatisticsManager;
@@ -14,6 +15,8 @@ import org.ned.client.view.WaitingScreen;
 import org.kxml2.kdom.Document;
 import org.kxml2.kdom.Element;
 import org.kxml2.kdom.Node;
+import org.ned.client.NedConsts.LoginError;
+import org.ned.client.utils.ErrorConnectionMessageResolver;
 
 public class AccountManager {
 
@@ -127,28 +130,28 @@ public class AccountManager {
         NedXmlUtils.writeXmlFile(NedIOUtils.getAccountsFile(), doc);
     }
 
-    public boolean login(String login, String password) {
-        boolean retval = false;
+    public int login(String login, String password) {
+        int retval = LoginError.UNKNOWN;
         UserInfo user = findUser(login);
         if (user == null) {
             retval = loginToServer(login, password);
-            if( !retval ) {
-                GeneralAlert.show( NedResources.BAD_LOGIN, GeneralAlert.WARNING );
+            if( retval != LoginError.SUCCESS  ) {
+                ErrorConnectionMessageResolver.showErrorMessage( retval );
             }
         } else if (user.password.equals(password)) {
             currentUser = user;
             saveSetup();
-            retval = true;
+            retval = LoginError.SUCCESS;
         } else {
             if ( GeneralAlert.showQuestion(NedResources.LOGIN_ONLINE) == GeneralAlert.RESULT_YES ) {
                 WaitingScreen.show( NedResources.CONNECTING );
                 retval = loginToServer(login, password);
                 WaitingScreen.dispose();
-                if( !retval ) {
-                    GeneralAlert.show( NedResources.BAD_LOGIN, GeneralAlert.WARNING );
+                if( retval != LoginError.SUCCESS ) {
+                    ErrorConnectionMessageResolver.showErrorMessage( retval );
                 }
             } else {
-                retval = false; // for concurrency purpose
+                retval = LoginError.ABORTED;// for concurrency purpose
             }
         }
         return retval;
@@ -160,8 +163,8 @@ public class AccountManager {
         saveSetup();
     }
 
-    public boolean loginToServer(String login, String password) {
-        boolean retval = false;
+    public int loginToServer(String login, String password) {
+        int retval =  LoginError.UNKNOWN;
         DataOutputStream httpOutput = null;
         HttpConnection httpConn = null;
         try {
@@ -169,7 +172,9 @@ public class AccountManager {
             httpConn.setRequestMethod(HttpConnection.GET);
             NedConnectionUtils.addCredentialsToConnection(httpConn, login, password);
             httpOutput = httpConn.openDataOutputStream();
-            if (httpConn.getResponseCode() == HttpConnection.HTTP_OK) {
+            int rspCode = httpConn.getResponseCode();
+
+            if ( rspCode == HttpConnection.HTTP_OK ) {
                 // exchange old user for new if exists
                 UserInfo user = findUser(login);
                 if( user != null ) {
@@ -181,13 +186,29 @@ public class AccountManager {
                 currentUser = user;
                 NedIOUtils.createDirectory(NedIOUtils.getUserRootDirectory());
                 saveSetup();
-                retval = true;
+                retval = LoginError.SUCCESS;
+                if( NedMidlet.getSettingsManager().getAutoStatSend() ) {
+                    StatisticsManager.uploadStats( true );
+                }
+                MotdManager.getInstance().updateMotd();
+            } else if ( rspCode == HttpConnection.HTTP_UNAUTHORIZED ) {
+                retval = LoginError.UNAUTHORIZED;
             }
-            if( NedMidlet.getSettingsManager().getAutoStatSend() ) {
-                StatisticsManager.uploadStats( true );
+        } catch ( ConnectionNotFoundException cex ) {
+            retval = LoginError.CONNECTIONERROR;
+        } catch ( IOException ioex ) {
+            if ( "-3".equals( ioex.getMessage() ) ) {
+                retval = LoginError.ABORTED;
+            } else {
+                retval = LoginError.OTHERCONNECTIONPROBLEM;
             }
-            MotdManager.getInstance().updateMotd();
+            ioex.printStackTrace();
+        } catch ( SecurityException sec ) {
+            retval = LoginError.LOCALSECURITY;
+            sec.printStackTrace();
         } catch (Exception ex) {
+            ex.printStackTrace();
+            retval = LoginError.UNKNOWN;
         } finally {
             try {
                 if (httpOutput != null) {
@@ -197,11 +218,9 @@ public class AccountManager {
                     httpConn.close();
                 }
             } catch (IOException ex) {
-                ex.printStackTrace();
             }
         }
         return retval;
-
     }
 
     public void changePassword(String newPasword) {
@@ -216,7 +235,6 @@ public class AccountManager {
         }
     }
 
-
     public void removeUser(String user) {
         if ( user != null ) {
             UserInfo removeUser = findUser( user );
@@ -225,7 +243,6 @@ public class AccountManager {
             //todo push to server
         }
     }
-
 
     public UserInfo findUser(String login) {
         UserInfo retval = null;
