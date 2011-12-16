@@ -1,3 +1,13 @@
+/*******************************************************************************
+* Copyright (c) 2011 Nokia Corporation
+* All rights reserved. This program and the accompanying materials
+* are made available under the terms of the Eclipse Public License v1.0
+* which accompanies this distribution, and is available at
+* http://www.eclipse.org/legal/epl-v10.html
+*
+* Contributors:
+* Comarch team - initial API and implementation
+*******************************************************************************/
 package org.ned.client.view.renderer;
 
 import com.sun.lwuit.Component;
@@ -7,7 +17,6 @@ import com.sun.lwuit.Label;
 import com.sun.lwuit.List;
 import com.sun.lwuit.layouts.BoxLayout;
 import com.sun.lwuit.list.ListCellRenderer;
-
 
 abstract public class ListCellRendererBase extends Container implements ListCellRenderer {
 
