@@ -44,6 +44,7 @@ public class CatalogScreen extends NedFormBase implements ActionListener {
 
         addCommand( BackCatalogCommand.getInstance().getCommand() );
         addCommand( HelpCommand.getInstance().getCommand() );
+        addCommand( DownloadsQueueViewCommand.getInstance().getCommand() );
         addCommand( DeleteContentCommand.getInstance().getCommand() );
         addCommand( DownloadAllCatalogScreenCommand.getInstance().getCommand() );
         addCommand( SearchDialogCommand.getInstance().getCommand() );
@@ -65,7 +66,7 @@ public class CatalogScreen extends NedFormBase implements ActionListener {
             DeleteContentCommand.getInstance().execute( mCatalogList );
         } else if ( src instanceof List || evt.getKeyEvent()
                                            == Display.GAME_RIGHT ) {
-            LibraryElement content = (LibraryElement) mCatalogList.
+            LibraryElement content = (LibraryElement)mCatalogList.
                     getSelectedItem();
             if ( content != null ) {
                 BrowseCatalogCommand.getInstance().execute( content.getId() );
@@ -87,6 +88,8 @@ public class CatalogScreen extends NedFormBase implements ActionListener {
         } else if ( src == UpdateLibraryCommand.getInstance().getCommand() ) {
             UpdateLibraryCommand.getInstance().execute( NedMidlet.
                     getSettingsManager().getLibraryManager().getCurrentLibrary() );
+        } else if ( src == DownloadsQueueViewCommand.getInstance().getCommand() ) {
+            DownloadsQueueViewCommand.getInstance().execute( mNewLibModel );
         }
     }
 }

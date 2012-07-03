@@ -39,6 +39,7 @@ public class CategoryScreen extends NedFormBase implements ActionListener {
 
         addCommand( BackCategoryCommand.getInstance().getCommand() );
         addCommand( HelpCommand.getInstance().getCommand() );
+        addCommand( DownloadsQueueViewCommand.getInstance().getCommand() );
         addCommand( DeleteContentCommand.getInstance().getCommand() );
         addCommand( DownloadAllCategoryScreenCommand.getInstance().getCommand() );
         addCommand( SearchDialogCommand.getInstance().getCommand() );
@@ -83,6 +84,8 @@ public class CategoryScreen extends NedFormBase implements ActionListener {
         } else if ( src == HelpCommand.getInstance().getCommand() ) {
             Object[] params = { this.getClass(), mNewLibModel.getId() };
             HelpCommand.getInstance().execute( params );
+        } else if ( src == DownloadsQueueViewCommand.getInstance().getCommand() ) {
+            DownloadsQueueViewCommand.getInstance().execute( mNewLibModel );
         }
     }
 }

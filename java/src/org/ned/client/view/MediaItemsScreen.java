@@ -67,7 +67,8 @@ public class MediaItemsScreen extends NedFormBase implements ActionListener, Sel
             Content content = ((LibraryElement)mMediaList.getSelectedItem()).
                     getDetails();
             AddToDownloadQueueCommand.getInstance().execute( content );
-            new DownloadQueueScreen( content ).show();
+            new DownloadQueueScreen( (LibraryElement)mMediaList.getSelectedItem() ).
+                    show();
         } else if ( src == PlayMediaCommand.getInstance().getCommand() ) {
             LibraryElement content = (LibraryElement)mMediaList.getSelectedItem();
             if ( content.isNew() ) {
@@ -102,6 +103,8 @@ public class MediaItemsScreen extends NedFormBase implements ActionListener, Sel
         } else if ( src == HelpCommand.getInstance().getCommand() ) {
             Object[] params = { this.getClass(), mNewLibModel.getId() };
             HelpCommand.getInstance().execute( params );
+        } else if ( src == DownloadsQueueViewCommand.getInstance().getCommand() ) {
+            DownloadsQueueViewCommand.getInstance().execute( mNewLibModel );
         }
     }
 
@@ -109,6 +112,7 @@ public class MediaItemsScreen extends NedFormBase implements ActionListener, Sel
         LibraryElement libElem = (LibraryElement)mMediaList.getModel().getItemAt( newSel );
         removeAllCommands();
         addCommand( BackMediaItemsCommand.getInstance().getCommand() );
+        addCommand( DownloadsQueueViewCommand.getInstance().getCommand() );
         addCommand( HelpCommand.getInstance().getCommand() );
 
         if ( libElem != null ) {
