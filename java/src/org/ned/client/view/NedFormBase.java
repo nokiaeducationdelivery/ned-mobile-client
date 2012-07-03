@@ -1,5 +1,5 @@
 /*******************************************************************************
-* Copyright (c) 2011 Nokia Corporation
+* Copyright (c) 2011-2012 Nokia Corporation
 * All rights reserved. This program and the accompanying materials
 * are made available under the terms of the Eclipse Public License v1.0
 * which accompanies this distribution, and is available at
@@ -10,14 +10,8 @@
 *******************************************************************************/
 package org.ned.client.view;
 
-import com.sun.lwuit.Command;
-import com.sun.lwuit.Component;
-import com.sun.lwuit.Dialog;
-import com.sun.lwuit.Display;
+import com.sun.lwuit.*;
 import org.ned.client.view.renderer.TitleBarPainter;
-import com.sun.lwuit.Font;
-import com.sun.lwuit.Form;
-import com.sun.lwuit.List;
 import com.sun.lwuit.plaf.Style;
 import com.sun.lwuit.plaf.UIManager;
 import org.ned.client.IContent;
@@ -46,13 +40,7 @@ public class NedFormBase extends Form {
     }
 
     public NedFormBase() {
-        if(com.sun.lwuit.Display.getInstance().isTouchScreenDevice()) {
-            Style style = getSoftButtonStyle();
-            style.setFont( Font.createSystemFont(Font.FACE_SYSTEM, Font.STYLE_PLAIN, Font.SIZE_LARGE ) );
-            style.setPadding( 10, 10, 0, 0 );
-            setSoftButtonStyle( style );
-        }
-        setMenuCellRenderer(new MenuCellRenderer());
+
     }
 
     public void show() {
@@ -134,8 +122,7 @@ public class NedFormBase extends Form {
                     + style.getMargin(Component.RIGHT)
                     + style.getPadding(Component.LEFT)
                     + style.getPadding(Component.RIGHT)
-                    + getCommandCount() * list.getItemGap()
-                    + 2 * list.getBorderGap();
+                    + getCommandCount() * list.getItemGap();
         }
         return  Display.getInstance().getDisplayHeight() - menuDialog.getStyle().getMargin( Component.TOP )
                                                          - menuDialog.getStyle().getMargin( Component.BOTTOM )

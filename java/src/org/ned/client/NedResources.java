@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2011 Nokia Corporation
+ * Copyright (c) 2011-2012 Nokia Corporation
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -216,6 +216,7 @@ public class NedResources {
     public static final String NEW_LANGUAGE = Localization.getMessage( "NEW_LANGUAGE" );
     public static final String DOWNLOAD_AGAIN_LANGUAGE = Localization.getMessage( "DOWNLOAD_AGAIN_LANGUAGE" );
     public static final String DOWNLOAD_SUCCESSFUL = Localization.getMessage( "DOWNLOAD_SUCCESSFUL" );
+    public static final String NOT_SUPPORTED = Localization.getMessage( "NOT_SUPPORTED" );
 
     public NedResources() {
     }

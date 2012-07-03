@@ -94,7 +94,7 @@ public class LanguageManager {
         try {
             mLanguages.addElement( new LanguageInfo( "Default (English)", "en-GB", true, "messages_en-GB.properties" ) );
             in = Runtime.getRuntime().getClass().getResourceAsStream( Localization._MESSAGES_BUNDLE );
-            fc = (FileConnection) Connector.open( NedIOUtils.getLocalRoot() + "/messages_en-GB.properties", Connector.READ_WRITE );
+            fc = (FileConnection) Connector.open( NedIOUtils.getLocalRoot() + "messages_en-GB.properties", Connector.READ_WRITE );
             if ( fc.exists() ) {
                 fc.delete();
             }

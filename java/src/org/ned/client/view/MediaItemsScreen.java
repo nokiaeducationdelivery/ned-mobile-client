@@ -114,7 +114,7 @@ public class MediaItemsScreen extends NedFormBase implements ActionListener, Sel
         removeAllCommands();
         addCommand(BackMediaItemsCommand.getInstance().getCommand());
         addCommand( HelpCommand.getInstance().getCommand() );
-        
+
         if( content!= null) {
             addCommand(DownloadAllMediaItemsScreenCommand.getInstance().getCommand());
             addCommand(SearchDialogCommand.getInstance().getCommand());

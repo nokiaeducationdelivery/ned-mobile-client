@@ -127,6 +127,9 @@ public class DownloadTaskCellRenderer extends Container implements ListCellRende
     }
 
     public Component getListCellRendererComponent( List list, Object value, int i, boolean isSelected ) {
+        if( value == null ) {
+            return null;
+        }
         DownloadTask content = (DownloadTask)value;
         mTransferTitle.setText( content.getTitle() );
         mTransferStatus.setText( content.getStatus() );

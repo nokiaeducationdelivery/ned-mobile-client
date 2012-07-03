@@ -1,5 +1,5 @@
 /*******************************************************************************
-* Copyright (c) 2011 Nokia Corporation
+* Copyright (c) 2011-2012 Nokia Corporation
 * All rights reserved. This program and the accompanying materials
 * are made available under the terms of the Eclipse Public License v1.0
 * which accompanies this distribution, and is available at
@@ -155,12 +155,6 @@ public class GeneralAlert {
         c2.addComponent(mMessageTextArea);
         messageDialog.addComponent(BorderLayout.CENTER,c2);
 
-        if(com.sun.lwuit.Display.getInstance().isTouchScreenDevice()) {
-            Style style = messageDialog.getSoftButtonStyle();
-            style.setFont( Font.createSystemFont(Font.FACE_SYSTEM, Font.STYLE_PLAIN, Font.SIZE_LARGE ) );
-            style.setPadding( 10, 10, 0, 0 );
-            messageDialog.setSoftButtonStyle(style);
-        }
     }
 
     private static Image getIcon( int aAlertType ) {
