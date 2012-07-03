@@ -70,4 +70,13 @@ public class Utils {
             }
         }
     }
+
+    public static int countLines( String aMessage ) {
+        int lastPos = 0;
+        int count = 1;
+        while ( -1 != (lastPos = aMessage.indexOf( "\n", lastPos + 1 )) ) {
+            ++count;
+        }
+        return count;
+    }
 }

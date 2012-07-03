@@ -60,7 +60,7 @@ public class Localization {
      */
     public static boolean initLocalizationSupport() {
         String locale = System.getProperty("microedition.locale");
-        if(NedMidlet.getAccountManager().getLanguage() != null) {
+        if ( NedMidlet.getAccountManager() != null && NedMidlet.getAccountManager().getLanguage() != null) {
             locale = NedMidlet.getAccountManager().getLanguage().getLocale();
         }
         return initLocalizationSupport(locale);     // NOI18N
