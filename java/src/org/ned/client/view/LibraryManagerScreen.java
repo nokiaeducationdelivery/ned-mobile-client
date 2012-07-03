@@ -20,6 +20,7 @@ import com.sun.lwuit.events.FocusListener;
 import com.sun.lwuit.events.SelectionListener;
 import com.sun.lwuit.layouts.BoxLayout;
 import com.sun.lwuit.list.ListModel;
+import org.ned.client.NedConsts;
 import org.ned.client.NedMidlet;
 import org.ned.client.NedResources;
 import org.ned.client.command.*;
@@ -47,6 +48,7 @@ public class LibraryManagerScreen extends NedFormBase implements ActionListener,
     }
 
     private void initForm() {
+        addDemoLabels();
         addUrlLabel();
         addUrlTextArea();
         addLibrariesList();
@@ -86,7 +88,7 @@ public class LibraryManagerScreen extends NedFormBase implements ActionListener,
     }
 
     private void addUrlLabel() {
-        Label serverUrlLabel = new Label( NedResources.LIBRARY_ID_ );
+        Label serverUrlLabel = new Label( NedResources.LIBRARY_ID );
         serverUrlLabel.setAlignment( Label.LEFT );
         serverUrlLabel.setFocusable( false );
         addComponent( serverUrlLabel );
@@ -101,13 +103,15 @@ public class LibraryManagerScreen extends NedFormBase implements ActionListener,
         } else if ( src == RemoveLibraryCommand.getInstance().getCommand() ) {
             RemoveLibraryCommand.getInstance().execute( mLibrariesList.getSelectedItem() );
         } else if ( src == mLibrariesList ) {
-            int maxPressedWidth = (int) (0.2 * mLibrariesList.getWidth());
+            int maxPressedWidth = (int)(0.2 * mLibrariesList.getWidth());
             if ( maxPressedWidth > 50 ) {
                 maxPressedWidth = 50;
             }
-            if ( mLibrariesList.getLastPointerPressedCoordinateX() < maxPressedWidth
-                 || mLibrariesList.getSelectedIndex() == mLibrariesList.getPreviusSelection() ) {
-                NedLibrary library = (NedLibrary) mLibrariesList.getSelectedItem();
+            if ( mLibrariesList.getLastPointerPressedCoordinateX()
+                    < maxPressedWidth
+                    || mLibrariesList.getSelectedIndex()
+                    == mLibrariesList.getPreviusSelection() ) {
+                NedLibrary library = (NedLibrary)mLibrariesList.getSelectedItem();
                 if ( library != null ) {
                     library.setVisible( !library.getVisible() );
                 }
@@ -146,18 +150,35 @@ public class LibraryManagerScreen extends NedFormBase implements ActionListener,
             if ( mLibrariesList.size() > 0 ) {
                 addCommand( RemoveLibraryCommand.getInstance().getCommand() );
                 addCommand( UpdateLibraryCommand.getInstance().getCommand() );
-                NedLibrary lib = (NedLibrary) mLibrariesList.getModel().getItemAt( newSel );
+                NedLibrary lib = (NedLibrary)mLibrariesList.getModel().getItemAt( newSel );
                 if ( NedIOUtils.fileExists( lib.getFileUri() ) ) {
                     addCommand( UpdateLibraryCommand.getInstance().getCommand() );
                 }
             }
         }
     }
+
+    private void addDemoLabels() {
+        if ( NedMidlet.getAccountManager().getServerUrl().equalsIgnoreCase( NedConsts.NedDemo.DEMOURL )
+                && NedMidlet.getAccountManager().getCurrentUser().login.equals( NedConsts.NedDemo.DEMOUSERNAME )
+                && NedMidlet.getAccountManager().getCurrentUser().password.equals( NedConsts.NedDemo.DEMOPASSWORD )
+                && NedMidlet.getSettingsManager().getLibraryManager().getSize()
+                == 0 ) {
+            Label demo = new Label( NedResources.DEMOURL );
+            demo.setAlignment( Label.LEFT );
+            addComponent( demo );
+            Label username = new Label( NedResources.LIBRARY_ID + ": "
+                    + NedConsts.NedDemo.DEMOLIBID );
+            username.setAlignment( Label.LEFT );
+            addComponent( username );
+        }
+    }
 }
 
 /**
- * List class extension that remembers last pointer press X coordinate
- * It may be used to perform different actions based on which part of List item was clicked
+ * List class extension that remembers last pointer press X coordinate It may be
+ * used to perform different actions based on which part of List item was
+ * clicked
  */
 class ClickableList extends List implements SelectionListener, FocusListener {
 

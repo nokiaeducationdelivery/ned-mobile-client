@@ -49,6 +49,20 @@ public class GeneralAlert {
     private static final Command yesCommand = new Command( NedResources.MID_ANSWER_YES );
     private static final Command noCommand = new Command( NedResources.MID_ANSWER_NO );
 
+    public static void show( final String aMessage, final int aAlertType,
+                             boolean aShowEDT ) {
+        if ( aShowEDT ) {
+            Display.getInstance().callSerially( new Runnable() {
+                
+                public void run() {
+                    show( aMessage, aAlertType );
+                }
+            } );
+        } else {
+            show( aMessage, aAlertType );
+        }
+    }
+
     public static void show( String aMessage, int aAlertType ) {
         initDialog( aMessage, aAlertType );
         messageDialog.addCommand( okCommand );
@@ -61,15 +75,16 @@ public class GeneralAlert {
         initDialog( message, QUESTION );
         messageDialog.addCommand( yesCommand );
         messageDialog.addCommand( noCommand );
-        return showDialog() == yesCommand ? GeneralAlert.RESULT_YES : GeneralAlert.RESULT_NO;
+        return showDialog() == yesCommand ? GeneralAlert.RESULT_YES
+               : GeneralAlert.RESULT_NO;
     }
 
     private static Command showDialog() {
         Container cont1 = messageDialog.getContentPane();
         int hi = 0;
         int wi = cont1.getPreferredW() + 2 * 5;
-        int wi2 = messageDialog.getTitleStyle().getFont().stringWidth( mDialogTitlePainer.
-                getTitle() ) + 2 * 5 + DialogTitlePainter.TITLE_LEFT_MARGIN;
+        int wi2 = messageDialog.getTitleStyle().getFont().stringWidth( mDialogTitlePainer.getTitle() )
+                + 2 * 5 + DialogTitlePainter.TITLE_LEFT_MARGIN;
         wi = Math.max( wi, wi2 );
 
         for ( int i = 0; i < messageDialog.getComponentCount(); i++ ) {
@@ -92,16 +107,11 @@ public class GeneralAlert {
                 isReverseSoftButtons();
         UIManager.getInstance().getLookAndFeel().setReverseSoftButtons( false );
         messageDialog = new Dialog( " " );
-        messageDialog.getTitleComponent().setPreferredH( mDialogTitlePainer.
-                getFontSize()
-                                                         + messageDialog.
-                getTitleStyle().getPadding( Component.TOP )
-                                                         + messageDialog.
-                getTitleStyle().getPadding( Component.BOTTOM )
-                                                         + messageDialog.
-                getTitleStyle().getMargin( Component.TOP )
-                                                         + messageDialog.
-                getTitleStyle().getMargin( Component.BOTTOM ) );
+        messageDialog.getTitleComponent().setPreferredH( mDialogTitlePainer.getFontSize()
+                + messageDialog.getTitleStyle().getPadding( Component.TOP )
+                + messageDialog.getTitleStyle().getPadding( Component.BOTTOM )
+                + messageDialog.getTitleStyle().getMargin( Component.TOP )
+                + messageDialog.getTitleStyle().getMargin( Component.BOTTOM ) );
         messageDialog.setScrollableX( false );
         messageDialog.setLayout( new BorderLayout() );
         messageDialog.setTransitionInAnimator( CommonTransitions.createFade( DIALOG_FADE_TIME ) );
@@ -130,7 +140,7 @@ public class GeneralAlert {
         int textWidth = mMessageTextArea.getSelectedStyle().getFont().
                 stringWidth( aMessage );
         int lineHeight = mMessageTextArea.getSelectedStyle().getFont().getHeight()
-                         + mMessageTextArea.getRowsGap();
+                + mMessageTextArea.getRowsGap();
         mMessageTextArea.setIsScrollVisible( false );
         mMessageTextArea.setEditable( false );
 

@@ -23,11 +23,21 @@ public class NedConsts {
     }
 
     public class NedUpdateAddress {
+
         public static final String CHECKFORUPDATEURL = "http://nokiacsr.com:8080/ned.ota/version.txt";
         public static final String INSTALATIONFILE = "http://nokiacsr.com:8080/ned.ota/NED.jad";//case sensitive URL
     }
 
+    public class NedDemo {
+
+        public static final String DEMOURL = "http://217.74.73.16:8083";
+        public static final String DEMOUSERNAME = "guest";
+        public static final String DEMOPASSWORD = "guest";
+        public static final String DEMOLIBID = "khan";
+    }
+
     public class NedUpdateInfo {
+
         public static final String VERSION = "Version";
         public static final String OVISTORE = "OVIStore";
     }

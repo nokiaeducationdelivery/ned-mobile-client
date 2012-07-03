@@ -114,7 +114,7 @@ public class NedResources {
     public static final String CATEGORIES = Localization.getMessage( "CATEGORIES" );
     public static final String ADD_LIBRARY = Localization.getMessage( "ADD_LIBRARY" );
     public static final String SHOW_LIBRARY = Localization.getMessage( "SHOW_LIBRARY" );
-    public static final String LIBRARY_ID_ = Localization.getMessage( "LIBRARY_ID_" );
+    public static final String LIBRARY_ID = Localization.getMessage( "LIBRARY_ID" );
     public static final String LIBRARY_MANAGER = Localization.getMessage( "LIBRARY_MANAGER" );
     public static final String CONNECTING = Localization.getMessage( "CONNECTING" );
     public static final String LIBRARY_NOT_EXISTS = Localization.getMessage( "LIBRARY_NOT_EXISTS" );
@@ -224,14 +224,15 @@ public class NedResources {
     public static final String CATALOGS_REMOVED = "CATALOGS_REMOVED";
     public static final String CATEGORIES_REMOVED = "CATEGORIES_REMOVED";
     public static final String MEDIAITEMS_REMOVED = "MEDIAITEMS_REMOVED";
-    public static final String LATEST_CHANGES =  Localization.getMessage( "LATEST_CHANGES" );
-    public static final String NO_CHANGES = Localization.getMessage( "NO_CHANGES");
-    public static final String CATALOG =  Localization.getMessage( "CATALOG" );
-    public static final String CATEGORY = Localization.getMessage( "CATEGORY");
-    public static final String NEEDHELP = Localization.getMessage( "NEEDHELP");
-    public static final String TRYAGAINLATER = Localization.getMessage( "TRYAGAINLATER");
+    public static final String LATEST_CHANGES = Localization.getMessage( "LATEST_CHANGES" );
+    public static final String NO_CHANGES = Localization.getMessage( "NO_CHANGES" );
+    public static final String CATALOG = Localization.getMessage( "CATALOG" );
+    public static final String CATEGORY = Localization.getMessage( "CATEGORY" );
+    public static final String NEEDHELP = Localization.getMessage( "NEEDHELP" );
+    public static final String TRYAGAINLATER = Localization.getMessage( "TRYAGAINLATER" );
     public static final String NEWVERSIONAVAILABLE = "NEWVERSIONAVAILABLE";
     public static final String NEWESTVERSION = Localization.getMessage( "NEWESTVERSION" );
+    public static final String DEMOURL = Localization.getMessage( "DEMOURL" );
 
     public NedResources() {
     }
