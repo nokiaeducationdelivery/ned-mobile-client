@@ -70,10 +70,10 @@ public class MediaItemContextMenu extends ContextMenu {
             ShowLinksCommand.getInstance().execute( content.getDetails() );
         } else if ( cmd == InstantDownloadCommand.getInstance().getCommand() ) {
             InstantDownloadCommand.getInstance().execute( content.getDetails() );
-            new DownloadQueueScreen( content.getDetails() ).show();
+            new DownloadQueueScreen( content ).show();
         } else if ( cmd == AddToDownloadQueueCommand.getInstance().getCommand() ) {
             AddToDownloadQueueCommand.getInstance().execute( content.getDetails() );
-            new DownloadQueueScreen( content.getDetails() ).show();
+            new DownloadQueueScreen( content ).show();
         }
     }
 
