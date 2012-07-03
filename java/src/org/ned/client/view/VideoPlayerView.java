@@ -339,7 +339,6 @@ public class VideoPlayerView extends NedFormBase implements PlayerListener, Acti
             int prefW = (Display.getInstance().getDisplayWidth() - 10
                     * rewindButton.getStyle().getMargin( Component.LEFT )) / 5;
             rewindButton.setPreferredW( prefW );
-            rewindButton.setAlignment( Component.CENTER );
             rewindButton.setPreferredH( 2 * prefH );
 
             playButton = new Button( playCommand );
@@ -348,28 +347,24 @@ public class VideoPlayerView extends NedFormBase implements PlayerListener, Acti
             playButton.setText( "" );
             playButton.setPreferredW( prefW );
             playButton.setPreferredH( 2 * prefH );
-            playButton.setAlignment( Component.CENTER );
 
             fastForwardButton = new Button( fastForwardCommand );
             fastForwardButton.setIcon( ffIcon );
             fastForwardButton.setText( "" );
             fastForwardButton.setPreferredW( prefW );
             fastForwardButton.setPreferredH( 2 * prefH );
-            fastForwardButton.setAlignment( Component.CENTER );
 
             fullScreenButton = new Button( fullScreenCommand );
             fullScreenButton.setIcon( fullIcon );
             fullScreenButton.setText( "" );
             fullScreenButton.setPreferredW( prefW );
             fullScreenButton.setPreferredH( 2 * prefH );
-            fullScreenButton.setAlignment( Component.CENTER );
 
             backButton = new Button( exitPlayerCommand );
             backButton.setIcon( exitIcon );
             backButton.setText( "" );
             backButton.setPreferredW( prefW );
             backButton.setPreferredH( 2 * prefH );
-            backButton.setAlignment( Component.CENTER );
 
             progress = new Slider();
             progress.setThumbImage( pauseIcon.subImage( 7, 0, 8, pauseIcon.

@@ -13,28 +13,17 @@ package org.ned.client;
 import com.sun.lwuit.Display;
 import com.sun.lwuit.Font;
 import com.sun.lwuit.animations.CommonTransitions;
-import com.sun.lwuit.impl.midp.VKBImplementationFactory;
-import com.sun.lwuit.plaf.DefaultLookAndFeel;
 import com.sun.lwuit.plaf.UIManager;
 import com.sun.lwuit.util.Resources;
 import java.io.IOException;
 import javax.microedition.io.ConnectionNotFoundException;
 import javax.microedition.midlet.MIDletStateChangeException;
-import org.ned.client.transfer.DownloadManager;
 import org.ned.client.command.OpenLibraryManagerCommand;
 import org.ned.client.statistics.StatType;
 import org.ned.client.statistics.StatisticsManager;
+import org.ned.client.transfer.DownloadManager;
 import org.ned.client.utils.NedIOUtils;
-import org.ned.client.view.AudioPlayerView;
-import org.ned.client.view.GeneralAlert;
-import org.ned.client.view.ImageDisplayView;
-import org.ned.client.view.LoginScreen;
-import org.ned.client.view.MainScreen;
-import org.ned.client.view.SplashScreen;
-import org.ned.client.view.TextDisplayView;
-import org.ned.client.view.VideoPlayerView;
-import org.ned.client.view.WaitingScreen;
-import org.ned.client.view.WelcomeScreen;
+import org.ned.client.view.*;
 import org.ned.client.view.customComponents.MenuBar;
 import org.ned.client.view.renderer.MenuCellRenderer;
 
@@ -50,7 +39,6 @@ public class NedMidlet extends javax.microedition.midlet.MIDlet {
     private XmlManager xm = null;
     private DownloadManager downloadManager = null;
     private SettingsManager settingsManager = null;
-    //private Scheduler sl = null;
     private AccountManager accountManager = null;
     private Resources res;
 
@@ -80,7 +68,8 @@ public class NedMidlet extends javax.microedition.midlet.MIDlet {
     }
 
     public int getDownloadState() {
-        return settingsManager.getDlAutomatic() ? DOWNLOAD_AUTOMATIC : DOWNLOAD_MANUAL;
+        return settingsManager.getDlAutomatic() ? DOWNLOAD_AUTOMATIC
+               : DOWNLOAD_MANUAL;
     }
 
     public void setDownloadState( int _dlState ) {
@@ -146,7 +135,6 @@ public class NedMidlet extends javax.microedition.midlet.MIDlet {
     }
 
     public void startApp() {
-        VKBImplementationFactory.init();//virtual keyboard will be shown on touch devices
         Display.init( this );
         loadTheme();
 
@@ -296,8 +284,8 @@ public class NedMidlet extends javax.microedition.midlet.MIDlet {
 //        }
 
         if ( settingsManager.getLibraryManager().getVisibleLibrariesList()
-             == null
-             || settingsManager.getLibraryManager().getVisibleLibrariesList().
+                == null
+                || settingsManager.getLibraryManager().getVisibleLibrariesList().
                 size() < 1 ) {
             OpenLibraryManagerCommand.getInstance().execute( null );
         } else {

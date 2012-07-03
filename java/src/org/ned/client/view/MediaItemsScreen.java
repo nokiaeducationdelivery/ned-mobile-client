@@ -30,11 +30,12 @@ public class MediaItemsScreen extends NedFormBase implements ActionListener, Sel
         super( id );
         setNedTitle( mNewLibModel != null ? mNewLibModel.getName() : " " );
 
-        mMediaList = new List( mNewLibModel != null ? LibraryHelpers.sortByType( mNewLibModel.
+        mMediaList = new List( mNewLibModel != null
+                               ? LibraryHelpers.sortByType( mNewLibModel.
                 getChildern() ) : new Vector( 0 ) );
         mMediaList.setFixedSelection( List.FIXED_NONE );
         mMediaList.setSelectedIndex( 0 );
-        mMediaList.setListCellRenderer( new MediaItemsListCellRenderer() );
+        mMediaList.setRenderer( new MediaItemsListCellRenderer() );
         mMediaList.setPreferredW( Display.getInstance().getDisplayWidth() );
         mMediaList.addSelectionListener( this );
         addComponent( mMediaList );
@@ -49,7 +50,7 @@ public class MediaItemsScreen extends NedFormBase implements ActionListener, Sel
         Object src = evt.getSource();
 
         if ( src == BackMediaItemsCommand.getInstance().getCommand()
-             || evt.getKeyEvent() == Display.GAME_LEFT ) {
+                || evt.getKeyEvent() == Display.GAME_LEFT ) {
             BackMediaItemsCommand.getInstance().execute( mNewLibModel.getParent().
                     getId() );
         } else if ( src == ShowDetailsCommand.getInstance().getCommand() ) {
@@ -101,7 +102,7 @@ public class MediaItemsScreen extends NedFormBase implements ActionListener, Sel
         } else if ( src == showFreeMem ) {
             GeneralAlert.show( String.valueOf( Runtime.getRuntime().freeMemory() ), GeneralAlert.INFO );
         } else if ( src == HelpCommand.getInstance().getCommand() ) {
-            Object[] params = { this.getClass(), mNewLibModel.getId() };
+            Object[] params = {this.getClass(), mNewLibModel.getId()};
             HelpCommand.getInstance().execute( params );
         } else if ( src == DownloadsQueueViewCommand.getInstance().getCommand() ) {
             DownloadsQueueViewCommand.getInstance().execute( mNewLibModel );

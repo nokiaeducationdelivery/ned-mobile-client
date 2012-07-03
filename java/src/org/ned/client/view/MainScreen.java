@@ -48,7 +48,7 @@ public class MainScreen extends NedFormBase implements ActionListener {
         LibrariesListCellRenderer librariesRenderer = new LibrariesListCellRenderer();
         librariesList = new NedList( new VisibleLibraryModel( NedMidlet.
                 getSettingsManager().getLibraryManager() ) );
-        librariesList.setListCellRenderer( librariesRenderer );
+        librariesList.setRenderer( librariesRenderer );
         librariesList.setFixedSelection( List.FIXED_NONE );
         librariesList.getStyle().setBorder( Border.createEmpty() );
         librariesList.setSelectedIndex( 0 );
@@ -117,7 +117,7 @@ public class MainScreen extends NedFormBase implements ActionListener {
             NedLibrary selectedLibrary = (NedLibrary)librariesList.
                     getSelectedItem();
             if ( selectedLibrary != null
-                 && NedIOUtils.fileExists( selectedLibrary.getFileUri() ) ) {
+                    && NedIOUtils.fileExists( selectedLibrary.getFileUri() ) ) {
                 SearchDialogCommand.getInstance().execute( selectedLibrary.getId() );
             } else {
                 GeneralAlert.show( NedResources.LIBRARY_NOT_EXISTS, GeneralAlert.INFO );
@@ -136,7 +136,6 @@ public class MainScreen extends NedFormBase implements ActionListener {
         empty.setAlignment( Label.CENTER );
         addComponent( empty );
     }
-
 
     private static class CheckForUpdateCallback implements AsyncCompletedCallback {
 

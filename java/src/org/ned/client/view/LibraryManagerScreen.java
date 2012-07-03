@@ -72,8 +72,9 @@ public class LibraryManagerScreen extends NedFormBase implements ActionListener,
 
         addUnderlineSeparator();
 
-        mLibrariesList = new ClickableList( NedMidlet.getSettingsManager().getLibraryManager() );
-        mLibrariesList.setListCellRenderer( new LibrariesListCheckBoxCellRenderer() );
+        mLibrariesList = new ClickableList( NedMidlet.getSettingsManager().
+                getLibraryManager() );
+        mLibrariesList.setRenderer( new LibrariesListCheckBoxCellRenderer() );
         mLibrariesList.setFixedSelection( List.FIXED_NONE );
         mLibrariesList.addActionListener( this );
         mLibrariesList.addSelectionListener( this );
@@ -101,7 +102,8 @@ public class LibraryManagerScreen extends NedFormBase implements ActionListener,
             NedMidlet.getSettingsManager().saveSettings();
             BackSettingsCommand.getInstance().execute( null );
         } else if ( src == RemoveLibraryCommand.getInstance().getCommand() ) {
-            RemoveLibraryCommand.getInstance().execute( mLibrariesList.getSelectedItem() );
+            RemoveLibraryCommand.getInstance().execute( mLibrariesList.
+                    getSelectedItem() );
         } else if ( src == mLibrariesList ) {
             int maxPressedWidth = (int)(0.2 * mLibrariesList.getWidth());
             if ( maxPressedWidth > 50 ) {
@@ -117,9 +119,11 @@ public class LibraryManagerScreen extends NedFormBase implements ActionListener,
                 }
             }
         } else if ( src == AddLibraryCommand.getInstance().getCommand() ) {
-            AddLibraryCommand.getInstance().beginAsync( mServerUrlTextArea.getText(), null, false );
+            AddLibraryCommand.getInstance().beginAsync( mServerUrlTextArea.
+                    getText(), null, false );
         } else if ( src == UpdateLibraryCommand.getInstance().getCommand() ) {
-            UpdateLibraryCommand.getInstance().execute( mLibrariesList.getSelectedItem() );
+            UpdateLibraryCommand.getInstance().execute( mLibrariesList.
+                    getSelectedItem() );
         } else if ( src == HelpCommand.getInstance().getCommand() ) {
             HelpCommand.getInstance().execute( this.getClass() );
         }
@@ -161,7 +165,8 @@ public class LibraryManagerScreen extends NedFormBase implements ActionListener,
     private void addDemoLabels() {
         if ( NedMidlet.getAccountManager().getServerUrl().equalsIgnoreCase( NedConsts.NedDemo.DEMOURL )
                 && NedMidlet.getAccountManager().getCurrentUser().login.equals( NedConsts.NedDemo.DEMOUSERNAME )
-                && NedMidlet.getAccountManager().getCurrentUser().password.equals( NedConsts.NedDemo.DEMOPASSWORD )
+                && NedMidlet.getAccountManager().getCurrentUser().password.
+                equals( NedConsts.NedDemo.DEMOPASSWORD )
                 && NedMidlet.getSettingsManager().getLibraryManager().getSize()
                 == 0 ) {
             Label demo = new Label( NedResources.DEMOURL );

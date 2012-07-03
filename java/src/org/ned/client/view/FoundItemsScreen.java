@@ -43,7 +43,7 @@ public class FoundItemsScreen extends NedFormBase implements ActionListener, Sel
         if ( mediaItems.size() > 0 ) {
             mMediaList = new List( mediaItems );
             mMediaList.setSelectedIndex( 0 );
-            mMediaList.setListCellRenderer( new MediaItemsListCellRenderer() );
+            mMediaList.setRenderer( new MediaItemsListCellRenderer() );
             mMediaList.setPreferredW( Display.getInstance().getDisplayWidth() );
             mMediaList.addSelectionListener( this );
             addComponent( mMediaList );
@@ -62,7 +62,7 @@ public class FoundItemsScreen extends NedFormBase implements ActionListener, Sel
         Object src = evt.getSource();
 
         if ( src == BackGenericCommand.getInstance().getCommand()
-             || evt.getKeyEvent() == Display.GAME_LEFT ) {
+                || evt.getKeyEvent() == Display.GAME_LEFT ) {
             BackGenericCommand.getInstance().execute( mNewLibModel.getParent().
                     getId() );
         } else if ( src == ShowDetailsCommand.getInstance().getCommand() ) {
@@ -86,10 +86,10 @@ public class FoundItemsScreen extends NedFormBase implements ActionListener, Sel
                         getDetails() );
                 String state = NedResources.MID_MANUAL;
                 if ( NedMidlet.getInstance().getDownloadState()
-                     == NedMidlet.DOWNLOAD_AUTOMATIC ) {
+                        == NedMidlet.DOWNLOAD_AUTOMATIC ) {
                     state = NedResources.MID_AUTOMATIC;
                 }
-                Object[] params = { content.getDetails().getText(), state };
+                Object[] params = {content.getDetails().getText(), state};
                 String s = Localization.getMessage( NedResources.MID_ADDED_DOWNLOAD_MESSAGE, params );
                 GeneralAlert.show( s, GeneralAlert.INFO );
             }

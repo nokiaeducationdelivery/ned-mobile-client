@@ -32,7 +32,7 @@ public class CategoryScreen extends NedFormBase implements ActionListener {
         mCategoryList = new NedList( this.mNewLibModel != null ? mNewLibModel.
                 getChildern() : new Vector( 0 ) );
         mCategoryList.setContextMenu( new CategoryContextMenu( mCategoryList, 2 ) );
-        mCategoryList.setListCellRenderer( new CategoryListCellRenderer() );
+        mCategoryList.setRenderer( new CategoryListCellRenderer() );
         mCategoryList.setSelectedIndex( 0 );
         mCategoryList.setPreferredW( Display.getInstance().getDisplayWidth() );
         addComponent( mCategoryList );
@@ -54,7 +54,7 @@ public class CategoryScreen extends NedFormBase implements ActionListener {
         Object src = evt.getSource();
 
         if ( src == BackCategoryCommand.getInstance().getCommand()
-             || evt.getKeyEvent() == Display.GAME_LEFT ) {
+                || evt.getKeyEvent() == Display.GAME_LEFT ) {
             if ( mNewLibModel != null ) {
                 BackCategoryCommand.getInstance().execute( mNewLibModel.
                         getParent().getId() );
@@ -62,7 +62,7 @@ public class CategoryScreen extends NedFormBase implements ActionListener {
                 BackToMainScreenCommand.getInstance().execute( null );
             }
         } else if ( src instanceof List || evt.getKeyEvent()
-                                           == Display.GAME_RIGHT ) {
+                == Display.GAME_RIGHT ) {
             LibraryElement content = (LibraryElement)mCategoryList.
                     getSelectedItem();
             if ( content != null ) {
@@ -82,7 +82,7 @@ public class CategoryScreen extends NedFormBase implements ActionListener {
         } else if ( src == showFreeMem ) {
             GeneralAlert.show( String.valueOf( Runtime.getRuntime().freeMemory() ), GeneralAlert.INFO );
         } else if ( src == HelpCommand.getInstance().getCommand() ) {
-            Object[] params = { this.getClass(), mNewLibModel.getId() };
+            Object[] params = {this.getClass(), mNewLibModel.getId()};
             HelpCommand.getInstance().execute( params );
         } else if ( src == DownloadsQueueViewCommand.getInstance().getCommand() ) {
             DownloadsQueueViewCommand.getInstance().execute( mNewLibModel );

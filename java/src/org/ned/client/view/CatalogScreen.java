@@ -34,7 +34,7 @@ public class CatalogScreen extends NedFormBase implements ActionListener {
         mCatalogList = new NedList( mNewLibModel != null ? mNewLibModel.
                 getChildern() : new Vector( 0 ) );
         mCatalogList.setContextMenu( new CatalogContextMenu( mCatalogList, 2 ) );
-        mCatalogList.setListCellRenderer( new CatalogListCellRenderer() );
+        mCatalogList.setRenderer( new CatalogListCellRenderer() );
         mCatalogList.setSelectedIndex( 0 );
         mCatalogList.addActionListener( this );
 
@@ -65,7 +65,7 @@ public class CatalogScreen extends NedFormBase implements ActionListener {
         } else if ( src == DeleteContentCommand.getInstance().getCommand() ) {
             DeleteContentCommand.getInstance().execute( mCatalogList );
         } else if ( src instanceof List || evt.getKeyEvent()
-                                           == Display.GAME_RIGHT ) {
+                == Display.GAME_RIGHT ) {
             LibraryElement content = (LibraryElement)mCatalogList.
                     getSelectedItem();
             if ( content != null ) {
@@ -83,7 +83,7 @@ public class CatalogScreen extends NedFormBase implements ActionListener {
         } else if ( src == showFreeMem ) {
             GeneralAlert.show( String.valueOf( Runtime.getRuntime().freeMemory() ), GeneralAlert.INFO );
         } else if ( src == HelpCommand.getInstance().getCommand() ) {
-            Object[] params = { this.getClass(), mNewLibModel.getId() };
+            Object[] params = {this.getClass(), mNewLibModel.getId()};
             HelpCommand.getInstance().execute( params );
         } else if ( src == UpdateLibraryCommand.getInstance().getCommand() ) {
             UpdateLibraryCommand.getInstance().execute( NedMidlet.

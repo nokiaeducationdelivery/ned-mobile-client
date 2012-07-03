@@ -36,7 +36,8 @@ public class LanguagesScreen extends NedFormBase implements ActionListener, Sele
 
     public LanguagesScreen() {
         super();
-        mLanguage = new LanguageLister( NedMidlet.getAccountManager().getLocalizationUri() );
+        mLanguage = new LanguageLister( NedMidlet.getAccountManager().
+                getLocalizationUri() );
         setLayout( new BoxLayout( BoxLayout.Y_AXIS ) );
         setNedTitle( NedResources.LANGUAGES );
         LanguageInfo currentLanguage = NedMidlet.getAccountManager().getLanguage();
@@ -50,7 +51,9 @@ public class LanguagesScreen extends NedFormBase implements ActionListener, Sele
         mCommands.setContextMenu( new LanguageContextMenu( mCommands, 1 ) );
         mCommands.setMinElementHeight( 1 );
         mCommands.setWidth( Display.getInstance().getDisplayWidth() );
-        mCommands.setListCellRenderer( new RadioButtonCellRenderer( currentLanguageName == null ? "en-GB" : currentLanguageName ) );
+        mCommands.setRenderer(
+                new RadioButtonCellRenderer( currentLanguageName == null
+                                             ? "en-GB" : currentLanguageName ) );
         mCommands.addActionListener( this );
         mCommands.addSelectionListener( this );
         addComponent( mCommands );
@@ -63,7 +66,7 @@ public class LanguagesScreen extends NedFormBase implements ActionListener, Sele
         addCommand( HelpCommand.getInstance().getCommand() );
 
         if ( mCommands.getSelectedItem() != null
-             && ((LanguageInfo) mCommands.getSelectedItem()).isLocal() ) {
+                && ((LanguageInfo)mCommands.getSelectedItem()).isLocal() ) {
             addCommand( DownloadLanguageAgainCommand.getInstance().getCommand() );
         }
 
@@ -75,21 +78,25 @@ public class LanguagesScreen extends NedFormBase implements ActionListener, Sele
         Object src = evt.getSource();
         if ( src == BackLanguagesCommand.getInstance().getCommand() ) {
             BackLanguagesCommand.getInstance().execute( null );
-        } else if ( src == ConfirmLanguageSelectCommand.getInstance().getCommand()
-                    || (src == mCommands && mCommands.getSelectedIndex() >= 0) ) {
-            LanguageInfo newLanguage = (LanguageInfo) mCommands.getSelectedItem();
+        } else if ( src
+                == ConfirmLanguageSelectCommand.getInstance().getCommand()
+                || (src == mCommands && mCommands.getSelectedIndex() >= 0) ) {
+            LanguageInfo newLanguage = (LanguageInfo)mCommands.getSelectedItem();
             if ( !newLanguage.isLocal() ) {
                 DownloadLanguageCommand.getInstance().beginAsync( newLanguage, new LanguageDownloadedCallback(), true );
             } else {
-                mCommands.setListCellRenderer( new RadioButtonCellRenderer( newLanguage.getLocale() ) );
+                mCommands.setRenderer( new RadioButtonCellRenderer( newLanguage.
+                        getLocale() ) );
                 ConfirmLanguageSelectCommand.getInstance().execute( newLanguage );
             }
         } else if ( src == HelpCommand.getInstance().getCommand() ) {
             HelpCommand.getInstance().execute( this.getClass() );
-        } else if ( src == CheckForLanguageUpdateCommand.getInstance().getCommand() ) {
+        } else if ( src == CheckForLanguageUpdateCommand.getInstance().
+                getCommand() ) {
             CheckForLanguageUpdateCommand.getInstance().beginAsync( mLanguage, new CheckCallback(), true );
-        } else if ( src == DownloadLanguageAgainCommand.getInstance().getCommand() ) {
-            LanguageInfo language = (LanguageInfo) mCommands.getSelectedItem();
+        } else if ( src
+                == DownloadLanguageAgainCommand.getInstance().getCommand() ) {
+            LanguageInfo language = (LanguageInfo)mCommands.getSelectedItem();
             DownloadLanguageAgainCommand.getInstance().beginAsync( language, new DownloadAgainCallback( mCommands ), true );
         }
     }
@@ -107,7 +114,8 @@ public class LanguagesScreen extends NedFormBase implements ActionListener, Sele
             } else {
                 String messageStr = NedResources.NEW_LANGUAGE + ":\n";
                 for ( int idx = 0; idx < newLang.size(); idx++ ) {
-                    messageStr += ((LanguageInfo) newLang.elementAt( idx )).getLangName();
+                    messageStr += ((LanguageInfo)newLang.elementAt( idx )).
+                            getLangName();
                     if ( idx != newLang.size() - 1 ) {
                         messageStr += ", ";
                     }
@@ -131,8 +139,9 @@ public class LanguagesScreen extends NedFormBase implements ActionListener, Sele
 
         public void onSuccess() {
             mCommands.repaint();
-            LanguageInfo newLanguage = (LanguageInfo) mCommands.getSelectedItem();
-            mCommands.setListCellRenderer( new RadioButtonCellRenderer( newLanguage.getLocale() ) );
+            LanguageInfo newLanguage = (LanguageInfo)mCommands.getSelectedItem();
+            mCommands.setRenderer( new RadioButtonCellRenderer( newLanguage.
+                    getLocale() ) );
             ConfirmLanguageSelectCommand.getInstance().execute( newLanguage );
         }
 

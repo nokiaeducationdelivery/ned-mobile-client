@@ -53,7 +53,7 @@ public class GeneralAlert {
                              boolean aShowEDT ) {
         if ( aShowEDT ) {
             Display.getInstance().callSerially( new Runnable() {
-                
+
                 public void run() {
                     show( aMessage, aAlertType );
                 }
@@ -83,7 +83,8 @@ public class GeneralAlert {
         Container cont1 = messageDialog.getContentPane();
         int hi = 0;
         int wi = cont1.getPreferredW() + 2 * 5;
-        int wi2 = messageDialog.getTitleStyle().getFont().stringWidth( mDialogTitlePainer.getTitle() )
+        int wi2 = messageDialog.getTitleStyle().getFont().stringWidth( mDialogTitlePainer.
+                getTitle() )
                 + 2 * 5 + DialogTitlePainter.TITLE_LEFT_MARGIN;
         wi = Math.max( wi, wi2 );
 
@@ -107,7 +108,8 @@ public class GeneralAlert {
                 isReverseSoftButtons();
         UIManager.getInstance().getLookAndFeel().setReverseSoftButtons( false );
         messageDialog = new Dialog( " " );
-        messageDialog.getTitleComponent().setPreferredH( mDialogTitlePainer.getFontSize()
+        messageDialog.getTitleComponent().setPreferredH( mDialogTitlePainer.
+                getFontSize()
                 + messageDialog.getTitleStyle().getPadding( Component.TOP )
                 + messageDialog.getTitleStyle().getPadding( Component.BOTTOM )
                 + messageDialog.getTitleStyle().getMargin( Component.TOP )
@@ -141,17 +143,17 @@ public class GeneralAlert {
                 stringWidth( aMessage );
         int lineHeight = mMessageTextArea.getSelectedStyle().getFont().getHeight()
                 + mMessageTextArea.getRowsGap();
-        mMessageTextArea.setIsScrollVisible( false );
+        mMessageTextArea.setScrollVisible( false );
         mMessageTextArea.setEditable( false );
 
         if ( textWidth >= displayW || Utils.countLines( aMessage ) > 1 ) {
             mMessageTextArea.setPreferredW( textWidth / (textWidth / displayW
-                                                         + 1) + 2 );//to fill equally to all lines
+                    + 1) + 2 );//to fill equally to all lines
             mMessageTextArea.setRows( textWidth
-                                      / mMessageTextArea.getPreferredW() + 2 );
+                    / mMessageTextArea.getPreferredW() + 2 );
             int preferredH = lineHeight * mMessageTextArea.getRows() + 2;
             if ( preferredH > (displayH * 0.5) ) {
-                mMessageTextArea.setIsScrollVisible( true );
+                mMessageTextArea.setScrollVisible( true );
                 preferredH = (int)(displayH * 0.5);
             }
             mMessageTextArea.setPreferredH( preferredH );

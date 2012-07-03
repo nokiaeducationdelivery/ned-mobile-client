@@ -29,10 +29,11 @@ public class LinksScreen extends NedFormBase implements ActionListener {
         setNedTitle( mNewLibModel != null ? mNewLibModel.getName() : " " );
 
         addCommand( BackLinksCommand.getInstance().getCommand() );
-        if ( mNewLibModel != null && mNewLibModel.getDetails() != null && mNewLibModel.getDetails().getExternalLinks() != null
-             && mNewLibModel.getDetails().getExternalLinks().size() > 0 ) {
+        if ( mNewLibModel != null && mNewLibModel.getDetails() != null
+                && mNewLibModel.getDetails().getExternalLinks() != null
+                && mNewLibModel.getDetails().getExternalLinks().size() > 0 ) {
             linksList = new List( mNewLibModel.getDetails().getExternalLinks() );
-            linksList.setListCellRenderer( new SimpleListCellRenderer() );
+            linksList.setRenderer( new SimpleListCellRenderer() );
             linksList.setSelectedIndex( 0 );
             linksList.setPreferredW( Display.getInstance().getDisplayWidth() );
             linksList.addActionListener( this );
@@ -54,11 +55,12 @@ public class LinksScreen extends NedFormBase implements ActionListener {
         Object src = evt.getSource();
 
         if ( src == BackLinksCommand.getInstance().getCommand()
-             || evt.getKeyEvent() == Display.GAME_LEFT ) {
+                || evt.getKeyEvent() == Display.GAME_LEFT ) {
             BackLinksCommand.getInstance().execute(
-                    mNewLibModel != null ? mNewLibModel.getParent().getId() : null );
+                    mNewLibModel != null ? mNewLibModel.getParent().getId()
+                    : null );
         } else if ( src instanceof List
-                    || src == OpenLinkCommand.getInstance().getCommand() ) {
+                || src == OpenLinkCommand.getInstance().getCommand() ) {
             OpenLinkCommand.getInstance().execute( linksList.getSelectedItem() );
         }
     }
