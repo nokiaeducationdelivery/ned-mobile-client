@@ -19,16 +19,17 @@ import com.sun.lwuit.layouts.BoxLayout;
 import org.ned.client.AccountManager.UserInfo;
 import org.ned.client.NedMidlet;
 import org.ned.client.NedResources;
+import org.ned.client.command.AsyncCompletedCallback;
 import org.ned.client.command.ExitCommand;
 import org.ned.client.command.HelpCommand;
-import org.ned.client.command.LoginOnStartCommand;
+import org.ned.client.command.LoginToAppCommand;
 import org.ned.client.command.ShowAboutCommand;
 import org.ned.client.command.RemoveUserCommand;
 import org.ned.client.view.customComponents.ClearTextField;
 import org.ned.client.command.ResetFactorySettingsCommand;
 import org.ned.client.view.customComponents.CheckBox;
 
-public class LoginScreen extends NedFormBase implements ActionListener, FocusListener {
+public class LoginScreen extends NedFormBase implements ActionListener, FocusListener, AsyncCompletedCallback {
 
     private ClearTextField textAreaUser;
     private ClearTextField textAreaPassword;
@@ -43,7 +44,7 @@ public class LoginScreen extends NedFormBase implements ActionListener, FocusLis
         addCommand(HelpCommand.getInstance().getCommand());
         addCommand(ResetFactorySettingsCommand.getInstance().getCommand());
         addCommand(RemoveUserCommand.getInstance().getCommand());
-        addCommand(LoginOnStartCommand.getInstance().getCommand());
+        addCommand(LoginToAppCommand.getInstance().getCommand());
         addCommandListener(this);
     }
 
@@ -119,9 +120,9 @@ public class LoginScreen extends NedFormBase implements ActionListener, FocusLis
 
     public void actionPerformed(ActionEvent evt) {
         Object src = evt.getSource();
-        if ( src == LoginOnStartCommand.getInstance().getCommand() ) {
-            Object[] login = new Object[]{ textAreaUser.getText(), textAreaPassword.getText(), ( rememberCheckBox.isSelected() ? Boolean.TRUE : Boolean.FALSE ) };
-            LoginOnStartCommand.getInstance().execute(login);
+        if ( src == LoginToAppCommand.getInstance().getCommand() ) {
+            Object[] login = new Object[]{ textAreaUser.getText(), textAreaPassword.getText() };
+            LoginToAppCommand.getInstance().beginAsync(login, this, false);
         } else if ( src == ExitCommand.getInstance().getCommand() ) {
             ExitCommand.getInstance().execute(null);
         } else if ( src == RemoveUserCommand.getInstance().getCommand()) {
@@ -159,5 +160,14 @@ public class LoginScreen extends NedFormBase implements ActionListener, FocusLis
                 rememberCheckBox.setSelected( false );
             }
         }
+    }
+
+    public void onSuccess() {
+        NedMidlet.getAccountManager().savePassword(textAreaUser.getText(), rememberCheckBox.isSelected());
+        NedMidlet.getInstance().continueApploading();
+    }
+
+    public void onFailure(String error) {
+        //no action on failure
     }
 }

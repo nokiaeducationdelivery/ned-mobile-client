@@ -25,6 +25,7 @@ import org.ned.client.utils.UnauthorizedLibraryUsageException;
 import org.ned.client.view.GeneralAlert;
 import org.ned.client.view.LoginOnLineScreen;
 import org.ned.client.view.StatisticsScreen;
+import org.ned.client.view.WaitingScreen;
 
 public class StatisticsUploader implements Runnable {
 
@@ -170,7 +171,7 @@ public class StatisticsUploader implements Runnable {
             } catch ( IllegalThreadStateException ex ) {
                 mIsSending = false;
             } catch ( SecurityException ex ) {
-                GeneralAlert.show( ex.getMessage(), GeneralAlert.ERROR );
+              //  GeneralAlert.show( ex.getMessage(), GeneralAlert.ERROR ); TODO this may mess watiting screen
             }
         }
     }
@@ -179,6 +180,7 @@ public class StatisticsUploader implements Runnable {
         try {
             submitToServer();
         } catch ( UnauthorizedLibraryUsageException ex ) {
+            WaitingScreen.dispose();
             if ( !mSupressLogin
                 && GeneralAlert.showQuestion(NedResources.LOGIN_AGAIN ) == GeneralAlert.RESULT_YES ) {
                     new LoginOnLineScreen( StatisticsScreen.class ).show();

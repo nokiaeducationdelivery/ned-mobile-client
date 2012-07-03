@@ -17,7 +17,7 @@ import org.ned.client.statistics.StatisticsManager;
 import org.ned.client.view.GeneralAlert;
 
 
-public class UploadStatisticsCommand extends NedCommand {
+public class UploadStatisticsCommand extends NedCommandAsync {
 
     private static UploadStatisticsCommand instance;
 
@@ -35,6 +35,5 @@ public class UploadStatisticsCommand extends NedCommand {
     protected void doAction(Object param) {
         StatisticsManager.uploadStats( false );
         MotdManager.getInstance().updateMotd();
-        GeneralAlert.show( NedResources.DLM_NEWSTATS, GeneralAlert.INFO );
     }
 }

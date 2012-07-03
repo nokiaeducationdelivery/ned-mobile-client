@@ -23,6 +23,7 @@ import javax.microedition.io.Connector;
 import javax.microedition.io.file.FileConnection;
 import org.ned.client.NedConsts;
 import org.ned.client.NedResources;
+import org.ned.client.command.AsyncCompletedCallback;
 import org.ned.client.command.BackStatisiticsCommand;
 import org.ned.client.command.HelpCommand;
 import org.ned.client.command.UploadStatisticsCommand;
@@ -31,7 +32,7 @@ import org.ned.client.utils.MediaTypeResolver;
 import org.ned.client.utils.NedIOUtils;
 
 
-public class StatisticsScreen extends NedFormBase implements ActionListener{
+public class StatisticsScreen extends NedFormBase implements ActionListener, AsyncCompletedCallback{
 
     private static final int ICON_FIT_SIZE = 36;
 
@@ -126,7 +127,7 @@ public class StatisticsScreen extends NedFormBase implements ActionListener{
         if( src == BackStatisiticsCommand.getInstance().getCommand() ) {
             BackStatisiticsCommand.getInstance().execute(null);
         } else if( src == UploadStatisticsCommand.getInstance().getCommand() ) {
-            UploadStatisticsCommand.getInstance().execute(null);
+            UploadStatisticsCommand.getInstance().beginAsync(null, this, true);
         } else if ( src == HelpCommand.getInstance().getCommand() ) {
             HelpCommand.getInstance().execute( this.getClass() );
         }
@@ -156,5 +157,12 @@ public class StatisticsScreen extends NedFormBase implements ActionListener{
         con.addComponent( new Label( "[" + id+ "]"));
 
         mCenterContainer.addComponent( con );
+    }
+
+    public void onSuccess() {
+        GeneralAlert.show( NedResources.DLM_NEWSTATS, GeneralAlert.INFO );
+    }
+
+    public void onFailure(String error) {
     }
 }

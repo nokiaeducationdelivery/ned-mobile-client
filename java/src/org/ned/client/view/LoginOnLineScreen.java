@@ -15,15 +15,15 @@ import com.sun.lwuit.events.ActionEvent;
 import com.sun.lwuit.events.ActionListener;
 import com.sun.lwuit.layouts.BoxLayout;
 import org.ned.client.AccountManager.UserInfo;
-import org.ned.client.NedConsts.LoginError;
 import org.ned.client.NedMidlet;
 import org.ned.client.NedResources;
+import org.ned.client.command.AsyncCompletedCallback;
 import org.ned.client.command.ExitCommand;
-import org.ned.client.command.LoginOnStartCommand;
+import org.ned.client.command.LoginToServerCommand;
 import org.ned.client.utils.ErrorConnectionMessageResolver;
 import org.ned.client.view.customComponents.ClearTextField;
 
-public class LoginOnLineScreen extends NedFormBase implements ActionListener {
+public class LoginOnLineScreen extends NedFormBase implements ActionListener, AsyncCompletedCallback {
 
     private ClearTextField textAreaUser;
     private ClearTextField textAreaPassword;
@@ -34,7 +34,7 @@ public class LoginOnLineScreen extends NedFormBase implements ActionListener {
         setLayout(new BoxLayout(BoxLayout.Y_AXIS));
         initForm();
         addCommand(ExitCommand.getInstance().getCommand());
-        addCommand(LoginOnStartCommand.getInstance().getCommand());
+        addCommand(LoginToServerCommand.getInstance().getCommand());
         addCommandListener(this);
         mPreviousForm = aPreviousForm;
     }
@@ -79,20 +79,23 @@ public class LoginOnLineScreen extends NedFormBase implements ActionListener {
 
     public void actionPerformed(ActionEvent evt) {
         Object src = evt.getSource();
-        if ( src == LoginOnStartCommand.getInstance().getCommand() ) {
-            int retval = LoginError.UNKNOWN;
-            retval = NedMidlet.getAccountManager().loginToServer( textAreaUser.getText(), textAreaPassword.getText());
-            if ( retval == LoginError.SUCCESS ) {
-                try {
-                    ((NedFormBase) mPreviousForm.newInstance()).show();
-                } catch (Exception ex) {
-                    new MainScreen().show();
-                }
-            } else {
-                ErrorConnectionMessageResolver.showErrorMessage( retval );
-            }
+        if ( src == LoginToServerCommand.getInstance().getCommand() ) {
+            Object[] credentials = new Object[]{ textAreaUser.getText(), textAreaPassword.getText()};
+            LoginToServerCommand.getInstance().beginAsync(credentials, this, true );
         } else if ( src == ExitCommand.getInstance().getCommand() ) {
             ExitCommand.getInstance().execute(null);
         }
+    }
+
+    public void onSuccess() {
+                try {
+            ((NedFormBase) mPreviousForm.newInstance()).show();
+        } catch (Exception ex) {
+            new MainScreen().show();
+        }
+    }
+
+    public void onFailure(String error) {
+        ErrorConnectionMessageResolver.showErrorMessage( Integer.parseInt(error) );
     }
 }

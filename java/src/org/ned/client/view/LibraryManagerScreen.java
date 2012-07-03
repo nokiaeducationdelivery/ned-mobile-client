@@ -118,7 +118,7 @@ public class LibraryManagerScreen extends NedFormBase implements ActionListener,
                 }
             }
         } else if ( src == AddLibraryCommand.getInstance().getCommand() ) {
-            AddLibraryCommand.getInstance().execute( serverUrlTextArea.getText() );
+            AddLibraryCommand.getInstance().beginAsync( serverUrlTextArea.getText(), null, false );
         } else if ( src == UpdateLibraryCommand.getInstance().getCommand() ){
             UpdateLibraryCommand.getInstance().execute(librariesList.getSelectedItem());
         }  else if ( src == HelpCommand.getInstance().getCommand() ) {

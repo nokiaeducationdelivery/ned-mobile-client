@@ -39,6 +39,16 @@ public class AccountManager {
         saveSetup();
     }
 
+    private int TryLoginToServer(String login, String password, int retval) {
+        WaitingScreen.show( NedResources.CONNECTING );
+        retval = loginToServer(login, password);
+        WaitingScreen.dispose();
+        if( retval != LoginError.SUCCESS ) {
+            ErrorConnectionMessageResolver.showErrorMessage( retval );
+        }
+        return retval;
+    }
+
     public class UserInfo {
 
         public UserInfo(String login, String password, boolean save) {
@@ -144,22 +154,14 @@ public class AccountManager {
         int retval = LoginError.UNKNOWN;
         UserInfo user = findUser(login);
         if (user == null) {
-            retval = loginToServer(login, password);
-            if( retval != LoginError.SUCCESS  ) {
-                ErrorConnectionMessageResolver.showErrorMessage( retval );
-            }
+            retval = TryLoginToServer(login, password, retval);
         } else if (user.password.equals(password)) {
             currentUser = user;
             saveSetup();
             retval = LoginError.SUCCESS;
         } else {
             if ( GeneralAlert.showQuestion(NedResources.LOGIN_ONLINE) == GeneralAlert.RESULT_YES ) {
-                WaitingScreen.show( NedResources.CONNECTING );
-                retval = loginToServer(login, password);
-                WaitingScreen.dispose();
-                if( retval != LoginError.SUCCESS ) {
-                    ErrorConnectionMessageResolver.showErrorMessage( retval );
-                }
+                retval = TryLoginToServer(login, password, retval);
             } else {
                 retval = LoginError.ABORTED;// for concurrency purpose
             }

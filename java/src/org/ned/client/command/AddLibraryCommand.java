@@ -26,7 +26,7 @@ import org.ned.client.view.LoginOnLineScreen;
 import org.ned.client.view.WaitingScreen;
 
 
-public class AddLibraryCommand extends NedCommand{
+public class AddLibraryCommand extends NedCommandAsync{
     private static AddLibraryCommand instance;
 
     private AddLibraryCommand() {

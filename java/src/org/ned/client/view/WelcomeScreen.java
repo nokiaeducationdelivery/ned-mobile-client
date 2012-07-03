@@ -14,7 +14,9 @@ import com.sun.lwuit.Label;
 import com.sun.lwuit.events.ActionEvent;
 import com.sun.lwuit.events.ActionListener;
 import com.sun.lwuit.layouts.BoxLayout;
+import org.ned.client.NedMidlet;
 import org.ned.client.NedResources;
+import org.ned.client.command.AsyncCompletedCallback;
 import org.ned.client.command.CheckServerUrlComand;
 import org.ned.client.command.ExitCommand;
 import org.ned.client.command.HelpCommand;
@@ -22,7 +24,7 @@ import org.ned.client.command.ShowAboutCommand;
 import org.ned.client.view.customComponents.ClearTextField;
 
 
-public class WelcomeScreen extends NedFormBase implements ActionListener  {
+public class WelcomeScreen extends NedFormBase implements ActionListener, AsyncCompletedCallback  {
 
     private ClearTextField serverUrlTextArea;
     private final String defaultInput = "http://";
@@ -46,8 +48,7 @@ public class WelcomeScreen extends NedFormBase implements ActionListener  {
             ExitCommand.getInstance().execute(null);
         } else if ( src == CheckServerUrlComand.getInstance().getCommand() ) {
             String newAddress = serverUrlTextArea.getText().trim();
-            WaitingScreen.show( NedResources.CONNECTING );
-            CheckServerUrlComand.getInstance().execute(newAddress);
+            CheckServerUrlComand.getInstance().beginAsync(newAddress, this, true);
         } else if ( src == HelpCommand.getInstance().getCommand() ) {
             HelpCommand.getInstance().execute( this.getClass() );
         } else if ( src == ShowAboutCommand.getInstance().getCommand()) {
@@ -74,5 +75,16 @@ public class WelcomeScreen extends NedFormBase implements ActionListener  {
         serverUrlLabel.setAlignment(Label.CENTER);
         serverUrlLabel.getStyle().setPadding(10, 10, 1, 1);
         addComponent(serverUrlLabel);
+    }
+
+    //for check url command
+    public void onSuccess() {
+        NedMidlet.getAccountManager().setServer(serverUrlTextArea.getText().trim());
+        new LoginScreen().show();
+    }
+
+    //for check url command
+    public void onFailure(String error) {
+        GeneralAlert.show(error , GeneralAlert.WARNING );//todo better message needed
     }
 }

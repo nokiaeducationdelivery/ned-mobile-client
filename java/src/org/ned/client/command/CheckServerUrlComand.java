@@ -19,7 +19,7 @@ import org.ned.client.NedResources;
 import org.ned.client.view.GeneralAlert;
 import org.ned.client.view.LoginScreen;
 
-public class CheckServerUrlComand extends NedCommand {
+public class CheckServerUrlComand extends NedCommandAsync {
 
     private static CheckServerUrlComand instance;
     private final String serverPostfix = "/NEDCatalogTool2/";
@@ -45,16 +45,12 @@ public class CheckServerUrlComand extends NedCommand {
         try {
             hc = (HttpConnection) Connector.open(wwwUrl);
             hc.setRequestMethod(HttpConnection.GET);
-            if (hc.getResponseCode() == HttpConnection.HTTP_OK ||
-                hc.getResponseCode() == HttpConnection.HTTP_UNAUTHORIZED ) {
-                NedMidlet.getAccountManager().setServer(url);
-                new LoginScreen().show();
-            } else {
-                GeneralAlert.show(" " + hc.getResponseCode() , GeneralAlert.WARNING );//todo better message needed
+            if (hc.getResponseCode() != HttpConnection.HTTP_OK &&
+                hc.getResponseCode() != HttpConnection.HTTP_UNAUTHORIZED ) {
+                throw new AsyncException( " " + hc.getResponseCode());
             }
         } catch (Exception ex) {
-            GeneralAlert.show(ex.getMessage() + " Url: " + wwwUrl, GeneralAlert.ERROR);
-            ex.printStackTrace();
+            throw new AsyncException(ex.getMessage() + " Url: " + wwwUrl);
         } finally {
             if (hc != null) {
                 try {

@@ -38,6 +38,6 @@ public class BrowseCatalogCommand extends NedCommand {
 
     protected void doLog( Object aParam ) {
         String id = (String)aParam;
-        StatisticsManager.logEvent( StatType.BROWSE_CATEGORY_OPEN, "Id=" + id );
+        StatisticsManager.logEvent( StatType.BROWSE_CATALOG_OPEN, "Id=" + id );
     }
 }
