@@ -43,9 +43,11 @@ public class DownloadManager implements IDownloadTaskManager {
 
     public DownloadManager( NedMidlet _midlet ) {
         midlet = _midlet;
-        vectorDownloadTasks = new Vector();
-        midlet.getXmlManager().readDownloads( this );
+        vectorDownloadTasks = new Vector(4,4);
+    }
 
+    public void init() {
+        midlet.getXmlManager().readDownloads( this );
     }
 
     public Vector getMainDownloadQueue() {

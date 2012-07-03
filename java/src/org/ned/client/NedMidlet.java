@@ -49,13 +49,14 @@ public class NedMidlet extends javax.microedition.midlet.MIDlet {
     private AudioPlayerView audioPlayerView = null;
     private XmlManager xm = null;
     private DownloadManager downloadManager = null;
-    private SettingsManager settingsManager = new SettingsManager( this );
-    private Scheduler sl = null;
+    private SettingsManager settingsManager = null;
+    //private Scheduler sl = null;
     private AccountManager accountManager = null;
     private Resources res;
 
     public NedMidlet() {
         instance = this;
+        settingsManager = new SettingsManager();
     }
 
     public static NedMidlet getInstance() {
@@ -106,10 +107,9 @@ public class NedMidlet extends javax.microedition.midlet.MIDlet {
         return getInstance().accountManager;
     }
 
-    public Scheduler getScheduler() {
-        return sl;
-    }
-
+//    public Scheduler getScheduler() {
+//        return sl;
+//    }
     public String getVersion() {
         return getAppProperty( "MIDlet-Version" );
     }
@@ -143,7 +143,8 @@ public class NedMidlet extends javax.microedition.midlet.MIDlet {
             }
         } else {
             GeneralAlert.show( NedResources.DOC_NOT_SUPPORTED, GeneralAlert.WARNING );
-            StatisticsManager.logEvent( StatType.PLAY_ITEM_END, "Id=" + content.getId() + ";ERROR;" );
+            StatisticsManager.logEvent( StatType.PLAY_ITEM_END, "Id=" + content.
+                    getId() + ";ERROR;" );
         }
     }
 
@@ -202,7 +203,7 @@ public class NedMidlet extends javax.microedition.midlet.MIDlet {
         NedIOUtils.createDirectory( NedIOUtils.getLocalData() );
         NedIOUtils.createDirectory( NedIOUtils.getLocalRoot() );
 
-        settingsManager = new SettingsManager( this );
+        settingsManager = new SettingsManager();
 
         accountManager = new AccountManager();
         if ( accountManager.getServerUrl() == null ) {
@@ -215,7 +216,8 @@ public class NedMidlet extends javax.microedition.midlet.MIDlet {
     private void loadTheme() {
         try {
             res = Resources.open( "/org/ned/client/NEDtheme.res" );
-            UIManager.getInstance().setThemeProps( res.getTheme( res.getThemeResourceNames()[0] ) );
+            UIManager.getInstance().setThemeProps( res.getTheme( res.
+                    getThemeResourceNames()[0] ) );
 
             UIManager.getInstance().getLookAndFeel().setReverseSoftButtons( true );
             UIManager.getInstance().getLookAndFeel().setMenuBarClass( MenuBar.class );
@@ -255,7 +257,8 @@ public class NedMidlet extends javax.microedition.midlet.MIDlet {
                     // if no localized resource is found or localization is available
                     // try broader locale (i.e. instead e.g. en_US, try just en)
                     try {
-                        r = Resources.open( resourceName + "_" + locale.substring( 0, 2 ) + suffix );
+                        r = Resources.open( resourceName + "_" + locale.
+                                substring( 0, 2 ) + suffix );
                     } catch ( IOException ex3 ) {
                         // if not found or locale is not set, try default locale
                         try {
@@ -283,17 +286,22 @@ public class NedMidlet extends javax.microedition.midlet.MIDlet {
 
     public void continueApploading() {
         NedIOUtils.createDirectory( NedIOUtils.getUserRootDirectory() );
+        settingsManager.loadSettings();
         downloadManager = new DownloadManager( this );
+        downloadManager.init();
 
         StatisticsManager.init( NedIOUtils.getUserRootDirectory() );
-        StatisticsManager.logEvent( StatType.USER_LOGGED, accountManager.getCurrentUser().login );
+        StatisticsManager.logEvent( StatType.USER_LOGGED, accountManager.
+                getCurrentUser().login );
 
-        if ( getSettingsManager().isSchedulerOn() ) {
-            getScheduler().startTask();
-        }
-        settingsManager.loadSettings();
-        if ( settingsManager.getLibraryManager().getVisibleLibrariesList() == null
-             || settingsManager.getLibraryManager().getVisibleLibrariesList().size() < 1 ) {
+//        if ( getSettingsManager().isSchedulerOn() ) {
+//            getScheduler().startTask();
+//        }
+
+        if ( settingsManager.getLibraryManager().getVisibleLibrariesList()
+             == null
+             || settingsManager.getLibraryManager().getVisibleLibrariesList().
+                size() < 1 ) {
             OpenLibraryManagerCommand.getInstance().execute( null );
         } else {
             new MainScreen().show();

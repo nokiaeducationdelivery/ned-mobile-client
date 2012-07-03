@@ -1,13 +1,13 @@
 /*******************************************************************************
-* Copyright (c) 2011 Nokia Corporation
-* All rights reserved. This program and the accompanying materials
-* are made available under the terms of the Eclipse Public License v1.0
-* which accompanies this distribution, and is available at
-* http://www.eclipse.org/legal/epl-v10.html
-*
-* Contributors:
-* Comarch team - initial API and implementation
-*******************************************************************************/
+ * Copyright (c) 2011-2012 Nokia Corporation
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * Comarch team - initial API and implementation
+ *******************************************************************************/
 package org.ned.client.view;
 
 import com.sun.lwuit.ButtonGroup;
@@ -40,7 +40,7 @@ public class DownloadOptionScreen extends NedFormBase implements ActionListener 
 
     private Container createGeneral() {
         Container general = new Container();
-        general.setLayout( new BoxLayout(BoxLayout.Y_AXIS ) );
+        general.setLayout( new BoxLayout( BoxLayout.Y_AXIS ) );
         Label downloadStateLabel = new Label( NedResources.MID_DOWNLOAD_STATE_SETTINGS );
         mAutomaticRB = new RadioButton( NedResources.MID_AUTOMATIC_SETTINGS );
         mAutomaticRB.setPreferredW( Display.getInstance().getDisplayWidth() );
@@ -69,23 +69,22 @@ public class DownloadOptionScreen extends NedFormBase implements ActionListener 
         return general;
     }
 
-    public void actionPerformed(ActionEvent evt) {
+    public void actionPerformed( ActionEvent evt ) {
         Object src = evt.getSource();
 
         if ( src == BackDownloadOptionsCommand.getInstance().getCommand() ) {
             BackDownloadOptionsCommand.getInstance().execute( null );
-        } else if (src == mAutomaticRB) {
-            NedMidlet.getInstance().setDownloadState(NedMidlet.DOWNLOAD_AUTOMATIC);
-            NedMidlet.getSettingsManager().setDlAutomatic(true);
+        } else if ( src == mAutomaticRB ) {
+            NedMidlet.getInstance().setDownloadState( NedMidlet.DOWNLOAD_AUTOMATIC );
+            NedMidlet.getSettingsManager().setDlAutomatic( true );
             NedMidlet.getSettingsManager().saveSettings();
-        } else if (src == mManualRB) {
-            NedMidlet.getInstance().setDownloadState(NedMidlet.DOWNLOAD_MANUAL);
-            NedMidlet.getSettingsManager().setDlAutomatic(false);
+            NedMidlet.getInstance().getDownloadManager().startDownloads();
+        } else if ( src == mManualRB ) {
+            NedMidlet.getInstance().setDownloadState( NedMidlet.DOWNLOAD_MANUAL );
+            NedMidlet.getSettingsManager().setDlAutomatic( false );
             NedMidlet.getSettingsManager().saveSettings();
         } else if ( src == HelpCommand.getInstance().getCommand() ) {
             HelpCommand.getInstance().execute( this.getClass() );
         }
     }
 }
-
-

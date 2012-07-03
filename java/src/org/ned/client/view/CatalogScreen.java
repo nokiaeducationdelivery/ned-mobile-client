@@ -59,7 +59,6 @@ public class CatalogScreen extends NedFormBase implements ActionListener {
 
         if ( src == BackCatalogCommand.getInstance().getCommand() || evt.
                 getKeyEvent() == Display.GAME_LEFT ) {
-            //update changes
             mNewModel.updateNewMediaList();
             BackCatalogCommand.getInstance().execute( mNewLibModel.getId() );
         } else if ( src == DeleteContentCommand.getInstance().getCommand() ) {
