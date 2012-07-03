@@ -10,6 +10,7 @@
  *******************************************************************************/
 package org.ned.client.command;
 
+import com.sun.lwuit.Display;
 import org.ned.client.NedResources;
 import org.ned.client.view.WaitingScreen;
 
@@ -30,24 +31,27 @@ public abstract class NedCommandAsync extends NedCommand implements Runnable {
     }
 
     public void run() {
+        tryShowConnecting();
         try {
             Thread.sleep( 100 );
         } catch ( InterruptedException ex ) {
         }
         try {
-            tryShowConnecting();
             execute( param );
+            tryDisposeConnecting();
             if ( callback != null ) {
-                tryDisposeConnecting();
                 callback.onSuccess();
             }
-        } catch ( Exception ex ) {
-            if ( callback != null ) {
-                tryDisposeConnecting();
-                callback.onFailure( ex.getMessage() );
-            }
-        } finally {
+        } catch ( final Exception ex ) {
             tryDisposeConnecting();
+            if ( callback != null ) {
+                Display.getInstance().callSerially( new Runnable( ){
+
+                    public void run() {
+                        callback.onFailure( ex.getMessage() );
+                    }
+                } );
+            }
         }
     }
 

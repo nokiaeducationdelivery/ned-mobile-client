@@ -228,7 +228,10 @@ public class NedResources {
     public static final String NO_CHANGES = Localization.getMessage( "NO_CHANGES");
     public static final String CATALOG =  Localization.getMessage( "CATALOG" );
     public static final String CATEGORY = Localization.getMessage( "CATEGORY");
-    public static final String NEEDHELP = Localization.getMessage( "NEEDHELP");;
+    public static final String NEEDHELP = Localization.getMessage( "NEEDHELP");
+    public static final String TRYAGAINLATER = Localization.getMessage( "TRYAGAINLATER");
+    public static final String NEWVERSIONAVAILABLE = "NEWVERSIONAVAILABLE";
+    public static final String NEWESTVERSION = Localization.getMessage( "NEWESTVERSION" );
 
     public NedResources() {
     }

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2011 Nokia Corporation
+ * Copyright (c) 2011-2012 Nokia Corporation
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -20,6 +20,16 @@ public class NedConsts {
     public class HttpHeaderValue {
 
         public static final String NOCACHE = "no-cache";
+    }
+
+    public class NedUpdateAddress {
+        public static final String CHECKFORUPDATEURL = "http://nokiacsr.com:8080/ned.ota/version.txt";
+        public static final String INSTALATIONFILE = "http://nokiacsr.com:8080/ned.ota/NED.jad";//case sensitive URL
+    }
+
+    public class NedUpdateInfo {
+        public static final String VERSION = "Version";
+        public static final String OVISTORE = "OVIStore";
     }
 
     public class NedLocalConst {

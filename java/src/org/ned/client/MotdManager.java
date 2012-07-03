@@ -50,7 +50,7 @@ public class MotdManager {
 
     public void updateMotd() {
         try {
-            String message = NedConnectionUtils.httpGet( NedMidlet.getAccountManager().getMotdServletUri() );
+            String message = NedConnectionUtils.httpGet( NedMidlet.getAccountManager().getMotdServletUri(), null );
             NedIOUtils.saveFile( NedIOUtils.getUserRootDirectory() + NedConsts.NedLocalConst.MOTDFILE , message );
             init();
         } catch ( SecurityException ex ) {

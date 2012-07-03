@@ -11,6 +11,7 @@
 package org.ned.client.command;
 
 import com.sun.lwuit.Command;
+import com.sun.lwuit.Display;
 import org.ned.client.MotdManager;
 import org.ned.client.NedConsts.NedLocalConst;
 import org.ned.client.NedMidlet;
@@ -96,7 +97,12 @@ public class BrowseLibraryCommand extends NedCommand {
                 library.setCatalogCount();
                 new CatalogScreen( library.getId() ).show();
             } else {
-                GeneralAlert.show( NedResources.DLM_CONNECTION_FAILED, GeneralAlert.WARNING );
+                Display.getInstance().callSerially( new Runnable() {
+
+                    public void run() {
+                        GeneralAlert.show( NedResources.DLM_CONNECTION_FAILED, GeneralAlert.WARNING );
+                    }
+                });
             }
             if ( NedMidlet.getSettingsManager().getAutoStatSend() ) {
                 StatisticsManager.uploadStats( true );

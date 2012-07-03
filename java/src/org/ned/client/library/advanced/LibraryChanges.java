@@ -18,6 +18,7 @@ import java.util.Vector;
 import javax.microedition.io.Connector;
 import javax.microedition.io.file.FileConnection;
 import org.ned.client.NedMidlet;
+import org.ned.client.utils.Utils;
 
 public class LibraryChanges {
 
@@ -91,7 +92,7 @@ public class LibraryChanges {
                 while ( (bytesRead = is.read( buffer )) > 0 ) {
                     builder.append( new String( buffer, 0, bytesRead, "UTF-8" ) );
                 }
-                mIds = split( builder.toString(), "\n" );
+                mIds = Utils.split( builder.toString(), "\n" );
             } else {
                 mIds = new Vector( 0, 0 );
             }
@@ -110,29 +111,6 @@ public class LibraryChanges {
                 }
             }
         }
-    }
-
-    public static Vector split( String sb, String splitter ) {
-        Vector strings = new Vector( 4, 4 );
-        int splitterLength = splitter.length();
-        int initialIndex = 0;
-        int indexOfSplitter = sb.indexOf( splitter, initialIndex );
-        if ( -1 == indexOfSplitter ) {
-            strings.addElement( sb );
-            return strings;
-        }
-        while ( -1 != indexOfSplitter ) {
-            String substring = sb.substring( initialIndex, indexOfSplitter );
-            initialIndex = indexOfSplitter + splitterLength;
-            indexOfSplitter = sb.indexOf( splitter, indexOfSplitter + 1 );
-            strings.addElement( substring );
-        }
-
-        if ( initialIndex + splitterLength <= sb.length() ) {
-            String substring = sb.substring( initialIndex, sb.length() );
-            strings.addElement( substring );
-        }
-        return strings;
     }
 
     /**

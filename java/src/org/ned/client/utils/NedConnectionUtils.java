@@ -12,6 +12,8 @@ package org.ned.client.utils;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Enumeration;
+import java.util.Hashtable;
 import javax.microedition.io.Connector;
 import javax.microedition.io.HttpConnection;
 import org.ned.client.NedConsts;
@@ -81,7 +83,7 @@ public class NedConnectionUtils {
         hc.setRequestProperty( "Authorization", "Basic " + BasicAuth.encode( user, password ) );
     }
 
-    public static String httpGet( String aUrl ) throws SecurityException {
+    public static String httpGet( String aUrl, Hashtable aHeaders ) throws SecurityException {
         HttpConnection hc = null;
         InputStream ic = null;
         StringBuffer buffer = new StringBuffer();
@@ -91,6 +93,14 @@ public class NedConnectionUtils {
             addCredentialsToConnection( hc,
                                         NedMidlet.getAccountManager().getCurrentUser().login,
                                         NedMidlet.getAccountManager().getCurrentUser().password );
+
+            if( aHeaders != null ) {
+                Enumeration en =  aHeaders.keys();
+                while( en.hasMoreElements() ) {
+                    String key = (String)en.nextElement();
+                    hc.setRequestProperty( key, (String)aHeaders.get( key ) );
+                }
+            }
 
             ic = hc.openInputStream();
 

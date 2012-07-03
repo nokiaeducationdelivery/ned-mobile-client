@@ -61,6 +61,7 @@ public class MainScreen extends NedFormBase implements ActionListener {
 
         addCommand( ExitCommand.getInstance().getCommand() );
         addCommand( ShowAboutCommand.getInstance().getCommand() );
+        addCommand( CheckForUpdateCommand.getInstance().getCommand() );
         addCommand( HelpCommand.getInstance().getCommand() );
         addCommand( OpenHistoryCommand.getInstance().getCommand() );
         addCommand( StatisticsCommand.getInstance().getCommand() );
@@ -125,6 +126,8 @@ public class MainScreen extends NedFormBase implements ActionListener {
             HelpCommand.getInstance().execute( this.getClass() );
         } else if ( src == ShowAboutCommand.getInstance().getCommand() ) {
             ShowAboutCommand.getInstance().execute( null );
+        } else if ( src == CheckForUpdateCommand.getInstance().getCommand() ) {
+            CheckForUpdateCommand.getInstance().beginAsync( null, new CheckForUpdateCallback(), true );
         }
     }
 
@@ -132,5 +135,19 @@ public class MainScreen extends NedFormBase implements ActionListener {
         Label empty = new Label( NedResources.NO_LIBRARIES );
         empty.setAlignment( Label.CENTER );
         addComponent( empty );
+    }
+
+
+    private static class CheckForUpdateCallback implements AsyncCompletedCallback {
+
+        public CheckForUpdateCallback() {
+        }
+
+        public void onSuccess() {
+        }
+
+        public void onFailure( String error ) {
+            GeneralAlert.show( error, GeneralAlert.WARNING );
+        }
     }
 }

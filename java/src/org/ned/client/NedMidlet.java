@@ -107,9 +107,6 @@ public class NedMidlet extends javax.microedition.midlet.MIDlet {
         return getInstance().accountManager;
     }
 
-//    public Scheduler getScheduler() {
-//        return sl;
-//    }
     public String getVersion() {
         return getAppProperty( "MIDlet-Version" );
     }

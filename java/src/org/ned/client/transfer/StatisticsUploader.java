@@ -59,11 +59,11 @@ public class StatisticsUploader implements Runnable {
             NedConnectionUtils.addCredentialsToConnection( httpConn,
                                                            NedMidlet.getAccountManager().getCurrentUser().login,
                                                            NedMidlet.getAccountManager().getCurrentUser().password );
-            
+
             httpOutput = httpConn.openDataOutputStream();
 
             String buffer = loadFile( mStatFile );
-           
+
             if ( !stop && buffer != null ) {
                 submitFile( buffer );
 
