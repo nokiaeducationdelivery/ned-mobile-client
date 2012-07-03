@@ -94,13 +94,13 @@ public class MenuBar extends com.sun.lwuit.MenuBar {
                       + style.getPadding( Component.LEFT )
                       + style.getPadding( Component.RIGHT )
                       + getCommandCount() * list.getItemGap()
-                      + 2 * list.getBottomGap();//getBorderGap();
+                      + 2 * list.getBottomGap();
         }
         return Display.getInstance().getDisplayHeight() - menuDialog.getStyle().getMargin( Component.TOP )
                - menuDialog.getStyle().getMargin( Component.BOTTOM )
                - menuDialog.getStyle().getPadding( Component.BOTTOM )
                - menuDialog.getStyle().getPadding( Component.TOP )
-               - Display.getInstance().getCurrent().getSoftButton( 0 ).getPreferredH()
+               - Display.getInstance().getCurrent().getMenuBar().getPreferredH()
                - getCommandCount() * (fontHigh
                                       + itemTopMargin
                                       + itemBottonMargin
