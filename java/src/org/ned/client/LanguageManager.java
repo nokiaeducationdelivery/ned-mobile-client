@@ -37,7 +37,8 @@ public class LanguageManager {
         if ( NedIOUtils.fileExists( NedIOUtils.getLanguageFile() ) ) {
             Element rootElement = null;
             try {
-                Document doc = NedXmlUtils.getDocFile( NedIOUtils.getLanguageFile() );
+                Document doc = NedXmlUtils.getDocFile( NedIOUtils.
+                        getLanguageFile(), true );
                 if ( doc == null ) {
                     NedIOUtils.removeFile( NedIOUtils.getLanguageFile() );
                     return;
@@ -58,7 +59,9 @@ public class LanguageManager {
                     String name = element.getAttributeValue( "", NedConsts.NedXmlAttribute.NAME );
                     String locale = element.getAttributeValue( "", NedConsts.NedXmlAttribute.LOCALE );
                     String remoteName = element.getAttributeValue( "", NedConsts.NedXmlAttribute.REMOTENAME );
-                    boolean isLocal = NedIOUtils.fileExists( NedIOUtils.getLocalRoot() + "messages_" + locale + ".properties" );
+                    boolean isLocal = NedIOUtils.fileExists( NedIOUtils.
+                            getLocalRoot() + "messages_" + locale
+                            + ".properties" );
                     mLanguages.addElement( new LanguageInfo( name, locale, isLocal, remoteName ) );
                 }
             }
@@ -73,9 +76,12 @@ public class LanguageManager {
 
         for ( int i = 0; i < mLanguages.size(); i++ ) {
             Element lang = rootElm.createElement( "", NedConsts.NedXmlTag.LANGUAGE );
-            lang.setAttribute( "", NedConsts.NedXmlAttribute.NAME, ((LanguageInfo) mLanguages.elementAt( i )).getLangName() );
-            lang.setAttribute( "", NedConsts.NedXmlAttribute.LOCALE, ((LanguageInfo) mLanguages.elementAt( i )).getLocale() );
-            lang.setAttribute( "", NedConsts.NedXmlAttribute.REMOTENAME, ((LanguageInfo) mLanguages.elementAt( i )).getFile() );
+            lang.setAttribute( "", NedConsts.NedXmlAttribute.NAME, ((LanguageInfo)mLanguages.
+                    elementAt( i )).getLangName() );
+            lang.setAttribute( "", NedConsts.NedXmlAttribute.LOCALE, ((LanguageInfo)mLanguages.
+                    elementAt( i )).getLocale() );
+            lang.setAttribute( "", NedConsts.NedXmlAttribute.REMOTENAME, ((LanguageInfo)mLanguages.
+                    elementAt( i )).getFile() );
             rootElm.addChild( Node.ELEMENT, lang );
         }
         doc.addChild( Node.ELEMENT, rootElm );
@@ -94,7 +100,8 @@ public class LanguageManager {
         try {
             mLanguages.addElement( new LanguageInfo( "Default (English)", "en-GB", true, "messages_en-GB.properties" ) );
             in = Runtime.getRuntime().getClass().getResourceAsStream( Localization._MESSAGES_BUNDLE );
-            fc = (FileConnection) Connector.open( NedIOUtils.getLocalRoot() + "messages_en-GB.properties", Connector.READ_WRITE );
+            fc = (FileConnection)Connector.open( NedIOUtils.getLocalRoot()
+                    + "messages_en-GB.properties", Connector.READ_WRITE );
             if ( fc.exists() ) {
                 fc.delete();
             }

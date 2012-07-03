@@ -68,7 +68,7 @@ public class DownloadLanguageCommand extends NedCommandAsync {
             }
             is = hc.openInputStream();
 
-            fc = (FileConnection) Connector.open( NedIOUtils.getLocalRoot() + "/messages_" + lang.getLocale() + ".properties", Connector.READ_WRITE );
+            fc = (FileConnection) Connector.open( NedIOUtils.getLocalRoot() + "messages_" + lang.getLocale() + ".properties", Connector.READ_WRITE );
             if ( fc.exists() ) {
                 fc.delete();
             }

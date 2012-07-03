@@ -27,21 +27,20 @@ public class DownloadAgainCallback implements AsyncCompletedCallback {
 
     public void onSuccess() {
         mList.repaint();
-        LanguageInfo lang = (LanguageInfo) mList.getSelectedItem();
+        LanguageInfo lang = (LanguageInfo)mList.getSelectedItem();
         if ( lang != null
-             && lang.equals( NedMidlet.getAccountManager().getLanguage() )
-             && GeneralAlert.showQuestion( NedResources.MSG_RESTART_NEEDED ) == GeneralAlert.RESULT_YES ) {
+                && lang.equals( NedMidlet.getAccountManager().getLanguage() )
+                && GeneralAlert.showQuestion( NedResources.MSG_RESTART_NEEDED )
+                == GeneralAlert.RESULT_YES ) {
             try {
                 NedMidlet.getInstance().destroyApp( true );
             } catch ( MIDletStateChangeException ex ) {
                 ex.printStackTrace();
             }
-        } else {
-            GeneralAlert.show( NedResources.DOWNLOAD_SUCCESSFUL, GeneralAlert.INFO );
         }
     }
 
     public void onFailure( String error ) {
-        GeneralAlert.show( error, GeneralAlert.WARNING );
+        GeneralAlert.show( error, GeneralAlert.WARNING, true );
     }
 }

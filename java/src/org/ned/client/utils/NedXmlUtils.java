@@ -32,13 +32,16 @@ public class NedXmlUtils {
     private static Document docCache = null;
 
     public static Document getDocFile(String file) {
+        return getDocFile( file, false );
+    }
+
+    public static Document getDocFile(String file, boolean aForceReload) {
         Document doc = null;
         KXmlParser parser = null;
-        FileConnection fc = null;
         InputStream in = null;
         InputStreamReader is = null;
 
-        if(docCache != null && currentFile != null && file.equals(currentFile))
+        if(docCache != null && currentFile != null && file.equals(currentFile) && !aForceReload )
         {
             return docCache;
         }
@@ -73,9 +76,6 @@ public class NedXmlUtils {
                 }
                 if (in != null) {
                     in.close();
-                }
-                if (fc != null) {
-                    fc.close();
                 }
                 parser = null;
             } catch (IOException ex) {

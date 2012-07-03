@@ -11,14 +11,12 @@
 package org.ned.client.view;
 
 import com.sun.lwuit.Display;
-import com.sun.lwuit.List;
 import com.sun.lwuit.events.ActionEvent;
 import com.sun.lwuit.events.ActionListener;
 import com.sun.lwuit.events.SelectionListener;
 import com.sun.lwuit.layouts.BoxLayout;
 import java.util.Enumeration;
 import java.util.Vector;
-import javax.microedition.midlet.MIDletStateChangeException;
 import org.ned.client.LanguageLister;
 import org.ned.client.LanguageManager;
 import org.ned.client.NedMidlet;
@@ -110,7 +108,7 @@ public class LanguagesScreen extends NedFormBase implements ActionListener, Sele
         public void onSuccess() {
             Vector newLang = mLanguage.getNew();
             if ( newLang.isEmpty() ) {
-                GeneralAlert.show( NedResources.NO_NEW_LANGUAGE, GeneralAlert.INFO );
+                GeneralAlert.show( NedResources.NO_NEW_LANGUAGE, GeneralAlert.INFO, true );
             } else {
                 String messageStr = NedResources.NEW_LANGUAGE + ":\n";
                 for ( int idx = 0; idx < newLang.size(); idx++ ) {
@@ -120,7 +118,7 @@ public class LanguagesScreen extends NedFormBase implements ActionListener, Sele
                         messageStr += ", ";
                     }
                 }
-                GeneralAlert.show( messageStr, GeneralAlert.INFO );
+                GeneralAlert.show( messageStr, GeneralAlert.INFO, true );
                 Enumeration iter = newLang.elements();
                 while ( iter.hasMoreElements() ) {
                     mCommands.getModel().addItem( iter.nextElement() );

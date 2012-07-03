@@ -1,15 +1,16 @@
 /*******************************************************************************
-* Copyright (c) 2011 Nokia Corporation
-* All rights reserved. This program and the accompanying materials
-* are made available under the terms of the Eclipse Public License v1.0
-* which accompanies this distribution, and is available at
-* http://www.eclipse.org/legal/epl-v10.html
-*
-* Contributors:
-* Comarch team - initial API and implementation
-*******************************************************************************/
+ * Copyright (c) 2011-2012 Nokia Corporation
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * Comarch team - initial API and implementation
+ *******************************************************************************/
 package org.ned.client;
 
+import java.util.Enumeration;
 import java.util.Vector;
 import org.ned.client.utils.NedIOUtils;
 
@@ -27,20 +28,20 @@ public class Content implements IContent {
     private String videoFile = null;
     private String videoPath = null;
 
-    public Content(String _text, String _id) {
+    public Content( String _text, String _id ) {
         text = _text;
         entryId = _id;
         description = "";
     }
 
-    public Content(String _oldFilePath) {
+    public Content( String _oldFilePath ) {
         description = "";
         videoFile = _oldFilePath;
     }
 
     public String getMediaFile() {
 
-        if (videoFile == null && data != null && data.length() > 0) {
+        if ( videoFile == null && data != null && data.length() > 0 ) {
             videoFile = getMediaFilePath() + data;
         }
         return videoFile;
@@ -54,11 +55,11 @@ public class Content implements IContent {
         return parentId;
     }
 
-    public void setParentId(String parentId) {
+    public void setParentId( String parentId ) {
         this.parentId = parentId;
     }
 
-    public void setData(String data) {
+    public void setData( String data ) {
         this.data = data;
     }
 
@@ -68,23 +69,25 @@ public class Content implements IContent {
 
     public boolean isDownloaded() {
         boolean result = false;
-        if (data != null && !data.equals("")) {
-            result = NedIOUtils.fileExists(getMediaFile());
+        if ( data != null && !data.equals( "" ) ) {
+            result = NedIOUtils.fileExists( getMediaFile() );
         }
         return result;
     }
 
-    public boolean isDownloaded(Vector directory) {
-        boolean result = false;
-        for ( int i = 0; i < directory.size() && !result; i++ ) {
-            if (data != null && data.equals(directory.elementAt(i))) {
-                result = true;
+    public boolean isDownloaded( Vector directory ) {
+        Enumeration en = directory.elements();
+        final String dataL = this.data;
+        while ( en.hasMoreElements() ) {
+            String el = (String)en.nextElement();
+            if ( dataL != null && dataL.equals( el ) ) {
+                return true;
             }
         }
-        return result;
+        return false;
     }
 
-    public void setType(String type) {
+    public void setType( String type ) {
         this.type = type;
     }
 
@@ -96,11 +99,11 @@ public class Content implements IContent {
         return text;
     }
 
-    public void setText(String aText) {
+    public void setText( String aText ) {
         text = aText;
     }
 
-    public void setDescription(String description) {
+    public void setDescription( String description ) {
         this.description = description;
     }
 
@@ -112,7 +115,7 @@ public class Content implements IContent {
         return externalLinks;
     }
 
-    public void setExternalLinks(Vector externalLinks) {
+    public void setExternalLinks( Vector externalLinks ) {
         this.externalLinks = externalLinks;
     }
 
@@ -120,11 +123,11 @@ public class Content implements IContent {
         return keywords;
     }
 
-    public void setKeywords(Vector keywords) {
+    public void setKeywords( Vector keywords ) {
         this.keywords = keywords;
     }
 
-    public void setVersion(String version) {
+    public void setVersion( String version ) {
         this.version = version;
     }
 
@@ -133,7 +136,7 @@ public class Content implements IContent {
     }
 
     public String getMediaFilePath() {
-        if (videoPath == null) {
+        if ( videoPath == null ) {
             videoPath = NedMidlet.getSettingsManager().getLibraryManager().
                     getCurrentLibrary().getDirUri() + "/"
                     + NedConsts.NedLocalConst.VIDEOSDIR;
@@ -141,8 +144,7 @@ public class Content implements IContent {
         return videoPath;
     }
 
-    public void setVideoPath(String vPath) {
+    public void setVideoPath( String vPath ) {
         videoPath = vPath;
     }
-
 }

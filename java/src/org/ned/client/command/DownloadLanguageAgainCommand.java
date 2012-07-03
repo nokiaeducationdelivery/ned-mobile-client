@@ -43,34 +43,39 @@ public class DownloadLanguageAgainCommand extends NedCommandAsync {
     }
 
     protected void doAction( Object param ) {
-        LanguageInfo lang = (LanguageInfo) param;
+        LanguageInfo lang = (LanguageInfo)param;
 
         HttpConnection hc = null;
         FileConnection fc = null;
         FileConnection fc2 = null;
         InputStream is = null;
         OutputStream os = null;
-        String url = NedMidlet.getAccountManager().getServerUrl() + NedConsts.NedRemotePath.LOCALESURL;
+        String url = NedMidlet.getAccountManager().getServerUrl()
+                + NedConsts.NedRemotePath.LOCALESURL;
 
         url = url + "/" + lang.getFile();
         try {
 
-            hc = (HttpConnection) Connector.open( url );
+            hc = (HttpConnection)Connector.open( url );
             NedConnectionUtils.addCredentialsToConnection( hc,
-                                                           NedMidlet.getAccountManager().getCurrentUser().login,
-                                                           NedMidlet.getAccountManager().getCurrentUser().password );
+                                                           NedMidlet.
+                    getAccountManager().getCurrentUser().login,
+                                                           NedMidlet.
+                    getAccountManager().getCurrentUser().password );
             hc.setRequestMethod( HttpConnection.GET );
             hc.setRequestProperty( NedConsts.HttpHeader.CACHECONTROL, NedConsts.HttpHeaderValue.NOCACHE );
 
             if ( hc.getResponseCode() != HttpConnection.HTTP_OK
-                 && hc.getResponseCode() != HttpConnection.HTTP_UNAUTHORIZED ) {
+                    && hc.getResponseCode() != HttpConnection.HTTP_UNAUTHORIZED ) {
                 throw new AsyncException( " " + hc.getResponseCode() );
             } else if ( hc.getResponseCode() == HttpConnection.HTTP_UNAUTHORIZED ) {
                 throw new AsyncException( NedResources.UNAUTHORIZED_ACCESS );
             }
             is = hc.openInputStream();
 
-            fc = (FileConnection) Connector.open( NedIOUtils.getLocalRoot() + "/messages_" + lang.getLocale() + ".properties" + NedLocalConst.TMP, Connector.READ_WRITE );
+            fc = (FileConnection)Connector.open( NedIOUtils.getLocalRoot()
+                    + "messages_" + lang.getLocale() + ".properties"
+                    + NedLocalConst.TMP, Connector.READ_WRITE );
             if ( fc.exists() ) {
                 fc.delete();
             }
@@ -84,13 +89,15 @@ public class DownloadLanguageAgainCommand extends NedCommandAsync {
             } catch ( IllegalStateException ex ) {
             }
 
-            while ( (bytesread = is.read( databyte, 0, NedConnectionUtils.MTU )) != -1 ) {
+            while ( (bytesread = is.read( databyte, 0, NedConnectionUtils.MTU ))
+                    != -1 ) {
                 os.write( databyte, 0, bytesread );
             }
             lang.setLocal();
 
-            fc2 = (FileConnection)Connector.open( NedIOUtils.getLocalRoot() + "/messages_" + lang.getLocale() + ".properties", Connector.READ_WRITE );
-            if( fc2 != null && fc2.exists() ) {
+            fc2 = (FileConnection)Connector.open( NedIOUtils.getLocalRoot()
+                    + "messages_" + lang.getLocale() + ".properties", Connector.READ_WRITE );
+            if ( fc2 != null && fc2.exists() ) {
                 fc2.delete();
                 fc2.close();
             }
@@ -123,14 +130,14 @@ public class DownloadLanguageAgainCommand extends NedCommandAsync {
                 } catch ( IOException ex ) {
                 }
             }
-            if( fc != null){
+            if ( fc != null ) {
                 try {
                     fc.close();
                 } catch ( IOException ex ) {
                     ex.printStackTrace();
                 }
             }
-                        if( fc != null){
+            if ( fc != null ) {
                 try {
                     fc.close();
                 } catch ( IOException ex ) {
