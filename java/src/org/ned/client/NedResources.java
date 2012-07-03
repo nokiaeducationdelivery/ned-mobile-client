@@ -218,6 +218,16 @@ public class NedResources {
     public static final String DOWNLOAD_SUCCESSFUL = Localization.getMessage( "DOWNLOAD_SUCCESSFUL" );
     public static final String NOT_SUPPORTED = Localization.getMessage( "NOT_SUPPORTED" );
     public static final String MISSING_HELP = Localization.getMessage( "MISSING_HELP" );
+    public static final String CATALOGS_ADDED = "CATALOGS_ADDED";
+    public static final String CATEGORIES_ADDED = "CATEGORIES_ADDED";
+    public static final String MEDIAITEMS_ADDED = "MEDIAITEMS_ADDED";
+    public static final String CATALOGS_REMOVED = "CATALOGS_REMOVED";
+    public static final String CATEGORIES_REMOVED = "CATEGORIES_REMOVED";
+    public static final String MEDIAITEMS_REMOVED = "MEDIAITEMS_REMOVED";
+    public static final String LATEST_CHANGES =  Localization.getMessage( "LATEST_CHANGES" );
+    public static final String NO_CHANGES = Localization.getMessage( "NO_CHANGES");
+    public static final String CATALOG =  Localization.getMessage( "CATALOG" );
+    public static final String CATEGORY = Localization.getMessage( "CATEGORY");
 
     public NedResources() {
     }

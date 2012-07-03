@@ -25,7 +25,7 @@ import org.ned.client.command.BrowseLibraryCommand;
 import org.ned.client.command.DownloadsQueueViewCommand;
 import org.ned.client.command.ExitCommand;
 import org.ned.client.command.OpenHistoryCommand;
-import org.ned.client.command.OpenLibraryManager;
+import org.ned.client.command.OpenLibraryManagerCommand;
 import org.ned.client.command.SearchDialogCommand;
 import org.ned.client.command.SettingsCommand;
 import org.ned.client.command.StatisticsCommand;
@@ -77,7 +77,7 @@ public class MainScreen extends NedFormBase implements ActionListener {
         addCommand(StatisticsCommand.getInstance().getCommand());
         addCommand(DownloadsQueueViewCommand.getInstance().getCommand());
         addCommand(SettingsCommand.getInstance().getCommand());
-        addCommand(OpenLibraryManager.getInstance().getCommand());
+        addCommand(OpenLibraryManagerCommand.getInstance().getCommand());
         addCommand(SearchDialogCommand.getInstance().getCommand());
 
 
@@ -117,8 +117,8 @@ public class MainScreen extends NedFormBase implements ActionListener {
             SettingsCommand.getInstance().execute(null);
         } else if (src == DownloadsQueueViewCommand.getInstance().getCommand()) {
             DownloadsQueueViewCommand.getInstance().execute(null);
-        } else if (src == OpenLibraryManager.getInstance().getCommand()) {
-            OpenLibraryManager.getInstance().execute(null);
+        } else if (src == OpenLibraryManagerCommand.getInstance().getCommand()) {
+            OpenLibraryManagerCommand.getInstance().execute(null);
         } else if( src == OpenHistoryCommand.getInstance().getCommand() ) {
             OpenHistoryCommand.getInstance().execute(null);
         } else if (src == showFreeMem) {

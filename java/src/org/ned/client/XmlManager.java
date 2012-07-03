@@ -1,13 +1,13 @@
 /*******************************************************************************
-* Copyright (c) 2011 Nokia Corporation
-* All rights reserved. This program and the accompanying materials
-* are made available under the terms of the Eclipse Public License v1.0
-* which accompanies this distribution, and is available at
-* http://www.eclipse.org/legal/epl-v10.html
-*
-* Contributors:
-* Comarch team - initial API and implementation
-*******************************************************************************/
+ * Copyright (c) 2011-2012 Nokia Corporation
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * Comarch team - initial API and implementation
+ *******************************************************************************/
 package org.ned.client;
 
 import org.ned.client.transfer.DownloadTask;
@@ -22,276 +22,292 @@ import org.kxml2.kdom.Document;
 import org.kxml2.kdom.Element;
 import org.kxml2.kdom.Node;
 
-
 public class XmlManager {
 
     private NedMidlet midlet = null;
 //    private String currentVideo = "";
 //    private String currentSummary = "";
 
-    public XmlManager(NedMidlet _midlet) {
+    public XmlManager( NedMidlet _midlet ) {
         this.midlet = _midlet;
     }
 
-    public static void parseLibrary(Document doc, Vector outLibrary) {
+    public static void parseLibrary( Document doc, Vector outLibrary ) {
         Content libraryItem = null;
 
         Element rootElement = doc.getRootElement();
 
-        for (int i = 0; i < rootElement.getChildCount(); i++) {
+        for ( int i = 0; i < rootElement.getChildCount(); i++ ) {
 
-            if (rootElement.getType(i) != Node.ELEMENT) {
+            if ( rootElement.getType( i ) != Node.ELEMENT ) {
                 continue;
             }
 
-            Element element = rootElement.getElement(i);
+            Element element = rootElement.getElement( i );
 
-            if (element.getName().equals("entry")) {
+            if ( element.getName().equals( "entry" ) ) {
 
                 String title = null;
                 String id = null;
 
-                id = element.getAttributeValue("", "id");
+                id = element.getAttributeValue( "", "id" );
 
-                for (int j = 0; j < element.getChildCount(); j++) {
+                for ( int j = 0; j < element.getChildCount(); j++ ) {
 
-                    if (element.getType(j) != Node.ELEMENT) {
+                    if ( element.getType( j ) != Node.ELEMENT ) {
                         continue;
                     }
 
-                    Element entryElement = element.getElement(j);
-                    if (entryElement.getName().equals("title")) {
-                        title = entryElement.getText(0);
+                    Element entryElement = element.getElement( j );
+                    if ( entryElement.getName().equals( "title" ) ) {
+                        title = entryElement.getText( 0 );
                         continue;
                     }
 
                 }
-                libraryItem = new Content(title, id);
-                outLibrary.addElement(libraryItem);
+                libraryItem = new Content( title, id );
+                outLibrary.addElement( libraryItem );
             }
         }
     }
 
-
-    public static Vector getContentChilds(String contentId, String libFile) {
+    public static Vector getContentChilds( String contentId, String libFile ) {
         Vector retval = new Vector();
 
-        Element element = findElement(contentId, libFile);
-        if (element != null) {
-            Vector childElementVector = findChilds(element, StringRepository.TAG_CHILDS);
-            if(childElementVector.size() == 1)
-            {
-                Vector childNodes =  findChilds((Element)childElementVector.elementAt(0), StringRepository.TAG_NODE);
-                for(int i = 0; i < childNodes.size(); i++)
-                {
-                    retval.addElement(parseContent( (Element)childNodes.elementAt(i) ));
+        Element element = findElement( contentId, libFile );
+        if ( element != null ) {
+            Vector childElementVector = findChilds( element, StringRepository.TAG_CHILDS );
+            if ( childElementVector.size() == 1 ) {
+                Vector childNodes = findChilds( (Element) childElementVector.elementAt( 0 ), StringRepository.TAG_NODE );
+                for ( int i = 0; i < childNodes.size(); i++ ) {
+                    retval.addElement( parseContent( (Element) childNodes.elementAt( i ) ) );
                 }
             }
         }
         return retval;
     }
 
-    public static void removeContentChild(String contentId){
-        String libUri = NedMidlet.getSettingsManager().getLibraryManager().getCurrentLibrary().getFileUri();
-        Document doc = NedXmlUtils.getDocFile(libUri);
+    /*new*/
+    public static Vector getContentChilds( Element aContentElement ) {
+        Vector retval = new Vector();
 
-        if(doc == null ){
+        if ( aContentElement != null ) {
+            Vector childElementVector = findChilds( aContentElement, StringRepository.TAG_CHILDS );
+            if ( childElementVector.size() == 1 ) {
+                Vector childNodes = findChilds( (Element) childElementVector.elementAt( 0 ), StringRepository.TAG_NODE );
+                for ( int i = 0; i < childNodes.size(); i++ ) {
+                    retval.addElement( parseContent( (Element) childNodes.elementAt( i ) ) );
+                }
+            }
+        }
+        return retval;
+    }
+
+    public static void removeContentChild( String contentId ) {
+        String libUri = NedMidlet.getSettingsManager().getLibraryManager().getCurrentLibrary().getFileUri();
+        Document doc = NedXmlUtils.getDocFile( libUri );
+
+        if ( doc == null ) {
             return;
         }
 
-        Element element = findElement(doc.getRootElement(), contentId);
+        Element element = findElement( doc.getRootElement(), contentId );
 
-        if(element != null){
+        if ( element != null ) {
             Node parent = element.getParent();
 
-            for(int idx = 0; idx < parent.getChildCount(); idx++){
-                if(parent.getChild(idx) == element){
-                    parent.removeChild(idx);
-                    NedXmlUtils.writeXmlFile(libUri, doc);
+            for ( int idx = 0; idx < parent.getChildCount(); idx++ ) {
+                if ( parent.getChild( idx ) == element ) {
+                    parent.removeChild( idx );
+                    NedXmlUtils.writeXmlFile( libUri, doc );
                     break;
                 }
             }
         }
     }
 
-    public static Vector getContentAllFiles(String contentId){
+    public static Vector getContentAllFiles( String contentId ) {
         Vector fileList = new Vector();
 
         String libUri = NedMidlet.getSettingsManager().getLibraryManager().getCurrentLibrary().getFileUri();
-        Document doc = NedXmlUtils.getDocFile(libUri);
+        Document doc = NedXmlUtils.getDocFile( libUri );
 
-        Element element = findElement(doc.getRootElement(), contentId);
+        Element element = findElement( doc.getRootElement(), contentId );
 
-        if(element != null){
-            searchContentFiles(element, fileList);
+        if ( element != null ) {
+            searchContentFiles( element, fileList );
         }
         return fileList;
     }
 
-    private static void searchContentFiles(Element element, Vector fileList){
+    private static void searchContentFiles( Element element, Vector fileList ) {
 
-        if (element.getName().equals(StringRepository.TAG_NODE)) {
-            Content content = parseContent(element);
+        if ( element.getName().equals( StringRepository.TAG_NODE ) ) {
+            Content content = parseContent( element );
 
             String type = content.getType();
-            if( type.equals(NedContentType.VIDEO ) ||
-                type.equals(NedContentType.IMAGE ) ||
-                type.equals(NedContentType.AUDIO ) ||
-                type.equals(NedContentType.TEXT  ))
-            {
-                if( content.getData() != null && content.getData().length() > 0 ) {
-                    fileList.addElement(content.getMediaFile());
+            if ( type.equals( NedContentType.VIDEO )
+                 || type.equals( NedContentType.IMAGE )
+                 || type.equals( NedContentType.AUDIO )
+                 || type.equals( NedContentType.TEXT ) ) {
+                if ( content.getData() != null && content.getData().length() > 0 ) {
+                    fileList.addElement( content.getMediaFile() );
                 }
-            }else{
-                Vector childElementVector = findChilds(element, StringRepository.TAG_CHILDS );
-                if(childElementVector.size() == 1)
-                {
-                    Vector childNodes =  findChilds((Element)childElementVector.elementAt(0), StringRepository.TAG_NODE);
-                    for(int idx = 0; idx < childNodes.size(); idx++){
-                        searchContentFiles((Element)childNodes.elementAt(idx), fileList);
+            } else {
+                Vector childElementVector = findChilds( element, StringRepository.TAG_CHILDS );
+                if ( childElementVector.size() == 1 ) {
+                    Vector childNodes = findChilds( (Element) childElementVector.elementAt( 0 ), StringRepository.TAG_NODE );
+                    for ( int idx = 0; idx < childNodes.size(); idx++ ) {
+                        searchContentFiles( (Element) childNodes.elementAt( idx ), fileList );
                     }
                 }
             }
         }
     }
 
-    public static Vector getContentAllChilds(String contentId) {
+    public static Vector getContentAllChilds( String contentId ) {
         Vector itemList = new Vector();
 
         String libUri = NedMidlet.getSettingsManager().getLibraryManager().getCurrentLibrary().getFileUri();
-        Document doc = NedXmlUtils.getDocFile(libUri);
+        Document doc = NedXmlUtils.getDocFile( libUri );
 
-        Element element = findElement(doc.getRootElement(), contentId);
+        Element element = findElement( doc.getRootElement(), contentId );
 
-        if (element != null) {
-            searchContentAllChilds(element, itemList);
+        if ( element != null ) {
+            searchContentAllChilds( element, itemList );
         }
         return itemList;
     }
 
-    private static void searchContentAllChilds(Element element, Vector itemList) {
+    private static void searchContentAllChilds( Element element, Vector itemList ) {
 
-        if (element.getName().equals(StringRepository.TAG_NODE)) {
-            Content content = parseContent(element);
+        if ( element.getName().equals( StringRepository.TAG_NODE ) ) {
+            Content content = parseContent( element );
 
             String type = content.getType();
-            itemList.addElement(content);
+            itemList.addElement( content );
 
-            if (type.equals(NedContentType.VIDEO)
-                    || type.equals(NedContentType.IMAGE)
-                    || type.equals(NedContentType.AUDIO)) {
+            if ( type.equals( NedContentType.VIDEO )
+                 || type.equals( NedContentType.IMAGE )
+                 || type.equals( NedContentType.AUDIO ) ) {
             } else {
-                Vector childElementVector = findChilds(element, StringRepository.TAG_CHILDS);
-                if (childElementVector.size() == 1) {
-                    Vector childNodes = findChilds((Element) childElementVector.elementAt(0), StringRepository.TAG_NODE);
-                    for (int idx = 0; idx < childNodes.size(); idx++) {
-                        searchContentAllChilds((Element) childNodes.elementAt(idx), itemList);
+                Vector childElementVector = findChilds( element, StringRepository.TAG_CHILDS );
+                if ( childElementVector.size() == 1 ) {
+                    Vector childNodes = findChilds( (Element) childElementVector.elementAt( 0 ), StringRepository.TAG_NODE );
+                    for ( int idx = 0; idx < childNodes.size(); idx++ ) {
+                        searchContentAllChilds( (Element) childNodes.elementAt( idx ), itemList );
                     }
                 }
             }
         }
     }
 
-    private static Vector findChilds(Element parent, String tagName) {
+    private static Vector findChilds( Element parent, String tagName ) {
         Vector retVal = new Vector();
-        for (int j = 0; j < parent.getChildCount(); j++) {
-            if (parent.getType(j) == Node.ELEMENT) {
-                Element entryElement = parent.getElement(j);
+        for ( int j = 0; j < parent.getChildCount(); j++ ) {
+            if ( parent.getType( j ) == Node.ELEMENT ) {
+                Element entryElement = parent.getElement( j );
 
-                if (entryElement.getName().equals(tagName)) {
-                    retVal.addElement(entryElement);
+                if ( entryElement.getName().equals( tagName ) ) {
+                    retVal.addElement( entryElement );
                 }
             }
         }
         return retVal;
     }
 
-    public static Content getContentData(String contentId) {
+    public static Content getContentData( String contentId ) {
         Content result = null;
 
-        Element element = findElement(contentId, null);
-        if (element != null) {
-            result = parseContent(element);
+        Element element = findElement( contentId, null );
+        if ( element != null ) {
+            result = parseContent( element );
         }
         return result;
     }
 
-    private static Content parseContent(Element element) {
+    /*new*/
+    public static Content getContentData( Element aContentElem ) {
+        Content result = null;
+
+        if ( aContentElem != null ) {
+            result = parseContent( aContentElem );
+        }
+        return result;
+    }
+
+    private static Content parseContent( Element element ) {
         String title = null;
         String description = null;
-        String parentId = element.getAttributeValue("", StringRepository.ATTRIBUTE_PARENT);
-        String type = element.getAttributeValue("", StringRepository.ATTRIBUTE_TYPE);
-        String data = element.getAttributeValue("", StringRepository.ATTRIBUTE_DATA);
-        String id = element.getAttributeValue("", StringRepository.ATTRIBUTE_ID);
-        String version = element.getAttributeValue("", StringRepository.ATTRIBUTE_VERSION);
-        
+        String parentId = element.getAttributeValue( "", StringRepository.ATTRIBUTE_PARENT );
+        String type = element.getAttributeValue( "", StringRepository.ATTRIBUTE_TYPE );
+        String data = element.getAttributeValue( "", StringRepository.ATTRIBUTE_DATA );
+        String id = element.getAttributeValue( "", StringRepository.ATTRIBUTE_ID );
+        String version = element.getAttributeValue( "", StringRepository.ATTRIBUTE_VERSION );
+
         Vector keywords = null;
         Vector externalLinks = null;
-        for (int j = 0; j < element.getChildCount(); j++) {
-            if (element.getType(j) == Node.ELEMENT) {
-                Element entryElement = element.getElement(j);
+        for ( int j = 0; j < element.getChildCount(); j++ ) {
+            if ( element.getType( j ) == Node.ELEMENT ) {
+                Element entryElement = element.getElement( j );
 
-                if (entryElement.getName().equals(StringRepository.TAG_TITLE)) {
-                    try{
-                        title = entryElement.getText(0);
-                    }catch(Exception ex){
+                if ( entryElement.getName().equals( StringRepository.TAG_TITLE ) ) {
+                    try {
+                        title = entryElement.getText( 0 );
+                    } catch ( Exception ex ) {
                         title = "";
                     }
-                }
-                else if(entryElement.getName().equals(StringRepository.TAG_DESCRIPTION)) {
-                    description = entryElement.getText(0);
-                }
-                else if(entryElement.getName().equals(StringRepository.TAG_KEYWORDS)) {
-                    if(keywords == null)
-                    {
+                } else if ( entryElement.getName().equals( StringRepository.TAG_DESCRIPTION ) ) {
+                    description = entryElement.getText( 0 );
+                } else if ( entryElement.getName().equals( StringRepository.TAG_KEYWORDS ) ) {
+                    if ( keywords == null ) {
                         keywords = new Vector();
                     }
-                    keywords.addElement(entryElement.getText(0));
-                }
-                else if(entryElement.getName().equals(StringRepository.TAG_EXTERNAL_LINKS)) {
-                    if(externalLinks == null)
-                    {
+                    keywords.addElement( entryElement.getText( 0 ) );
+                } else if ( entryElement.getName().equals( StringRepository.TAG_EXTERNAL_LINKS ) ) {
+                    if ( externalLinks == null ) {
                         externalLinks = new Vector();
                     }
-                    externalLinks.addElement(entryElement.getText(0));
+                    externalLinks.addElement( entryElement.getText( 0 ) );
                 }
             }
         }
-        Content parsed = new Content(title, id);
-        parsed.setParentId(parentId);
-        parsed.setData(data);
+        Content parsed = new Content( title, id );
+        parsed.setParentId( parentId );
+        parsed.setData( data );
         parsed.setDescription( description == null ? "" : description );
-        parsed.setType(type);
-        parsed.setKeywords(keywords);
-        parsed.setExternalLinks(externalLinks);
-        parsed.setVersion(version == null ? "" : version);
+        parsed.setType( type );
+        parsed.setKeywords( keywords );
+        parsed.setExternalLinks( externalLinks );
+        parsed.setVersion( version == null ? "" : version );
         return parsed;
     }
 
-    private static Element findElement(String contentId, String libFile) {
+    /*private*/
+    public static Element findElement( String contentId, String libFile ) {
         Element retVal = null;
-        String libfile = (libFile == null) ?
-                            NedMidlet.getSettingsManager().getLibraryManager().getCurrentLibrary().getFileUri() :
-                            libFile;
-        Document doc = NedXmlUtils.getDocFile(libfile);
-        if (doc != null) {
+        String libfile = (libFile == null)
+                         ? NedMidlet.getSettingsManager().getLibraryManager().getCurrentLibrary().getFileUri()
+                         : libFile;
+        Document doc = NedXmlUtils.getDocFile( libfile );
+        if ( doc != null ) {
             Element rootElement = doc.getRootElement();
-            if (rootElement != null) {
-                retVal = findElement(rootElement, contentId);
+            if ( rootElement != null ) {
+                retVal = findElement( rootElement, contentId );
             }
         }
         return retVal;
     }
 
-    private static Element findElement(Element rootElement, String contentId) {
+    private static Element findElement( Element rootElement, String contentId ) {
         Element retVal = null;
-        String idValue = rootElement.getAttributeValue("", "id");
-        if (idValue != null && idValue.equals(contentId)) {
+        String idValue = rootElement.getAttributeValue( "", "id" );
+        if ( idValue != null && idValue.equals( contentId ) ) {
             retVal = rootElement;
         } else {
-            for (int i = 0; i < rootElement.getChildCount() && retVal == null; i++) {
-                if (rootElement.getElement(i) != null) {
-                    retVal = findElement(rootElement.getElement(i), contentId);
+            for ( int i = 0; i < rootElement.getChildCount() && retVal == null; i++ ) {
+                if ( rootElement.getElement( i ) != null ) {
+                    retVal = findElement( rootElement.getElement( i ), contentId );
                 }
             }
         }
@@ -321,12 +337,10 @@ public class XmlManager {
 //        }
 //        return item;
 //    }
-
 //    public void updateStatistics() {
 //        StatisticsManager.updateStatistics(LibraryManager.getInstance().getCurrentLibrary().currentCatalog.currentCategory.currentMediaItem.content.getPath(),
 //                LibraryManager.getInstance().getCurrentLibrary().currentCatalog.currentCategory.currentMediaItem.content.getText());
 //    }
-
 ////    public static int removeEntry_(String filepath, String entryId) {
 //        boolean removed = false;
 //        String currentId = null;
@@ -368,12 +382,10 @@ public class XmlManager {
 //
 //        return entryElementCount;
 //    }
-
 //    public void resetLibrary() {
 //        NedIOUtils.removeFile(midlet.getLocalRoot() + LibraryManager.getInstance().getCurrentLibrary().getLocalDirName() + NedLocalConst.LIBRARYFILE);
 //        NedIOUtils.removeFile(midlet.getLocalRoot() + LibraryManager.getInstance().getCurrentLibrary().getLocalDirName() + NedLocalConst.LIBRARYDIR + '/');
 //    }
-
 //    public void updateLibrary() {
 //        boolean newer = true;
 //        String file = midlet.getLocalRoot() + LibraryManager.getInstance().getCurrentLibrary().getLocalDirName() + NedLocalConst.LIBRARYFILE;
@@ -418,47 +430,46 @@ public class XmlManager {
 //            }
 //        }
 //    }
-
-    public void readDownloads(IDownloadTaskManager downloadManager) {
-        if ( NedIOUtils.fileExists(NedIOUtils.getDowloadsFile()) ) {
-            Document doc = NedXmlUtils.getDocFile(NedIOUtils.getDowloadsFile());
-            if (doc == null) {
-                NedIOUtils.removeFile(NedIOUtils.getDowloadsFile());
+    public void readDownloads( IDownloadTaskManager downloadManager ) {
+        if ( NedIOUtils.fileExists( NedIOUtils.getDowloadsFile() ) ) {
+            Document doc = NedXmlUtils.getDocFile( NedIOUtils.getDowloadsFile() );
+            if ( doc == null ) {
+                NedIOUtils.removeFile( NedIOUtils.getDowloadsFile() );
                 return;
             }
             Element rootElement = doc.getRootElement();
-            for (int i = 0; i < rootElement.getChildCount(); i++) {
-                if (rootElement.getType(i) != Node.ELEMENT) {
+            for ( int i = 0; i < rootElement.getChildCount(); i++ ) {
+                if ( rootElement.getType( i ) != Node.ELEMENT ) {
                     continue;
                 }
-                Element element = rootElement.getElement(i);
-                if (element.getName().equals("entry")) {
-                    String localPath = element.getText(0);
-                    String title = element.getAttributeValue("", "title");
-                    String progress = element.getAttributeValue("", "progress");
-                    if ((localPath == null) || (title == null)
-                            || (progress == null)) {
+                Element element = rootElement.getElement( i );
+                if ( element.getName().equals( "entry" ) ) {
+                    String localPath = element.getText( 0 );
+                    String title = element.getAttributeValue( "", "title" );
+                    String progress = element.getAttributeValue( "", "progress" );
+                    if ( (localPath == null) || (title == null)
+                         || (progress == null) ) {
                         continue;
                     }
-                    String url = element.getAttributeValue("", "url");
+                    String url = element.getAttributeValue( "", "url" );
 
-                    progress = progress.replace('%', '0');
-                    DownloadTask tf = new DownloadTask(downloadManager, localPath, url, title);
-                    tf.setPercentDownloaded(progress);
+                    progress = progress.replace( '%', '0' );
+                    DownloadTask tf = new DownloadTask( downloadManager, localPath, url, title );
+                    tf.setPercentDownloaded( progress );
 
                     long size = 0;
                     long pSize = 0;
-                    String fileSize = element.getAttributeValue("", "filesize");
-                    if (fileSize != null) {
-                        size = Long.parseLong(fileSize);
-                        pSize = size * Long.parseLong(progress) / 1000;
+                    String fileSize = element.getAttributeValue( "", "filesize" );
+                    if ( fileSize != null ) {
+                        size = Long.parseLong( fileSize );
+                        pSize = size * Long.parseLong( progress ) / 1000;
                     }
-                    if (size > 0) {
-                        tf.setDownloadLength(size);
-                        tf.addTotalBytesDownloaded(pSize);
+                    if ( size > 0 ) {
+                        tf.setDownloadLength( size );
+                        tf.addTotalBytesDownloaded( pSize );
                         tf.setPercentDownloaded();
                     }
-                    if (midlet.getSettingsManager().getDlAutomatic()) {
+                    if ( midlet.getSettingsManager().getDlAutomatic() ) {
                         tf.startDownload();
                     }
                     continue;
@@ -466,33 +477,33 @@ public class XmlManager {
             }
         } else {
             Document doc = new Document();
-            Element videos = doc.createElement("", NedXmlTag.VIDEOS);
-            doc.addChild(Node.ELEMENT, videos);
-            NedXmlUtils.writeXmlFile(NedIOUtils.getDowloadsFile(), doc);
+            Element videos = doc.createElement( "", NedXmlTag.VIDEOS );
+            doc.addChild( Node.ELEMENT, videos );
+            NedXmlUtils.writeXmlFile( NedIOUtils.getDowloadsFile(), doc );
             return;
         }
     }
 
-    public void setProgress(String videoFile, float progress, long fileSize) {
-        Document doc = NedXmlUtils.getDocFile(NedIOUtils.getDowloadsFile());
-        if (doc == null) {
-            NedIOUtils.removeFile(NedIOUtils.getDowloadsFile());
+    public void setProgress( String videoFile, float progress, long fileSize ) {
+        Document doc = NedXmlUtils.getDocFile( NedIOUtils.getDowloadsFile() );
+        if ( doc == null ) {
+            NedIOUtils.removeFile( NedIOUtils.getDowloadsFile() );
             return;
         }
         Element rootElement = doc.getRootElement();
-        for (int i = 0; i < rootElement.getChildCount(); i++) {
-            if (rootElement.getType(i) != Node.ELEMENT) {
+        for ( int i = 0; i < rootElement.getChildCount(); i++ ) {
+            if ( rootElement.getType( i ) != Node.ELEMENT ) {
                 continue;
             }
-            Element element = rootElement.getElement(i);
-            if (element.getName().equals("entry")) {
-                String video = element.getText(0);
-                if (video.equals(videoFile)) {
-                    String pr = String.valueOf((int) (progress)) + "%";
-                    element.setAttribute("", "progress", pr);
-                    element.setAttribute("", "filesize",
-                            String.valueOf(fileSize));
-                    NedXmlUtils.writeXmlFile(NedIOUtils.getDowloadsFile(), doc);
+            Element element = rootElement.getElement( i );
+            if ( element.getName().equals( "entry" ) ) {
+                String video = element.getText( 0 );
+                if ( video.equals( videoFile ) ) {
+                    String pr = String.valueOf( (int) (progress) ) + "%";
+                    element.setAttribute( "", "progress", pr );
+                    element.setAttribute( "", "filesize",
+                                          String.valueOf( fileSize ) );
+                    NedXmlUtils.writeXmlFile( NedIOUtils.getDowloadsFile(), doc );
                     return;
                 }
             }
@@ -522,23 +533,22 @@ public class XmlManager {
 //            return;
 //        }
 //    }
-
     //newmethod
-    public void addDownloadsEntry(DownloadTask transfer) {
+    public void addDownloadsEntry( DownloadTask transfer ) {
 
         Document doc = NedXmlUtils.getDocFile( NedIOUtils.getDowloadsFile() );
-        if (doc != null) {
-            if (!videoEntryExists(transfer.getTitle(), doc)) {
-                Element entry = doc.createElement("", "entry");
-                entry.setAttribute("", "title", transfer.getTitle());
-                entry.setAttribute("", "progress", "0%");
-                entry.setAttribute("", "url", transfer.getUrlPath());
-                entry.addChild(Node.TEXT, transfer.getFile());
-                doc.getRootElement().addChild(Node.ELEMENT, entry);
-                NedXmlUtils.writeXmlFile(NedIOUtils.getDowloadsFile(), doc);
+        if ( doc != null ) {
+            if ( !videoEntryExists( transfer.getTitle(), doc ) ) {
+                Element entry = doc.createElement( "", "entry" );
+                entry.setAttribute( "", "title", transfer.getTitle() );
+                entry.setAttribute( "", "progress", "0%" );
+                entry.setAttribute( "", "url", transfer.getUrlPath() );
+                entry.addChild( Node.TEXT, transfer.getFile() );
+                doc.getRootElement().addChild( Node.ELEMENT, entry );
+                NedXmlUtils.writeXmlFile( NedIOUtils.getDowloadsFile(), doc );
             }
         } else {
-            NedIOUtils.removeFile(NedIOUtils.getDowloadsFile());
+            NedIOUtils.removeFile( NedIOUtils.getDowloadsFile() );
             return;
         }
     }
@@ -566,48 +576,47 @@ public class XmlManager {
 //            return;
 //        }
 //    }
-
-    public void removeDownloadsEntry(String video) {
-        Document doc = NedXmlUtils.getDocFile(NedIOUtils.getDowloadsFile());
-        if (doc != null) {
-            if (videoEntryExists(video, doc)) {
+    public void removeDownloadsEntry( String video ) {
+        Document doc = NedXmlUtils.getDocFile( NedIOUtils.getDowloadsFile() );
+        if ( doc != null ) {
+            if ( videoEntryExists( video, doc ) ) {
                 //TODO remove entry
                 Element rootElement = doc.getRootElement();
                 int removeId = -1;
-                for (int i = 0; i < rootElement.getChildCount(); i++) {
-                    if (rootElement.getType(i) != Node.ELEMENT) {
+                for ( int i = 0; i < rootElement.getChildCount(); i++ ) {
+                    if ( rootElement.getType( i ) != Node.ELEMENT ) {
                         continue;
                     }
-                    Element element = rootElement.getElement(i);
-                    if (element.getName().equals("entry")) {
-                        String entryVideo = element.getText(0);
-                        if ((entryVideo != null) && (entryVideo.equals(video))) {
+                    Element element = rootElement.getElement( i );
+                    if ( element.getName().equals( "entry" ) ) {
+                        String entryVideo = element.getText( 0 );
+                        if ( (entryVideo != null) && (entryVideo.equals( video )) ) {
                             removeId = i;
                         }
                     }
                 }
-                if (removeId > -1) {
-                    rootElement.removeChild(removeId);
-                    NedXmlUtils.writeXmlFile(NedIOUtils.getDowloadsFile(), doc);
+                if ( removeId > -1 ) {
+                    rootElement.removeChild( removeId );
+                    NedXmlUtils.writeXmlFile( NedIOUtils.getDowloadsFile(), doc );
                 }
             }
         } else {
-            NedIOUtils.removeFile(NedIOUtils.getDowloadsFile());
+            NedIOUtils.removeFile( NedIOUtils.getDowloadsFile() );
             return;
         }
     }
 
-    public boolean videoEntryExists(String video, Document doc) {
+    public boolean videoEntryExists( String video, Document doc ) {
         boolean entryFound = false;
         Element rootElement = doc.getRootElement();
-        for (int i = 0; i < rootElement.getChildCount(); i++) {
-            if (rootElement.getType(i) != Node.ELEMENT) {
+        for ( int i = 0; i < rootElement.getChildCount(); i++ ) {
+            if ( rootElement.getType( i ) != Node.ELEMENT ) {
                 continue;
             }
-            Element element = rootElement.getElement(i);
-            if (element.getName().equals("entry")) {
-                String text = element.getText(0);
-                if ((text != null) && (text.equals(video))) {
+            Element element = rootElement.getElement( i );
+            if ( element.getName().equals( "entry" ) ) {
+                String text = element.getText( 0 );
+                if ( (text != null) && (text.equals( video )) ) {
                     entryFound = true;
                     break;
                 }
@@ -615,7 +624,6 @@ public class XmlManager {
         }
         return entryFound;
     }
-
     //public boolean loadFileSystem() {
 //        if (NedIOUtils.fileExists(midlet.getLocalRoot() + LibraryManager.getInstance().getCurrentLibrary().getLocalDirName() + NedLocalConst.FILESYSTEMFILE)) {
 //            Document doc = NedXmlUtils.getDocFile(midlet.getLocalRoot() + LibraryManager.getInstance().getCurrentLibrary().getLocalDirName() + NedLocalConst.FILESYSTEMFILE);

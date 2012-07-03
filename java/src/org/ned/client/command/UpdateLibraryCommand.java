@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2011 Nokia Corporation
+ * Copyright (c) 2011-2012 Nokia Corporation
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -16,16 +16,14 @@ import org.ned.client.MotdManager;
 import org.ned.client.NedMidlet;
 import org.ned.client.NedResources;
 import org.ned.client.library.NedLibrary;
+import org.ned.client.library.advanced.LibraryChangesReport;
+import org.ned.client.library.advanced.LibraryGeneralModel;
 import org.ned.client.statistics.StatisticsManager;
 import org.ned.client.utils.ContentNotExistException;
 import org.ned.client.utils.NedConnectionUtils;
 import org.ned.client.utils.NedXmlUtils;
 import org.ned.client.utils.UnauthorizedLibraryUsageException;
-import org.ned.client.view.CatalogScreen;
-import org.ned.client.view.GeneralAlert;
-import org.ned.client.view.LibraryManagerScreen;
-import org.ned.client.view.LoginOnLineScreen;
-import org.ned.client.view.WaitingScreen;
+import org.ned.client.view.*;
 
 /**
  *
@@ -96,13 +94,27 @@ public class UpdateLibraryCommand extends NedCommand {
             }
         }
 
-        private void downloadLibrary() throws SecurityException, UnauthorizedLibraryUsageException, ContentNotExistException{
-            WaitingScreen.show(NedResources.GLOBAL_CONNECTING);
-            if (!NedMidlet.getInstance().getDownloadManager().getViaServlet(
-                    NedMidlet.getAccountManager().getContentServletUri(), library)) {
-                GeneralAlert.show(NedResources.DLM_CONNECTION_FAILED, GeneralAlert.WARNING);
+        private void downloadLibrary() throws SecurityException, UnauthorizedLibraryUsageException, ContentNotExistException {
+            WaitingScreen.show( NedResources.GLOBAL_CONNECTING );
+            //basic informatin about changes
+            LibraryGeneralModel libModel = LibraryGeneralModel.getInfo(
+                    NedXmlUtils.getDocFile(
+                    NedMidlet.getSettingsManager().getLibraryManager().getCurrentLibrary().getFileUri() ) );
+
+
+            if ( !NedMidlet.getInstance().getDownloadManager().getViaServlet(
+                    NedMidlet.getAccountManager().getContentServletUri(), library ) ) {
+                GeneralAlert.show( NedResources.DLM_CONNECTION_FAILED, GeneralAlert.WARNING );
             } else {
                 NedXmlUtils.cleanDocCache();
+                LibraryGeneralModel newLibModel = LibraryGeneralModel.getInfo(
+                        NedXmlUtils.getDocFile(
+                        NedMidlet.getSettingsManager().getLibraryManager().getCurrentLibrary().getFileUri() ) );
+
+                LibraryChangesReport changes = null;
+                if ( newLibModel != null && libModel != null ) {
+                    changes = LibraryChangesReport.generateReport( newLibModel, libModel );
+                }
                 library.setCatalogCount();
                 NedMidlet.getSettingsManager().resetServer();
                 WaitingScreen.dispose();
@@ -110,6 +122,9 @@ public class UpdateLibraryCommand extends NedCommand {
                     Thread.sleep( 250 );
                 } catch ( InterruptedException ex ) {
                 }
+                String report = changes.getFullReport();
+                GeneralAlert.show( report.length() == 0 ? NedResources.NO_CHANGES : report.trim(), GeneralAlert.INFO );
+
                 if ( Display.getInstance().getCurrent() instanceof CatalogScreen ) {//this is workaround for UpdateLibrary form CatalogScreen
                     new CatalogScreen( library.getId() ).show();
                 }

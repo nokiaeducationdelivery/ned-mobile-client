@@ -21,7 +21,7 @@ import java.io.IOException;
 import javax.microedition.io.ConnectionNotFoundException;
 import javax.microedition.midlet.MIDletStateChangeException;
 import org.ned.client.transfer.DownloadManager;
-import org.ned.client.command.OpenLibraryManager;
+import org.ned.client.command.OpenLibraryManagerCommand;
 import org.ned.client.statistics.StatType;
 import org.ned.client.statistics.StatisticsManager;
 import org.ned.client.utils.NedIOUtils;
@@ -294,7 +294,7 @@ public class NedMidlet extends javax.microedition.midlet.MIDlet {
         settingsManager.loadSettings();
         if ( settingsManager.getLibraryManager().getVisibleLibrariesList() == null
              || settingsManager.getLibraryManager().getVisibleLibrariesList().size() < 1 ) {
-            OpenLibraryManager.getInstance().execute( null );
+            OpenLibraryManagerCommand.getInstance().execute( null );
         } else {
             new MainScreen().show();
         }
