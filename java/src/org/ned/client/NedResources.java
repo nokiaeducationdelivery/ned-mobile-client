@@ -108,10 +108,9 @@ public class NedResources {
     public static final String MID_UPLOAD_COMMAND = Localization.getMessage( "MID_UPLOAD_COMMAND" );
     public static final String BAD_LOGIN = Localization.getMessage( "BAD_LOGIN" );
     public static final String LOGIN = Localization.getMessage( "LOGIN" );
-    public static final String CATALOGS_NO_UNKNOWN = Localization.getMessage( "CATALOGS_NO_UNKNOWN" );
-    public static final String CATALOGS = Localization.getMessage( "CATALOGS" );
-    public static final String MEDIA_ITEMS = Localization.getMessage( "MEDIA_ITEMS" );
-    public static final String CATEGORIES = Localization.getMessage( "CATEGORIES" );
+    public static final String CATALOGS = "CATALOGS";
+    public static final String MEDIA_ITEMS = "MEDIA_ITEMS";
+    public static final String CATEGORIES = "CATEGORIES";
     public static final String ADD_LIBRARY = Localization.getMessage( "ADD_LIBRARY" );
     public static final String SHOW_LIBRARY = Localization.getMessage( "SHOW_LIBRARY" );
     public static final String LIBRARY_ID = Localization.getMessage( "LIBRARY_ID" );
@@ -179,8 +178,6 @@ public class NedResources {
     public static final String STATISTICS_OPTIONS = Localization.getMessage( "STATISTICS_OPTIONS" );
     public static final String SEARCH_FOR = Localization.getMessage( "SEARCH_FOR" );
     public static final String ITEM_ADDED_TO_QUEUE = "ITEM_ADDED_TO_QUEUE";
-    public static final String LOCAL = Localization.getMessage( "LOCAL" );
-    public static final String REMOTE = Localization.getMessage( "REMOTE" );
     public static final String GO_TO_START = Localization.getMessage( "GO_TO_START" );
     public static final String QUESTION_FACTORY = Localization.getMessage( "QUESTION_FACTORY" );
     public static final String QUESTION_FACTORY2 = Localization.getMessage( "QUESTION_FACTORY2" );
@@ -193,7 +190,7 @@ public class NedResources {
     public static final String TRA_FILESIZE = Localization.getMessage( "TRA_FILESIZE" );
     public static final String TRA_UNKNOWN_SIZE = Localization.getMessage( "TRA_UNKNOWN_SIZE" );
     public static final String ABOUT = Localization.getMessage( "ABOUT" );
-    public static final String VERSION = Localization.getMessage( "VERSION" );
+    public static final String VERSION = "VERSION";
     public static final String REMEMBERME = Localization.getMessage( "REMEMBERME" );
     public static final String REMOVEALL = Localization.getMessage( "REMOVEALL" );
     public static final String REMOVEALL_DOWNLOAD_DIALOG = Localization.getMessage( "TRA_REMOVEALL_DOWNLOAD_DIALOG" );
@@ -234,6 +231,7 @@ public class NedResources {
     public static final String NEWESTVERSION = Localization.getMessage( "NEWESTVERSION" );
     public static final String DEMOURL = Localization.getMessage( "DEMOURL" );
     public static final String NEDSERVICENOTPRESENT = Localization.getMessage( "NEDSERVICENOTPRESENT" );
+    public static final String DEMOLIBID = Localization.getMessage( "DEMOLIBID" );
 
     public NedResources() {
     }
