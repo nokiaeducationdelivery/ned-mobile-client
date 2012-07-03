@@ -1,0 +1,26 @@
+<html>
+  <head>
+    <style type="text/css">
+body
+{
+background-color:#e1e1e1;
+}
+h1
+{
+color:#6225;
+text-align:left;
+}
+p
+{
+color:#69b510;
+}
+</style>
+  </head>
+  <body>
+   <p> Shows available language version</p>
+	<h1>Ok</h1> <p>Change current language. You need to restart application to apply changes</p>
+	<h1>Refresh list</h1> <p>Checks if new localizations are available on the server<p>
+	<h1>Download again</h1> <p>Downloads again selected localization<p>
+	<h1></h1><p></p>
+  </body>
+</html>

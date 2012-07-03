@@ -217,6 +217,7 @@ public class NedResources {
     public static final String DOWNLOAD_AGAIN_LANGUAGE = Localization.getMessage( "DOWNLOAD_AGAIN_LANGUAGE" );
     public static final String DOWNLOAD_SUCCESSFUL = Localization.getMessage( "DOWNLOAD_SUCCESSFUL" );
     public static final String NOT_SUPPORTED = Localization.getMessage( "NOT_SUPPORTED" );
+    public static final String MISSING_HELP = Localization.getMessage( "MISSING_HELP" );
 
     public NedResources() {
     }

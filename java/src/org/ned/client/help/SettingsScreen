@@ -11,16 +11,17 @@ color:#6225;
 text-align:left;
 }
 p
-{	
+{
 color:#69b510;
 }
 </style>
-  </head> 
+  </head>
   <body>
     <p> NED settings.</p>
 	<h1>Statistic options</h1> <p>Configuration for statistics upload.</p>
     <h1>Download options</h1> <p>Select manual or automatic downloads.</p>
 	<h1>Switch user</h1> <p>Allows You to log in as another user.</p>
+    <h1>Languages</h1> <p>Allows to change application language. It is also possible to check and downaload new translations for the application form NED server.</p>
 	<h1></h1><p></p>
   </body>
 </html>
