@@ -79,8 +79,8 @@ public class MediaItemsListCellRenderer extends ListCellRendererBase implements 
         addComponent(mTitle);
         addComponent(mFlag);
 
-        local = NedResources.getRes().getImage("Local");
-        remote = NedResources.getRes().getImage("Remote");
+        local = NedMidlet.getRes().getImage("Local");
+        remote = NedMidlet.getRes().getImage("Remote");
     }
 
     public Component getListCellRendererComponent(List list, Object value, int index, boolean isSelected) {

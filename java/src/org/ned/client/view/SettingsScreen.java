@@ -1,5 +1,5 @@
 /*******************************************************************************
-* Copyright (c) 2011 Nokia Corporation
+* Copyright (c) 2011-2012 Nokia Corporation
 * All rights reserved. This program and the accompanying materials
 * are made available under the terms of the Eclipse Public License v1.0
 * which accompanies this distribution, and is available at
@@ -14,12 +14,7 @@ import com.sun.lwuit.List;
 import com.sun.lwuit.events.ActionEvent;
 import com.sun.lwuit.events.ActionListener;
 import org.ned.client.NedResources;
-import org.ned.client.command.BackSettingsCommand;
-import org.ned.client.command.DownloadOptionsCommand;
-import org.ned.client.command.HelpCommand;
-import org.ned.client.command.LoginViewCommand;
-import org.ned.client.command.NedCommand;
-import org.ned.client.command.StatisticsOptionsCommand;
+import org.ned.client.command.*;
 import org.ned.client.view.renderer.SimpleListCellRenderer;
 
 
@@ -32,7 +27,9 @@ public class SettingsScreen extends NedFormBase implements ActionListener{
         setNedTitle( NedResources.MID_SETTINGS_TITLE );
         mCommands = new List( new Object[]{ StatisticsOptionsCommand.getInstance(),
                                             DownloadOptionsCommand.getInstance(),
-                                            LoginViewCommand.getInstance() } );
+                                            LoginViewCommand.getInstance(),
+                                            LanguagesViewCommand.getInstance()
+                                            } );
         mCommands.setListCellRenderer( new SimpleListCellRenderer() );
         mCommands.addActionListener( this );
         addComponent( mCommands );

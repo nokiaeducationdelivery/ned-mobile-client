@@ -16,11 +16,7 @@ import com.sun.lwuit.events.ActionListener;
 import com.sun.lwuit.layouts.BoxLayout;
 import org.ned.client.NedMidlet;
 import org.ned.client.NedResources;
-import org.ned.client.command.AsyncCompletedCallback;
-import org.ned.client.command.CheckServerUrlComand;
-import org.ned.client.command.ExitCommand;
-import org.ned.client.command.HelpCommand;
-import org.ned.client.command.ShowAboutCommand;
+import org.ned.client.command.*;
 import org.ned.client.view.customComponents.ClearTextField;
 
 

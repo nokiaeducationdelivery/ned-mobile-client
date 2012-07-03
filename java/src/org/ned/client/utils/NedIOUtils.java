@@ -89,6 +89,21 @@ public class NedIOUtils {
         return content;
     }
 
+    public static InputStream loadFileAsStream(String file) {
+        FileConnection fc = null;
+        InputStream is = null;
+        try {
+            fc = (FileConnection) Connector.open(file, Connector.READ);
+
+            if ( fc.exists()) {
+                is = fc.openInputStream();
+            }
+        } catch (IOException ex) {
+           is = null;
+        }
+        return is;
+    }
+
     public static void saveFile( String aFile, String aContent ) {
         FileConnection fc = null;
         PrintStream os = null;
@@ -249,6 +264,10 @@ public class NedIOUtils {
 
     public static String getDowloadsFile() {
         return getUserRootDirectory() + NedLocalConst.DOWNLOADSFILE;
+    }
+
+    public static String getLanguageFile() {
+        return getLocalRoot() + NedLocalConst.LANGUAGESFILE;
     }
 
     public static void moveFile(String oldPath, String newPath) {

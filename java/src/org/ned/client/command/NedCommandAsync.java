@@ -19,26 +19,32 @@ public abstract class NedCommandAsync extends NedCommand implements Runnable {
     protected Object param;
     private boolean showConnectingDialog;
 
-    public void beginAsync(Object aParam, AsyncCompletedCallback aCallback, boolean showConnectingDialog) {
+    public void beginAsync( Object aParam, AsyncCompletedCallback aCallback, boolean showConnectingDialog ) {
         this.param = aParam;
         this.callback = aCallback;
         this.showConnectingDialog = showConnectingDialog;
-        if (this instanceof Runnable) {
-            Thread t = new Thread((Runnable) this);
+        if ( this instanceof Runnable ) {
+            Thread t = new Thread( (Runnable) this );
             t.start();
         }
     }
 
     public void run() {
         try {
+            Thread.sleep( 100 );
+        } catch ( InterruptedException ex ) {
+        }
+        try {
             tryShowConnecting();
-            execute(param);
-            if (callback != null) {
+            execute( param );
+            if ( callback != null ) {
+                tryDisposeConnecting();
                 callback.onSuccess();
             }
-        } catch (Exception ex) {
-            if (callback != null) {
-                callback.onFailure(ex.getMessage());
+        } catch ( Exception ex ) {
+            if ( callback != null ) {
+                tryDisposeConnecting();
+                callback.onFailure( ex.getMessage() );
             }
         } finally {
             tryDisposeConnecting();
@@ -46,21 +52,21 @@ public abstract class NedCommandAsync extends NedCommand implements Runnable {
     }
 
     private void tryShowConnecting() {
-        if (showConnectingDialog) {
-            WaitingScreen.show(NedResources.CONNECTING);
+        if ( showConnectingDialog ) {
+            WaitingScreen.show( NedResources.CONNECTING );
         }
     }
 
     private void tryDisposeConnecting() {
-        if (showConnectingDialog) {
+        if ( showConnectingDialog ) {
             WaitingScreen.dispose();
         }
     }
 
     protected static class AsyncException extends RuntimeException {
 
-        public AsyncException(String message) {
-            super(message);
+        public AsyncException( String message ) {
+            super( message );
         }
     }
 }

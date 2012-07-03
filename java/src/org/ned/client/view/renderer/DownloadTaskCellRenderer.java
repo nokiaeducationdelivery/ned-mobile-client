@@ -18,6 +18,7 @@ import com.sun.lwuit.List;
 import com.sun.lwuit.layouts.BoxLayout;
 import com.sun.lwuit.list.ListCellRenderer;
 import com.sun.lwuit.plaf.Border;
+import org.ned.client.NedMidlet;
 import org.ned.client.NedResources;
 import org.ned.client.transfer.DownloadTask;
 import org.ned.client.view.customComponents.ProgressBar;
@@ -46,7 +47,7 @@ public class DownloadTaskCellRenderer extends Container implements ListCellRende
     public DownloadTaskCellRenderer() {
         setLayout(new BoxLayout(BoxLayout.Y_AXIS));
         setCellRenderer(true);
-        Font resultFont = NedResources.getFont(NedResources.LIST_FONT);
+        Font resultFont = NedMidlet.getFont(NedResources.LIST_FONT);
 
         Container fileContainer = new Container(new BoxLayout(BoxLayout.X_AXIS));
         fileContainer.getStyle().setPadding(0, 0, 0, 0);

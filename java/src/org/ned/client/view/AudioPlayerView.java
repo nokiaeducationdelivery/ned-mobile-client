@@ -23,6 +23,7 @@ import javax.microedition.media.Player;
 import javax.microedition.media.PlayerListener;
 import javax.microedition.media.control.VolumeControl;
 import org.ned.client.IContent;
+import org.ned.client.NedMidlet;
 import org.ned.client.NedResources;
 import org.ned.client.command.BackAudioCommand;
 import org.ned.client.command.PauseAudioCommand;
@@ -38,7 +39,7 @@ public class AudioPlayerView extends NedFormBase implements ActionListener, Play
     private VolumeControl volume = null;
     private String audioFile;
     private Player player;
-    private Image musicImage = NedResources.getRes().getImage( "AudioBig" );
+    private Image musicImage = NedMidlet.getRes().getImage( "AudioBig" );
 
     public AudioPlayerView(IContent content) {
         try {

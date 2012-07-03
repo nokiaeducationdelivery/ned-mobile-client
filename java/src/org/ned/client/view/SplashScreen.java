@@ -14,6 +14,7 @@ import com.sun.lwuit.Display;
 import com.sun.lwuit.Image;
 import com.sun.lwuit.Label;
 import com.sun.lwuit.layouts.BorderLayout;
+import org.ned.client.NedMidlet;
 import org.ned.client.NedResources;
 
 
@@ -48,21 +49,21 @@ public class SplashScreen extends NedFormBase {
                 imgName = null;
                 break;
         }
-        
+
         if (imgName != null) {
-            splashImg = NedResources.getRes().getImage(imgName);
+            splashImg = NedMidlet.getRes().getImage(imgName);
         } else {
             if (Display.getInstance().getDisplayHeight() > Display.getInstance().getDisplayWidth()) {
                 imgName = splashes[3];
             } else {
                 imgName = splashes[2];
             }
-            splashImg = NedResources.getRes().getImage(imgName).scaled(
+            splashImg = NedMidlet.getRes().getImage(imgName).scaled(
                     Display.getInstance().getDisplayWidth(), Display.getInstance().getDisplayHeight());
         }
         fitImageIntoScreen();
         getStyle().setBgColor(0xdddbdb);
-        
+
     }
 
     private void fitImageIntoScreen() {

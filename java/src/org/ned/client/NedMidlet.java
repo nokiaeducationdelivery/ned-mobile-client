@@ -11,6 +11,7 @@
 package org.ned.client;
 
 import com.sun.lwuit.Display;
+import com.sun.lwuit.Font;
 import com.sun.lwuit.animations.CommonTransitions;
 import com.sun.lwuit.impl.midp.VKBImplementationFactory;
 import com.sun.lwuit.plaf.DefaultLookAndFeel;
@@ -51,6 +52,8 @@ public class NedMidlet extends javax.microedition.midlet.MIDlet {
     private SettingsManager settingsManager = new SettingsManager(this);
     private Scheduler sl = null;
     private AccountManager accountManager = null;
+    private LanguageManager languageManager = null;
+    private Resources res;
 
     public NedMidlet() {
         instance = this;
@@ -154,7 +157,7 @@ public class NedMidlet extends javax.microedition.midlet.MIDlet {
                 CommonTransitions.createSlide(CommonTransitions.SLIDE_VERTICAL, false,
                 NedConsts.NedTransitions.TRANSITION_TIME));
         UIManager.getInstance().getLookAndFeel().setDefaultDialogTransitionOut(
-                CommonTransitions.createSlide(CommonTransitions.SLIDE_VERTICAL, true, 
+                CommonTransitions.createSlide(CommonTransitions.SLIDE_VERTICAL, true,
                 NedConsts.NedTransitions.TRANSITION_TIME));
         UIManager.getInstance().getLookAndFeel().setDefaultFormTransitionIn(
                 CommonTransitions.createSlide(CommonTransitions.SLIDE_HORIZONTAL, false,
@@ -196,7 +199,6 @@ public class NedMidlet extends javax.microedition.midlet.MIDlet {
         }
     }
 
-
     public void resetApp() {
         NedIOUtils.createDirectory(NedIOUtils.getLocalData());
         NedIOUtils.createDirectory(NedIOUtils.getLocalRoot());
@@ -213,9 +215,8 @@ public class NedMidlet extends javax.microedition.midlet.MIDlet {
 
     private void loadTheme() {
         try {
-            Resources res = Resources.open("/org/ned/client/NEDtheme.res");
+            res = Resources.open("/org/ned/client/NEDtheme.res");
             UIManager.getInstance().setThemeProps(res.getTheme(res.getThemeResourceNames()[0]));
-            NedResources.getInstance().setRes(res);
 
             DefaultLookAndFeel painter = (DefaultLookAndFeel)UIManager.getInstance().getLookAndFeel();
             painter.setCheckBoxImages(res.getImage("checked"), res.getImage("unchecked"));
@@ -230,6 +231,14 @@ public class NedMidlet extends javax.microedition.midlet.MIDlet {
         } catch ( IOException e ) {
             e.printStackTrace();
         }
+    }
+
+    public static Resources getRes() {
+        return instance.res;
+    }
+
+    public static Font getFont(String id) {
+        return instance.res.getFont(id);
     }
 
     public Resources getLocalImageResources(String resourceName) {

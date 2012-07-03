@@ -14,10 +14,7 @@ import com.sun.lwuit.Command;
 import java.io.IOException;
 import javax.microedition.io.Connector;
 import javax.microedition.io.HttpConnection;
-import org.ned.client.NedMidlet;
 import org.ned.client.NedResources;
-import org.ned.client.view.GeneralAlert;
-import org.ned.client.view.LoginScreen;
 
 public class CheckServerUrlComand extends NedCommandAsync {
 

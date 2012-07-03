@@ -25,6 +25,7 @@ import com.sun.lwuit.layouts.BoxLayout;
 import com.sun.lwuit.layouts.FlowLayout;
 import com.sun.lwuit.plaf.Style;
 import com.sun.lwuit.plaf.UIManager;
+import org.ned.client.NedMidlet;
 import org.ned.client.NedResources;
 import org.ned.client.view.renderer.DialogTitlePainter;
 
@@ -85,6 +86,7 @@ public class GeneralAlert {
         int H_Margin = hi < disH ? (disH - hi)/2 : 0;
         int V_Margin =  wi < disW ? (disW - wi)/2 : 0;
         Command tmp = messageDialog.show( H_Margin, H_Margin, V_Margin, V_Margin, true);
+        messageDialog.dispose();
         UIManager.getInstance().getLookAndFeel().setReverseSoftButtons(isReversed);
         return tmp;
     }
@@ -117,12 +119,11 @@ public class GeneralAlert {
 
         Container c2 = new Container( new BoxLayout( BoxLayout.Y_AXIS ) );
 
-        int displayW = Display.getInstance().getDisplayWidth() - 15; // magic number, it should rather be set to width of margins+borders+padding
+        int displayW = Display.getInstance().getDisplayWidth() - 10; // magic number, it should rather be set to width of margins+borders+padding
         int displayH = Display.getInstance().getDisplayHeight();
 
         mMessageTextArea = new TextArea( aMessage );
         mMessageTextArea.setSelectedStyle( mMessageTextArea.getUnselectedStyle() );
-        mMessageTextArea.setEditable( false );
 
         int textWidth = mMessageTextArea.getSelectedStyle().getFont().stringWidth( aMessage );
         int lineHeight = mMessageTextArea.getSelectedStyle().getFont().getHeight() + mMessageTextArea.getRowsGap();
@@ -166,16 +167,16 @@ public class GeneralAlert {
 
         switch ( aAlertType) {
             case ERROR:
-                return NedResources.getRes().getImage("error");
+                return NedMidlet.getRes().getImage("error");
             case QUESTION:
-                return NedResources.getRes().getImage("question");
+                return NedMidlet.getRes().getImage("question");
             case WARNING:
-                return NedResources.getRes().getImage("warning");
+                return NedMidlet.getRes().getImage("warning");
             case TEXT:
                 return null;
             case INFO:
             default:
-                return NedResources.getRes().getImage("info");
+                return NedMidlet.getRes().getImage("info");
         }
     }
 

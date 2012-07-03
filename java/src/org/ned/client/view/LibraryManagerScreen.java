@@ -10,7 +10,6 @@
 *******************************************************************************/
 package org.ned.client.view;
 
-import org.ned.client.view.renderer.LibrariesListCheckBoxCellRenderer;
 import com.sun.lwuit.Component;
 import com.sun.lwuit.Display;
 import com.sun.lwuit.Label;
@@ -23,14 +22,11 @@ import com.sun.lwuit.layouts.BoxLayout;
 import com.sun.lwuit.list.ListModel;
 import org.ned.client.NedMidlet;
 import org.ned.client.NedResources;
-import org.ned.client.command.AddLibraryCommand;
-import org.ned.client.command.BackSettingsCommand;
-import org.ned.client.command.HelpCommand;
-import org.ned.client.command.RemoveLibraryCommand;
-import org.ned.client.command.UpdateLibraryCommand;
+import org.ned.client.command.*;
 import org.ned.client.library.NedLibrary;
 import org.ned.client.utils.NedIOUtils;
 import org.ned.client.view.customComponents.ClearTextField;
+import org.ned.client.view.renderer.LibrariesListCheckBoxCellRenderer;
 import org.ned.client.view.renderer.UnselectedBGPainter;
 
 public class LibraryManagerScreen extends NedFormBase implements ActionListener, FocusListener, SelectionListener {

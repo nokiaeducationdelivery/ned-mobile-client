@@ -39,6 +39,7 @@ import javax.microedition.media.PlayerListener;
 import javax.microedition.media.control.FramePositioningControl;
 import javax.microedition.media.control.VolumeControl;
 import org.ned.client.IContent;
+import org.ned.client.NedMidlet;
 import org.ned.client.NedResources;
 import org.ned.client.command.BackVideoCommand;
 import org.ned.client.view.customComponents.ProgressBar;
@@ -46,12 +47,12 @@ import org.ned.client.view.customComponents.ProgressBar;
 public class VideoPlayerView extends NedFormBase implements PlayerListener, ActionListener, Runnable {
 
     private static final int INIT_VOLUME_LEVEL = 80;
-    private static final Image playIcon = NedResources.getRes().getImage( "Play" );
-    private static final Image pauseIcon = NedResources.getRes().getImage( "Pause" );
-    private static final Image ffIcon = NedResources.getRes().getImage( "FF" );
-    private static final Image rewIcon = NedResources.getRes().getImage( "Rew" );
-    private static final Image fullIcon = NedResources.getRes().getImage( "Fullscreen" );
-    private static final Image exitIcon = NedResources.getRes().getImage( "BackIcon" );
+    private static final Image playIcon = NedMidlet.getRes().getImage( "Play" );
+    private static final Image pauseIcon = NedMidlet.getRes().getImage( "Pause" );
+    private static final Image ffIcon = NedMidlet.getRes().getImage( "FF" );
+    private static final Image rewIcon = NedMidlet.getRes().getImage( "Rew" );
+    private static final Image fullIcon = NedMidlet.getRes().getImage( "Fullscreen" );
+    private static final Image exitIcon = NedMidlet.getRes().getImage( "BackIcon" );
 
     private static int currentVolume = -1;
     private VolumeControl volume = null;

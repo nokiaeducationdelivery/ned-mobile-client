@@ -12,7 +12,7 @@ package org.ned.client.utils;
 
 import com.sun.lwuit.Image;
 import org.ned.client.NedConsts.NedContentType;
-import org.ned.client.NedResources;
+import org.ned.client.NedMidlet;
 
 
 public class MediaTypeResolver {
@@ -25,11 +25,11 @@ public class MediaTypeResolver {
 
 
     static {
-        audio = NedResources.getRes().getImage( "Audio2" );
-        video = NedResources.getRes().getImage( "Video2" );
-        picture = NedResources.getRes().getImage( "Image2" );
-        text = NedResources.getRes().getImage( "Text2" );
-        unknown = NedResources.getRes().getImage( "UnknownType" );
+        audio = NedMidlet.getRes().getImage( "Audio2" );
+        video = NedMidlet.getRes().getImage( "Video2" );
+        picture = NedMidlet.getRes().getImage( "Image2" );
+        text = NedMidlet.getRes().getImage( "Text2" );
+        unknown = NedMidlet.getRes().getImage( "UnknownType" );
     }
 
     public static boolean isVideo( String aFileName ) {
@@ -57,7 +57,7 @@ public class MediaTypeResolver {
     public static boolean isOldMedia( String aFileName ) {
         return isVideo(aFileName) || isAudio(aFileName) || isImage(aFileName);
     }
-    
+
     public static Image getTypeIcon( String aType ) {
         if ( NedContentType.AUDIO.equals( aType ) ) {
             return audio;

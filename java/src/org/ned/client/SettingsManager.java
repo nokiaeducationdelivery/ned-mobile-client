@@ -137,35 +137,30 @@ public class SettingsManager {
                 GeneralAlert.show( "load settings err: " + ex.getMessage(), GeneralAlert.ERROR );
             }
             for (int i = 0; i < rootElement.getChildCount(); i++) {
-                if (rootElement.getType(i) != Node.ELEMENT) {
-                    continue;
-                }
-                Element element = rootElement.getElement(i);
-                if (element.getName().equals("Library")) {
-                    libraryManager.addLibrary(new NedLibrary(element));
-                }
-
-                if (element.getName().equals("Schedule")) {
-                    setDlTime(element.getText(0));
-                    if (element.getAttributeValue("", "state").equals("on")) {
-                        setDlState(true);
-                    } else {
-                        setDlState(false);
-                    }
-                    String auto = element.getAttributeValue("", "automatic");
-                    if ((auto != null) && (auto.equals("yes"))) {
-                        setDlAutomatic(true);
-                    } else {
-                        setDlAutomatic(false);
-                    }
-                    continue;
-                }
-                if( element.getName().equals("Statistics") ) {
-                    if ( element.getAttributeValue("", "auto") != null
-                      && element.getAttributeValue("", "auto").equals("no")) {
-                        setAutoStatSend(false);
-                    } else {
-                        setAutoStatSend(true);
+                if (rootElement.getType(i) == Node.ELEMENT) {
+                    Element element = rootElement.getElement(i);
+                    if (element.getName().equals("Library")) {
+                        libraryManager.addLibrary(new NedLibrary(element));
+                    } else if (element.getName().equals("Schedule")) {
+                        setDlTime(element.getText(0));
+                        if (element.getAttributeValue("", "state").equals("on")) {
+                            setDlState(true);
+                        } else {
+                            setDlState(false);
+                        }
+                        String auto = element.getAttributeValue("", "automatic");
+                        if ((auto != null) && (auto.equals("yes"))) {
+                            setDlAutomatic(true);
+                        } else {
+                            setDlAutomatic(false);
+                        }
+                    } else if( element.getName().equals("Statistics") ) {
+                        if ( element.getAttributeValue("", "auto") != null
+                          && element.getAttributeValue("", "auto").equals("no")) {
+                            setAutoStatSend(false);
+                        } else {
+                            setAutoStatSend(true);
+                        }
                     }
                 }
             }
@@ -252,7 +247,7 @@ public class SettingsManager {
                 pElement.addChild(Node.TEXT, version);
             }
             pLibrary.addChild(Node.ELEMENT, pElement);
-            
+
             retval[i] = pLibrary;
         }
         return retval;
