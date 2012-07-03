@@ -48,15 +48,21 @@ public class AddLibraryCommand extends NedCommandAsync{
                 NedLibrary newLibrary = NedConnectionUtils.getLibraryInfo( newAddress );
 
                 if ( newLibrary != null ) {
-                    if (NedMidlet.getSettingsManager().getAutoStatSend()) {
+                    if( NedMidlet.getSettingsManager().getLibraryManager().addLibrary( newLibrary ))
+                    {
+                        if (NedMidlet.getSettingsManager().getAutoStatSend()) {
                         StatisticsManager.uploadStats( true );
+                        }
+                        MotdManager.getInstance().updateMotd();
+                        WaitingScreen.dispose();
+                        StatisticsManager.logEvent( StatType.LIBRARY_ADD, "Id=" + newLibrary.getId()
+                                                 +";Title=" + newLibrary.getTitle()
+                                                 +";Ver=" + newLibrary.getVersion() + ";" );
+                    } else {
+                      WaitingScreen.dispose();
+                      GeneralAlert.show( NedResources.LIBRARY_ALREADY_EXISTS, GeneralAlert.WARNING );
                     }
-                    MotdManager.getInstance().updateMotd();
-                    WaitingScreen.dispose();
-                    NedMidlet.getSettingsManager().getLibraryManager().addLibrary( newLibrary );
-                    StatisticsManager.logEvent( StatType.LIBRARY_ADD, "Id=" + newLibrary.getId()
-                                                                     +";Title=" + newLibrary.getTitle()
-                                                                     +";Ver=" + newLibrary.getVersion() + ";" );
+
                 } else {
                     WaitingScreen.dispose();
                     GeneralAlert.show( NedResources.LIBRARY_NOT_EXISTS, GeneralAlert.WARNING );

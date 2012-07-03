@@ -164,6 +164,7 @@ public class NedResources {
     public static final String LIBRARY_MANAGER = Localization.getMessage("LIBRARY_MANAGER");
     public static final String CONNECTING = Localization.getMessage("CONNECTING");
     public static final String LIBRARY_NOT_EXISTS = Localization.getMessage("LIBRARY_NOT_EXISTS");
+    public static final String LIBRARY_ALREADY_EXISTS = Localization.getMessage("LIBRARY_ALREADY_EXISTS");
     public static final String USER_NAME = Localization.getMessage("USER_NAME");
     public static final String PASSWORD = Localization.getMessage("PASSWORD");
     public static final String USER_AUTHENTICATION = Localization.getMessage("USER_AUTHENTICATION");
