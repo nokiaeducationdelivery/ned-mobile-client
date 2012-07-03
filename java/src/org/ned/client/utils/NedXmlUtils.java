@@ -30,9 +30,14 @@ public class NedXmlUtils {
     private static String currentFile = null;
     private static byte[] buffer = null;
     private static Document docCache = null;
+    private static boolean isModified = true;
 
     public static Document getDocFile(String file) {
         return getDocFile( file, false );
+    }
+
+    public static void touch() {
+        isModified = true;
     }
 
     public static Document getDocFile(String file, boolean aForceReload) {
@@ -41,7 +46,7 @@ public class NedXmlUtils {
         InputStream in = null;
         InputStreamReader is = null;
 
-        if(docCache != null && currentFile != null && file.equals(currentFile) && !aForceReload )
+        if(docCache != null && currentFile != null && file.equals(currentFile) && !aForceReload && !isModified )
         {
             return docCache;
         }
@@ -88,6 +93,7 @@ public class NedXmlUtils {
         {
             buffer = null;
         }
+        isModified = false;
         return doc;
     }
 

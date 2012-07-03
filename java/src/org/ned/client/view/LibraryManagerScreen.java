@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2011 Nokia Corporation
+ * Copyright (c) 2011-2012 Nokia Corporation
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -169,11 +169,7 @@ public class LibraryManagerScreen extends NedFormBase implements ActionListener,
                 equals( NedConsts.NedDemo.DEMOPASSWORD )
                 && NedMidlet.getSettingsManager().getLibraryManager().getSize()
                 == 0 ) {
-            Label demo = new Label( NedResources.DEMOURL );
-            demo.setAlignment( Label.LEFT );
-            addComponent( demo );
-            Label username = new Label( NedResources.LIBRARY_ID + ": "
-                    + NedConsts.NedDemo.DEMOLIBID );
+            Label username = new Label( NedResources.DEMOLIBID );
             username.setAlignment( Label.LEFT );
             addComponent( username );
         }

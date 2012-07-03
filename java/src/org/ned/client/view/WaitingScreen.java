@@ -11,6 +11,7 @@
 package org.ned.client.view;
 
 import com.sun.lwuit.Dialog;
+import com.sun.lwuit.Display;
 import com.sun.lwuit.Label;
 import com.sun.lwuit.animations.CommonTransitions;
 import com.sun.lwuit.layouts.BorderLayout;
@@ -38,18 +39,32 @@ public class WaitingScreen {
     }
 
     public static void dispose() {
-        if ( instance != null && instance.dialog != null ) {
-            instance.dialog.setVisible( false );
-            instance.dialog.dispose();
-        }
-        UIManager.getInstance().getLookAndFeel().setDefaultDialogTransitionIn( CommonTransitions.createSlide(
-                CommonTransitions.SLIDE_VERTICAL, false, NedConsts.NedTransitions.TRANSITION_TIME ) );
-        UIManager.getInstance().getLookAndFeel().setDefaultDialogTransitionOut( CommonTransitions.createSlide(
-                CommonTransitions.SLIDE_VERTICAL, true, NedConsts.NedTransitions.TRANSITION_TIME ) );
+        Display.getInstance().callSeriallyAndWait( new Runnable() {
+
+            public void run() {
+                if ( instance != null && instance.dialog != null ) {
+                    instance.dialog.setVisible( false );
+                    instance.dialog.dispose();
+                    UIManager.getInstance().getLookAndFeel().
+                            setDefaultDialogTransitionIn( CommonTransitions.
+                            createSlide(
+                            CommonTransitions.SLIDE_VERTICAL, false, NedConsts.NedTransitions.TRANSITION_TIME ) );
+                    UIManager.getInstance().getLookAndFeel().
+                            setDefaultDialogTransitionOut( CommonTransitions.
+                            createSlide(
+                            CommonTransitions.SLIDE_VERTICAL, true, NedConsts.NedTransitions.TRANSITION_TIME ) );
+                }
+            }
+        } );
     }
 
     private void showModeless() {
-        dialog.showPacked( BorderLayout.CENTER, false );
+        Display.getInstance().callSerially( new Runnable() {
+
+            public void run() {
+                dialog.showPacked( BorderLayout.CENTER, false );
+            }
+        } );
     }
 
     private WaitingScreen( String status ) {

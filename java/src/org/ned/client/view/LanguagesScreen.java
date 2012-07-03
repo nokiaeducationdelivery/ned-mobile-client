@@ -129,7 +129,7 @@ public class LanguagesScreen extends NedFormBase implements ActionListener, Sele
         }
 
         public void onFailure( String error ) {
-            GeneralAlert.show( error, GeneralAlert.WARNING );
+            GeneralAlert.show( error, GeneralAlert.WARNING, true );
         }
     }
 
@@ -144,7 +144,7 @@ public class LanguagesScreen extends NedFormBase implements ActionListener, Sele
         }
 
         public void onFailure( String error ) {
-            GeneralAlert.show( error, GeneralAlert.WARNING );
+            GeneralAlert.show( error, GeneralAlert.WARNING, true );
         }
     }
 }

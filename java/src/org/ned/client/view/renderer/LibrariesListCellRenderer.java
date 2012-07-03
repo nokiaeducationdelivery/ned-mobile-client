@@ -12,6 +12,7 @@ package org.ned.client.view.renderer;
 
 import com.sun.lwuit.Component;
 import com.sun.lwuit.List;
+import org.ned.client.Localization;
 import org.ned.client.NedResources;
 import org.ned.client.library.NedLibrary;
 import org.ned.client.view.style.NEDStyleToolbox;
@@ -22,16 +23,20 @@ import org.ned.client.view.style.NEDStyleToolbox;
  */
 public class LibrariesListCellRenderer extends ListCellRendererBase {
 
-    public Component getListCellRendererComponent( List list, Object value, int index, boolean isSelected ) {
-        NedLibrary lib = (NedLibrary) value;
+    Object[] params = new Object[1];
+
+    public Component getListCellRendererComponent( List list, Object value,
+                                                   int index, boolean isSelected ) {
+        NedLibrary lib = (NedLibrary)value;
         if ( lib != null ) {
             mTitle.setText( lib.getTitle() );
             if ( lib.isDownloaded() ) {
-                mQuanity.setText( " " + lib.getCatalogCount() + " "
-                                  + NedResources.CATALOGS );
+                params[0] = String.valueOf( lib.getCatalogCount() );
+
             } else {
-                mQuanity.setText( " " + NedResources.CATALOGS_NO_UNKNOWN );
+                params[0] = "?";
             }
+            mQuanity.setText( Localization.getMessage( NedResources.CATALOGS, params ) );
 
             if ( isSelected ) {
                 setFocus( true );
@@ -45,6 +50,7 @@ public class LibrariesListCellRenderer extends ListCellRendererBase {
                 setFocus( false );
             }
         }
+
         return this;
     }
 }

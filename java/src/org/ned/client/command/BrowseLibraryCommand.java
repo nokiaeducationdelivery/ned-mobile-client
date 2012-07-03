@@ -11,7 +11,6 @@
 package org.ned.client.command;
 
 import com.sun.lwuit.Command;
-import com.sun.lwuit.Display;
 import org.ned.client.MotdManager;
 import org.ned.client.NedConsts.NedLocalConst;
 import org.ned.client.NedMidlet;
@@ -40,13 +39,13 @@ public class BrowseLibraryCommand extends NedCommand {
     }
 
     protected void doAction( Object param ) {
-        String id = (String) param;
+        String id = (String)param;
 
         NedLibrary selected = NedMidlet.getSettingsManager().getLibraryManager().
                 findLibrary( id );
         if ( NedIOUtils.fileExists( selected.getFileUri() ) ) {
             NedIOUtils.createDirectory( selected.getDirUri() + "/"
-                                        + NedLocalConst.VIDEOSDIR );
+                    + NedLocalConst.VIDEOSDIR );
             new CatalogScreen( id ).show();
         } else {
             WaitingScreen.show( NedResources.GLOBAL_CONNECTING );
@@ -58,7 +57,7 @@ public class BrowseLibraryCommand extends NedCommand {
     }
 
     protected void doLog( Object aParam ) {
-        String id = (String) aParam;
+        String id = (String)aParam;
         StatisticsManager.logEvent( StatType.BROWSE_LIBRARY_OPEN, "Id=" + id );
     }
 
@@ -84,7 +83,7 @@ public class BrowseLibraryCommand extends NedCommand {
             } catch ( UnauthorizedLibraryUsageException ex ) {
                 WaitingScreen.dispose();//to get main view not a "Connecting..." dialog by Diaplay.getCurrent
                 if ( GeneralAlert.showQuestion( NedResources.LOGIN_AGAIN )
-                     == GeneralAlert.RESULT_YES ) {
+                        == GeneralAlert.RESULT_YES ) {
                     new LoginOnLineScreen( MainScreen.class ).show();
                 }
                 return;
@@ -97,12 +96,7 @@ public class BrowseLibraryCommand extends NedCommand {
                 library.setCatalogCount();
                 new CatalogScreen( library.getId() ).show();
             } else {
-                Display.getInstance().callSerially( new Runnable() {
-
-                    public void run() {
-                        GeneralAlert.show( NedResources.DLM_CONNECTION_FAILED, GeneralAlert.WARNING );
-                    }
-                });
+                GeneralAlert.show( NedResources.DLM_CONNECTION_FAILED, GeneralAlert.WARNING, true );
             }
             if ( NedMidlet.getSettingsManager().getAutoStatSend() ) {
                 StatisticsManager.uploadStats( true );

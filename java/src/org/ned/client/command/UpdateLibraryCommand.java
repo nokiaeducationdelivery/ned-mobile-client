@@ -90,7 +90,7 @@ public class UpdateLibraryCommand extends NedCommand {
                 }
             } catch ( ContentNotExistException ex ) {
                 WaitingScreen.dispose();
-                GeneralAlert.show( NedResources.LIB_NOT_EXIST_ANY_MORE, GeneralAlert.WARNING );
+                GeneralAlert.show( NedResources.LIB_NOT_EXIST_ANY_MORE, GeneralAlert.WARNING, true );
             }
         }
 
@@ -104,7 +104,7 @@ public class UpdateLibraryCommand extends NedCommand {
 
             if ( !NedMidlet.getInstance().getDownloadManager().getViaServlet(
                     NedMidlet.getAccountManager().getContentServletUri(), library ) ) {
-                GeneralAlert.show( NedResources.DLM_CONNECTION_FAILED, GeneralAlert.WARNING );
+                GeneralAlert.show( NedResources.DLM_CONNECTION_FAILED, GeneralAlert.WARNING, true );
             } else {
                 NedXmlUtils.cleanDocCache();
                 LibraryGeneralModel newLibModel = LibraryGeneralModel.getInfo(
@@ -123,7 +123,7 @@ public class UpdateLibraryCommand extends NedCommand {
                 } catch ( InterruptedException ex ) {
                 }
                 String report = changes.getFullReport();
-                GeneralAlert.show( report.length() == 0 ? NedResources.NO_CHANGES : report.trim(), GeneralAlert.INFO );
+                GeneralAlert.show( report.length() == 0 ? NedResources.NO_CHANGES : report.trim(), GeneralAlert.INFO, true );
                 changes.persistChangesInfo();
 
                 if ( Display.getInstance().getCurrent() instanceof CatalogScreen ) {//this is workaround for UpdateLibrary form CatalogScreen

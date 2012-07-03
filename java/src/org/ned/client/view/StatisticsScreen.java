@@ -160,7 +160,7 @@ public class StatisticsScreen extends NedFormBase implements ActionListener, Asy
     }
 
     public void onSuccess() {
-        GeneralAlert.show( NedResources.DLM_NEWSTATS, GeneralAlert.INFO );
+        GeneralAlert.show( NedResources.DLM_NEWSTATS, GeneralAlert.INFO, true );
     }
 
     public void onFailure(String error) {

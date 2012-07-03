@@ -12,28 +12,35 @@ package org.ned.client.view.renderer;
 
 import com.sun.lwuit.Component;
 import com.sun.lwuit.List;
+import org.ned.client.Localization;
 import org.ned.client.NedResources;
 import org.ned.client.library.advanced.LibraryElement;
 import org.ned.client.view.style.NEDStyleToolbox;
 
 public class CatalogListCellRenderer extends ListCellRendererBase {
 
-    public Component getListCellRendererComponent( List list, Object value, int index, boolean isSelected ) {
+    private Object[] params = new Object[1];
+
+    public Component getListCellRendererComponent( List list, Object value,
+                                                   int index, boolean isSelected ) {
         if ( value == null ) {
             return this;
         }
         LibraryElement content = (LibraryElement)value;
         mTitle.setText( content.getName() );
-        mQuanity.setText( content.getChildern().size() + " "
-                          + NedResources.CATEGORIES );
+
+        params[0] = String.valueOf( content.getChildern().size() );
+        mQuanity.setText( Localization.getMessage( NedResources.CATEGORIES, params ) );
 
         if ( isSelected ) {
             setFocus( true );
-            mTitle.getStyle().setFgColor( content.isNew() ? NEDStyleToolbox.BLUE : NEDStyleToolbox.WHITE );
+            mTitle.getStyle().setFgColor( content.isNew() ? NEDStyleToolbox.BLUE
+                                          : NEDStyleToolbox.WHITE );
             mQuanity.getStyle().setFgColor( NEDStyleToolbox.WHITE );
             getStyle().setBgPainter( mSelectedPainter );
         } else {
-            mTitle.getStyle().setFgColor( content.isNew() ? NEDStyleToolbox.BLUE : NEDStyleToolbox.MAIN_FONT_COLOR );
+            mTitle.getStyle().setFgColor( content.isNew() ? NEDStyleToolbox.BLUE
+                                          : NEDStyleToolbox.MAIN_FONT_COLOR );
             mQuanity.getStyle().setFgColor( NEDStyleToolbox.MAIN_FONT_COLOR );
             getStyle().setBgPainter( mUnselectedPainter );
             setFocus( false );

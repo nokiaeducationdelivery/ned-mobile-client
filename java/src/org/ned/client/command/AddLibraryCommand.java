@@ -60,11 +60,11 @@ public class AddLibraryCommand extends NedCommandAsync {
                                 + ";Ver=" + newLibrary.getVersion() + ";" );
                     } else {
                         WaitingScreen.dispose();
-                        GeneralAlert.show( NedResources.LIBRARY_ALREADY_EXISTS, GeneralAlert.WARNING );
+                        GeneralAlert.show( NedResources.LIBRARY_ALREADY_EXISTS, GeneralAlert.WARNING, true );
                     }
                 } else {
                     WaitingScreen.dispose();
-                    GeneralAlert.show( NedResources.LIBRARY_NOT_EXISTS, GeneralAlert.WARNING );
+                    GeneralAlert.show( NedResources.LIBRARY_NOT_EXISTS, GeneralAlert.WARNING, true );
                 }
             } catch ( UnauthorizedLibraryUsageException ex ) {
                 WaitingScreen.dispose();

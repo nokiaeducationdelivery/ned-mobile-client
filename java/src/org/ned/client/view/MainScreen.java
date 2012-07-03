@@ -146,7 +146,7 @@ public class MainScreen extends NedFormBase implements ActionListener {
         }
 
         public void onFailure( String error ) {
-            GeneralAlert.show( error, GeneralAlert.WARNING );
+            GeneralAlert.show( error, GeneralAlert.WARNING, true );
         }
     }
 }

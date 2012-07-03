@@ -23,8 +23,9 @@ import com.sun.lwuit.animations.CommonTransitions;
 import com.sun.lwuit.layouts.BorderLayout;
 import com.sun.lwuit.layouts.BoxLayout;
 import com.sun.lwuit.layouts.FlowLayout;
-import com.sun.lwuit.plaf.Style;
 import com.sun.lwuit.plaf.UIManager;
+import java.util.Enumeration;
+import java.util.Vector;
 import org.ned.client.NedMidlet;
 import org.ned.client.NedResources;
 import org.ned.client.utils.Utils;
@@ -34,7 +35,6 @@ public class GeneralAlert {
 
     private static Dialog messageDialog;
     private static TextArea mMessageTextArea;
-    private static boolean isReversed = false;
     private static DialogTitlePainter mDialogTitlePainer = new DialogTitlePainter();
     public static final int RESULT_YES = 1;
     public static final int RESULT_NO = 0;
@@ -52,7 +52,7 @@ public class GeneralAlert {
     public static void show( final String aMessage, final int aAlertType,
                              boolean aShowEDT ) {
         if ( aShowEDT ) {
-            Display.getInstance().callSerially( new Runnable() {
+            Display.getInstance().callSeriallyAndWait( new Runnable() {
 
                 public void run() {
                     show( aMessage, aAlertType );
@@ -102,13 +102,11 @@ public class GeneralAlert {
         messageDialog.setFocusable( false );
         messageDialog.setVisible( false );
         messageDialog.dispose();
-        UIManager.getInstance().getLookAndFeel().setReverseSoftButtons( isReversed );
+        UIManager.getInstance().getLookAndFeel().setReverseSoftButtons( true );
         return tmp;
     }
 
     private static void initDialog( String aMessage, int aAlertType ) {
-        isReversed = UIManager.getInstance().getLookAndFeel().
-                isReverseSoftButtons();
         UIManager.getInstance().getLookAndFeel().setReverseSoftButtons( false );
         messageDialog = new Dialog( " " );
         messageDialog.getTitleComponent().setPreferredH( mDialogTitlePainer.
@@ -148,13 +146,14 @@ public class GeneralAlert {
                 + mMessageTextArea.getRowsGap();
         mMessageTextArea.setScrollVisible( false );
         mMessageTextArea.setEditable( false );
-
-        if ( textWidth >= displayW || Utils.countLines( aMessage ) > 1 ) {
-            mMessageTextArea.setPreferredW( textWidth / (textWidth / displayW
-                    + 1) + 2 );//to fill equally to all lines
-            mMessageTextArea.setRows( textWidth
-                    / mMessageTextArea.getPreferredW() + 2 );
-            int preferredH = lineHeight * Math.max( mMessageTextArea.getActualRows(),Utils.countLines( aMessage ) ) + 2;
+        //to fill equally to all lines
+        mMessageTextArea.setPreferredW( textWidth / (textWidth / displayW + 1)
+                + 2 );
+        final int lines = countLines( aMessage, mMessageTextArea.getPreferredW() );
+        if ( lines > 1 ) {
+            mMessageTextArea.setRows( Math.min( lines + 1, 4 ) );
+            mMessageTextArea.setShouldCalcPreferredSize( true );
+            int preferredH = lineHeight * mMessageTextArea.getRows() + 2;
             if ( preferredH > (displayH * 0.5) ) {
                 mMessageTextArea.setScrollVisible( true );
                 preferredH = (int)(displayH * 0.5);
@@ -173,6 +172,19 @@ public class GeneralAlert {
         c2.addComponent( mMessageTextArea );
         messageDialog.addComponent( BorderLayout.CENTER, c2 );
 
+    }
+
+    static int countLines( String aMessage, int aPrefferedWidth ) {
+        int count = 0;
+        final Font font = mMessageTextArea.getSelectedStyle().getFont();
+        Vector lines = Utils.split( aMessage, "\n" );
+        Enumeration en = lines.elements();
+        while ( en.hasMoreElements() ) {
+            int current = (int)Math.ceil( font.stringWidth( (String)en.nextElement())
+                    / aPrefferedWidth ) + 1;
+            count += current;
+        }
+        return count;
     }
 
     private static Image getIcon( int aAlertType ) {

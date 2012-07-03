@@ -44,7 +44,7 @@ public class ConfirmLanguageSelectCommand extends NedCommandAsync {
                     ex.printStackTrace();
                 }
             } else {
-                GeneralAlert.show( NedResources.MSG_NEW_LANGUAGE, GeneralAlert.INFO );
+                GeneralAlert.show( NedResources.MSG_NEW_LANGUAGE, GeneralAlert.INFO, true );
             }
         }
     }

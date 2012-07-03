@@ -14,6 +14,7 @@ import com.sun.lwuit.Component;
 import com.sun.lwuit.List;
 import java.util.Enumeration;
 import java.util.Vector;
+import org.ned.client.Localization;
 import org.ned.client.NedResources;
 import org.ned.client.library.advanced.LibraryElement;
 import org.ned.client.utils.NedIOUtils;
@@ -21,10 +22,11 @@ import org.ned.client.view.style.NEDStyleToolbox;
 
 public class CategoryListCellRenderer extends ListCellRendererBase {
 
-    private static final int INIT_LENGTH = 35;
     private Vector fileLists = null;
+    private Object[] params = new Object[3];
 
-    public Component getListCellRendererComponent( List list, Object value, int index, boolean isSelected ) {
+    public Component getListCellRendererComponent( List list, Object value,
+                                                   int index, boolean isSelected ) {
         if ( value == null ) {
             return this;
         }
@@ -59,20 +61,21 @@ public class CategoryListCellRenderer extends ListCellRendererBase {
             }
         }
 
-        StringBuffer text = new StringBuffer( INIT_LENGTH );
-        text.append( content.getChildern().size() ).append( " " ).append( NedResources.MEDIA_ITEMS ).
-                append( ": " ).append( local ).append( " " ).append( NedResources.LOCAL ).
-                append( ", " ).append( remote ).append( " " ).append( NedResources.REMOTE );
+        params[0] = String.valueOf( content.getChildern().size() );
+        params[1] = String.valueOf( local );
+        params[2] = String.valueOf( remote );
 
-        mQuanity.setText( text.toString() );
+        mQuanity.setText( Localization.getMessage( NedResources.MEDIA_ITEMS, params ) );
 
         if ( isSelected ) {
             setFocus( true );
-            mTitle.getStyle().setFgColor( content.isNew() ? NEDStyleToolbox.BLUE : NEDStyleToolbox.WHITE );
+            mTitle.getStyle().setFgColor( content.isNew() ? NEDStyleToolbox.BLUE
+                                          : NEDStyleToolbox.WHITE );
             mQuanity.getStyle().setFgColor( NEDStyleToolbox.WHITE );
             getStyle().setBgPainter( mSelectedPainter );
         } else {
-            mTitle.getStyle().setFgColor( content.isNew() ? NEDStyleToolbox.BLUE : NEDStyleToolbox.MAIN_FONT_COLOR );
+            mTitle.getStyle().setFgColor( content.isNew() ? NEDStyleToolbox.BLUE
+                                          : NEDStyleToolbox.MAIN_FONT_COLOR );
             mQuanity.getStyle().setFgColor( NEDStyleToolbox.MAIN_FONT_COLOR );
             getStyle().setBgPainter( mUnselectedPainter );
             setFocus( false );

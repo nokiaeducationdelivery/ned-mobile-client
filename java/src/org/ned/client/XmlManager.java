@@ -125,6 +125,7 @@ public class XmlManager {
                 if ( parent.getChild( idx ) == element ) {
                     parent.removeChild( idx );
                     NedXmlUtils.writeXmlFile( libUri, doc );
+                    NedXmlUtils.touch();
                     break;
                 }
             }
