@@ -16,20 +16,12 @@ import com.sun.lwuit.events.ActionListener;
 import com.sun.lwuit.events.DataChangedListener;
 import com.sun.lwuit.layouts.BorderLayout;
 import com.sun.lwuit.layouts.BoxLayout;
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.DataInputStream;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.util.Timer;
 import java.util.TimerTask;
 import javax.microedition.io.Connector;
 import javax.microedition.io.HttpConnection;
-import javax.microedition.media.Control;
-import javax.microedition.media.Manager;
-import javax.microedition.media.MediaException;
-import javax.microedition.media.Player;
-import javax.microedition.media.PlayerListener;
+import javax.microedition.media.*;
 import javax.microedition.media.control.FramePositioningControl;
 import javax.microedition.media.control.VolumeControl;
 import org.ned.client.IContent;
@@ -87,7 +79,8 @@ public class VideoPlayerView extends NedFormBase implements PlayerListener, Acti
         addPointerReleasedListener( new ActionListener() {
 
             public void actionPerformed( ActionEvent evt ) {
-                if ( player != null && mediaComponent != null && mediaComponent.isFullScreen() ) {
+                if ( player != null && mediaComponent != null && mediaComponent.
+                        isFullScreen() ) {
                     showControlPanel();
                 }
             }
@@ -117,11 +110,19 @@ public class VideoPlayerView extends NedFormBase implements PlayerListener, Acti
     }
 
     private synchronized void updateProgressBar() {
-        if ( player != null && progress.isRenderPercentageOnTop() ) {
+        if ( player != null ) {
             long time = player.getMediaTime();
             long duration = player.getDuration();
-            if ( time != Player.TIME_UNKNOWN && duration != Player.TIME_UNKNOWN && duration > 0 ) {
-                progress.setProgress( (int) (100 * time / duration) );
+            if ( time != Player.TIME_UNKNOWN && duration != Player.TIME_UNKNOWN
+                    && duration > 0 ) {
+                progress.setProgress( (int)(100 * time / duration) );
+                int seconds = (int)((time / 1000000) % 60);
+                int minutes = (int)((time / 60000000) % 60);
+
+                String secondsStr = (seconds < 10 ? "0" : "") + seconds;
+                String minutesStr = (minutes < 10 ? "0" : "") + minutes;
+
+                progress.setText( minutesStr + ":" + secondsStr );
             }
         }
     }
@@ -139,7 +140,7 @@ public class VideoPlayerView extends NedFormBase implements PlayerListener, Acti
         DataInputStream dataIn = null;
         ByteArrayOutputStream byteout = null;
         try {
-            connection = (HttpConnection) Connector.open( url );
+            connection = (HttpConnection)Connector.open( url );
             dataIn = connection.openDataInputStream();
             byte[] buffer = new byte[1000];
             int read = -1;
@@ -159,7 +160,8 @@ public class VideoPlayerView extends NedFormBase implements PlayerListener, Acti
             throw ex;
         }
         // Fill InputStream to return with content read from the URL.
-        ByteArrayInputStream byteIn = new ByteArrayInputStream( byteout.toByteArray() );
+        ByteArrayInputStream byteIn = new ByteArrayInputStream( byteout.
+                toByteArray() );
         return byteIn;
     }
 
@@ -225,7 +227,7 @@ public class VideoPlayerView extends NedFormBase implements PlayerListener, Acti
                     player.deallocate();
                 }
                 if ( player.getState() == Player.REALIZED
-                     || player.getState() == Player.UNREALIZED ) {
+                        || player.getState() == Player.UNREALIZED ) {
                     player.close();
                 }
                 player = null;
@@ -253,7 +255,8 @@ public class VideoPlayerView extends NedFormBase implements PlayerListener, Acti
         } );
     }
 
-    public synchronized void playerUpdate2( Player p, String event, Object eventData ) {
+    public synchronized void playerUpdate2( Player p, String event,
+                                            Object eventData ) {
         if ( p.getState() == Player.CLOSED ) {
             return;
         }
@@ -293,7 +296,8 @@ public class VideoPlayerView extends NedFormBase implements PlayerListener, Acti
             player.realize();
             player.prefetch();
             mediaComponent = new MediaComponent( player );
-            mediaComponent.setPreferredH( getContentPane().getHeight() - 3 * Font.getDefaultFont().getHeight() );
+            mediaComponent.setPreferredH( getContentPane().getHeight() - 3
+                    * Font.getDefaultFont().getHeight() );
             mediaComponent.getStyle().setMargin( 0, 0, 0, 0 );
             mediaComponent.setFullScreen( true );
             mediaComponent.setVisible( true );
@@ -305,10 +309,11 @@ public class VideoPlayerView extends NedFormBase implements PlayerListener, Acti
             Control[] cs = player.getControls();
             for ( int i = 0; i < cs.length; i++ ) {
                 if ( cs[i] instanceof VolumeControl ) {
-                    volume = (VolumeControl) cs[i];
-                    volume.setLevel( currentVolume == -1 ? INIT_VOLUME_LEVEL : currentVolume );
+                    volume = (VolumeControl)cs[i];
+                    volume.setLevel( currentVolume == -1 ? INIT_VOLUME_LEVEL
+                                     : currentVolume );
                 } else if ( cs[i] instanceof FramePositioningControl ) {
-                    frame = (FramePositioningControl) cs[i];
+                    frame = (FramePositioningControl)cs[i];
                 }
             }
             player.start();
@@ -331,13 +336,15 @@ public class VideoPlayerView extends NedFormBase implements PlayerListener, Acti
             rewindButton = new Button( rewindCommanf );
             rewindButton.setIcon( rewIcon );
             rewindButton.setText( "" );
-            int prefW = (Display.getInstance().getDisplayWidth() - 10 * rewindButton.getStyle().getMargin( Component.LEFT )) / 5;
+            int prefW = (Display.getInstance().getDisplayWidth() - 10
+                    * rewindButton.getStyle().getMargin( Component.LEFT )) / 5;
             rewindButton.setPreferredW( prefW );
             rewindButton.setAlignment( Component.CENTER );
             rewindButton.setPreferredH( 2 * prefH );
 
             playButton = new Button( playCommand );
-            playButton.setIcon( (player != null && player.getState() == Player.STARTED) ? pauseIcon : playIcon );
+            playButton.setIcon( (player != null && player.getState()
+                    == Player.STARTED) ? pauseIcon : playIcon );
             playButton.setText( "" );
             playButton.setPreferredW( prefW );
             playButton.setPreferredH( 2 * prefH );
@@ -365,11 +372,11 @@ public class VideoPlayerView extends NedFormBase implements PlayerListener, Acti
             backButton.setAlignment( Component.CENTER );
 
             progress = new Slider();
-            progress.setThumbImage( pauseIcon.subImage( 7, 0, 8, pauseIcon.getHeight(), false ) );
+            progress.setThumbImage( pauseIcon.subImage( 7, 0, 8, pauseIcon.
+                    getHeight(), false ) );
             progress.setMinValue( 0 );
             progress.setMaxValue( 100 );
             progress.setFocusable( true );
-            progress.setRenderPercentageOnTop( true );
             progress.setIncrements( 1 );
             progress.setEditable( true );
             progress.setPreferredH( Font.getDefaultFont().getHeight() );
@@ -398,7 +405,8 @@ public class VideoPlayerView extends NedFormBase implements PlayerListener, Acti
             if ( mediaComponent != null ) {
                 removeComponent( mediaComponent );
                 if ( isPortraitNow ) {
-                    mediaComponent.setPreferredH( getContentPane().getHeight() - 3 * Font.getDefaultFont().getHeight() );
+                    mediaComponent.setPreferredH( getContentPane().getHeight() - 3
+                            * Font.getDefaultFont().getHeight() );
                 } else {
                     mediaComponent.setPreferredH( 100 );
                 }
