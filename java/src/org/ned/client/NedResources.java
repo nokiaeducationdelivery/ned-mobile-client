@@ -233,6 +233,7 @@ public class NedResources {
     public static final String NEWVERSIONAVAILABLE = "NEWVERSIONAVAILABLE";
     public static final String NEWESTVERSION = Localization.getMessage( "NEWESTVERSION" );
     public static final String DEMOURL = Localization.getMessage( "DEMOURL" );
+    public static final String NEDSERVICENOTPRESENT = Localization.getMessage( "NEDSERVICENOTPRESENT" );
 
     public NedResources() {
     }

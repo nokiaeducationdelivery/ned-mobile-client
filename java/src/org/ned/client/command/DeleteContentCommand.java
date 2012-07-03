@@ -72,7 +72,7 @@ public class DeleteContentCommand extends NedCommand {
         }
     }
 
-    private void removeFiles( Vector fileList ) {//TODO meybe other thread??
+    private void removeFiles( Vector fileList ) {//TODO maybe other thread??
         for ( int idx = 0; idx < fileList.size(); idx++ ) {
             String fileName = (String) fileList.elementAt( idx );
 

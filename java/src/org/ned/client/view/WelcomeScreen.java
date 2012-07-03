@@ -82,7 +82,7 @@ public class WelcomeScreen extends NedFormBase implements ActionListener, AsyncC
 
     //for check url command
     public void onFailure( String error ) {
-        GeneralAlert.show( error, GeneralAlert.WARNING );//todo better message needed
+        GeneralAlert.show( NedResources.NEDSERVICENOTPRESENT, GeneralAlert.WARNING );
     }
 
     private void addDemoLabel() {

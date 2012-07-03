@@ -47,6 +47,10 @@ public class AccountManager {
         return retval;
     }
 
+    public int getUsersCount() {
+        return users.size();
+    }
+
     public class UserInfo {
 
         public UserInfo( String login, String password, boolean save ) {
@@ -68,30 +72,36 @@ public class AccountManager {
     }
 
     public String getContentServletUri() {
-        return serverAddress + NedConsts.NedRemotePath.BASEPATH + NedConsts.NedRemotePath.GETXMLSERVLET;
+        return serverAddress + NedConsts.NedRemotePath.BASEPATH
+                + NedConsts.NedRemotePath.GETXMLSERVLET;
     }
 
     public String getMotdServletUri() {
-        return serverAddress + NedConsts.NedRemotePath.BASEPATH + NedConsts.NedRemotePath.MOTDSERVLET;
+        return serverAddress + NedConsts.NedRemotePath.BASEPATH
+                + NedConsts.NedRemotePath.MOTDSERVLET;
     }
 
     public String getStatisticsServletUri() {
-        return serverAddress + NedConsts.NedRemotePath.BASEPATH + NedConsts.NedRemotePath.STAT_UPLOAD;
+        return serverAddress + NedConsts.NedRemotePath.BASEPATH
+                + NedConsts.NedRemotePath.STAT_UPLOAD;
     }
 
     public String getLoginServletUri() {
-        return serverAddress + NedConsts.NedRemotePath.BASEPATH + NedConsts.NedRemotePath.LOGIN;
+        return serverAddress + NedConsts.NedRemotePath.BASEPATH
+                + NedConsts.NedRemotePath.LOGIN;
     }
 
     public String getLocalizationUri() {
-        return serverAddress + NedConsts.NedRemotePath.BASEPATH + NedConsts.NedRemotePath.LOCALIZATION;
+        return serverAddress + NedConsts.NedRemotePath.BASEPATH
+                + NedConsts.NedRemotePath.LOCALIZATION;
     }
 
     private void readSetup() {
         if ( NedIOUtils.fileExists( NedIOUtils.getAccountsFile() ) ) {
             Element rootElement = null;
             try {
-                Document doc = NedXmlUtils.getDocFile( NedIOUtils.getAccountsFile() );
+                Document doc = NedXmlUtils.getDocFile( NedIOUtils.
+                        getAccountsFile() );
                 if ( doc == null ) {
                     NedIOUtils.removeFile( NedIOUtils.getAccountsFile() );
                     return;
@@ -118,8 +128,10 @@ public class AccountManager {
                     } else if ( (element.getName().equals( NedConsts.NedXmlTag.LAST_USER )) ) {
                         currentUser = findUser( element.getAttributeValue( "", NedConsts.NedXmlAttribute.LOGIN ) );
                     } else if ( element.getName().equals( "Language" ) ) {
-                        currentLanguage = new LanguageInfo( element.getAttributeValue( "", "langName" ),
-                                                            element.getAttributeValue( "", "locale" ), true );
+                        currentLanguage = new LanguageInfo( element.
+                                getAttributeValue( "", "langName" ),
+                                                            element.
+                                getAttributeValue( "", "locale" ), true );
                     }
                 }
             }
@@ -137,10 +149,14 @@ public class AccountManager {
 
         for ( int i = 0; i < users.size(); i++ ) {
             Element user = accountSetup.createElement( "", NedConsts.NedXmlTag.USER );
-            user.setAttribute( "", NedConsts.NedXmlAttribute.LOGIN, ((UserInfo) users.elementAt( i )).login );
-            user.setAttribute( "", NedConsts.NedXmlAttribute.PASSWORD, ((UserInfo) users.elementAt( i )).password );
-            user.setAttribute( "", NedConsts.NedXmlAttribute.PASSWORD, ((UserInfo) users.elementAt( i )).password );
-            user.setAttribute( "", NedConsts.NedXmlAttribute.SAVE_PASS, ((UserInfo) users.elementAt( i )).isPassSaved ? "yes" : "no" );
+            user.setAttribute( "", NedConsts.NedXmlAttribute.LOGIN, ((UserInfo)users.
+                    elementAt( i )).login );
+            user.setAttribute( "", NedConsts.NedXmlAttribute.PASSWORD, ((UserInfo)users.
+                    elementAt( i )).password );
+            user.setAttribute( "", NedConsts.NedXmlAttribute.PASSWORD, ((UserInfo)users.
+                    elementAt( i )).password );
+            user.setAttribute( "", NedConsts.NedXmlAttribute.SAVE_PASS, ((UserInfo)users.
+                    elementAt( i )).isPassSaved ? "yes" : "no" );
             accountSetup.addChild( Node.ELEMENT, user );
         }
         doc.addChild( Node.ELEMENT, accountSetup );
@@ -170,7 +186,8 @@ public class AccountManager {
             saveSetup();
             retval = LoginError.SUCCESS;
         } else {
-            if ( GeneralAlert.showQuestion( NedResources.LOGIN_ONLINE ) == GeneralAlert.RESULT_YES ) {
+            if ( GeneralAlert.showQuestion( NedResources.LOGIN_ONLINE )
+                    == GeneralAlert.RESULT_YES ) {
                 retval = TryLoginToServer( login, password, retval );
             } else {
                 retval = LoginError.ABORTED;// for concurrency purpose
@@ -190,7 +207,7 @@ public class AccountManager {
         DataOutputStream httpOutput = null;
         HttpConnection httpConn = null;
         try {
-            httpConn = (HttpConnection) Connector.open( getLoginServletUri() );
+            httpConn = (HttpConnection)Connector.open( getLoginServletUri() );
             httpConn.setRequestMethod( HttpConnection.GET );
             httpConn.setRequestProperty( NedConsts.HttpHeader.CACHECONTROL, NedConsts.HttpHeaderValue.NOCACHE );
             NedConnectionUtils.addCredentialsToConnection( httpConn, login, password );
@@ -270,9 +287,9 @@ public class AccountManager {
     public UserInfo findUser( String login ) {
         UserInfo retval = null;
         for ( int i = 0; i
-                         < users.size(); i++ ) {
-            if ( ((UserInfo) users.elementAt( i )).login.equals( login ) ) {
-                retval = (UserInfo) users.elementAt( i );
+                < users.size(); i++ ) {
+            if ( ((UserInfo)users.elementAt( i )).login.equals( login ) ) {
+                retval = (UserInfo)users.elementAt( i );
             }
         }
         return retval;

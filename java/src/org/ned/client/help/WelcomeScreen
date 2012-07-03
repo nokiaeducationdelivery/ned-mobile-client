@@ -19,7 +19,10 @@ color:#69b510;
   <body>
    <p> This is server screen. Here You enter your NED server address. You do it only once.</p>
 	<h1>Then You press Check Server to proceed.</p>
-    <h1>For example: http://nokiacsr.com:8080</p>
+    <h1>Demo server: 'http://217.74.73.16:8083'</p>
+    <h1>Username: 'guest'</p>
+    <h1>Password: 'guest'</p>
+    <h1>Library Id: 'khan'</p>
 	<h1></h1><p></p>
   </body>
 </html>

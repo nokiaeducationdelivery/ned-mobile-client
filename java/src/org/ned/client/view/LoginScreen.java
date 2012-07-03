@@ -1,13 +1,13 @@
 /*******************************************************************************
-* Copyright (c) 2011 Nokia Corporation
-* All rights reserved. This program and the accompanying materials
-* are made available under the terms of the Eclipse Public License v1.0
-* which accompanies this distribution, and is available at
-* http://www.eclipse.org/legal/epl-v10.html
-*
-* Contributors:
-* Comarch team - initial API and implementation
-*******************************************************************************/
+ * Copyright (c) 2011-2012 Nokia Corporation
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * Comarch team - initial API and implementation
+ *******************************************************************************/
 package org.ned.client.view;
 
 import com.sun.lwuit.Component;
@@ -82,7 +82,8 @@ public class LoginScreen extends NedFormBase implements ActionListener, FocusLis
     }
 
     private void addServerLabel() {
-        Label labelServer = new Label( NedMidlet.getAccountManager().getServerUrl() );
+        Label labelServer = new Label( NedMidlet.getAccountManager().
+                getServerUrl() );
         labelServer.setFocusable( false );
         labelServer.setAlignment( CENTER );
 
@@ -153,12 +154,9 @@ public class LoginScreen extends NedFormBase implements ActionListener, FocusLis
             }
         } else if ( src
                 == ResetFactorySettingsCommand.getInstance().getCommand() ) {
-            if ( textAreaUser.getText() != null
-                    && !textAreaUser.getText().equals( "" ) ) {
-                Object[] login = new Object[]{textAreaUser.getText(),
-                                              textAreaPassword.getText()};
-                ResetFactorySettingsCommand.getInstance().execute( login );
-            }
+            Object[] login = new Object[]{textAreaUser.getText(),
+                                          textAreaPassword.getText()};
+            ResetFactorySettingsCommand.getInstance().execute( login );
         } else if ( src == HelpCommand.getInstance().getCommand() ) {
             HelpCommand.getInstance().execute( this.getClass() );
         } else if ( src == ShowAboutCommand.getInstance().getCommand() ) {
@@ -171,7 +169,8 @@ public class LoginScreen extends NedFormBase implements ActionListener, FocusLis
 
     public void focusLost( Component cmpnt ) {
         if ( cmpnt == textAreaUser ) {
-            UserInfo user = NedMidlet.getAccountManager().findUser( textAreaUser.getText() );
+            UserInfo user = NedMidlet.getAccountManager().findUser( textAreaUser.
+                    getText() );
             if ( user != null ) {
                 if ( user.isPassSaved ) {
                     textAreaPassword.setText( user.password );
@@ -185,7 +184,8 @@ public class LoginScreen extends NedFormBase implements ActionListener, FocusLis
     }
 
     public void onSuccess() {
-        NedMidlet.getAccountManager().savePassword( textAreaUser.getText(), rememberCheckBox.isSelected() );
+        NedMidlet.getAccountManager().savePassword( textAreaUser.getText(), rememberCheckBox.
+                isSelected() );
         NedMidlet.getInstance().continueApploading();
     }
 
