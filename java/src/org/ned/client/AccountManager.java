@@ -188,6 +188,11 @@ public class AccountManager {
         } else {
             if ( GeneralAlert.showQuestion( NedResources.LOGIN_ONLINE )
                     == GeneralAlert.RESULT_YES ) {
+                try {
+                    Thread.sleep( 100 );
+                } catch ( InterruptedException ex ) {
+                    ex.printStackTrace();
+                }
                 retval = TryLoginToServer( login, password, retval );
             } else {
                 retval = LoginError.ABORTED;// for concurrency purpose

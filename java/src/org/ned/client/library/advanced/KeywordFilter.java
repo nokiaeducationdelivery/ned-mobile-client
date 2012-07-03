@@ -13,11 +13,6 @@ package org.ned.client.library.advanced;
 import java.util.Enumeration;
 import java.util.Vector;
 
-interface IFilter {
-
-    boolean isMatch( LibraryElement aElement );
-}
-
 public class KeywordFilter implements IFilter {
 
     private String mKeyword;
@@ -36,7 +31,7 @@ public class KeywordFilter implements IFilter {
             Enumeration en = keyWords.elements();
             while ( en.hasMoreElements() ) {
                 if ( ((String)en.nextElement()).toLowerCase().indexOf( mKeyword )
-                     >= 0 ) {
+                        >= 0 ) {
                     return true;
                 }
             }

@@ -36,8 +36,7 @@ public class ShowAboutCommand extends NedCommand {
 
     protected void doAction( Object aParam ) {
         String message = NedResources.VERSION + ' ' + NedMidlet.getInstance().
-                getVersion() + "\n" + NedResources.NEEDHELP + "\n"
-                         + "ned(at)freelists.org";
+                getVersion() + "\n" + "ned(at)freelists.org" + "\n" + NedResources.NEEDHELP;
         GeneralAlert.show( message, GeneralAlert.INFO );
     }
 }

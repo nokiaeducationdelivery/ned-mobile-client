@@ -10,14 +10,9 @@
  *******************************************************************************/
 package org.ned.client.library.advanced;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
 import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.Vector;
-import javax.microedition.io.Connector;
-import javax.microedition.io.file.FileConnection;
 import org.ned.client.Localization;
 import org.ned.client.NedMidlet;
 import org.ned.client.NedResources;

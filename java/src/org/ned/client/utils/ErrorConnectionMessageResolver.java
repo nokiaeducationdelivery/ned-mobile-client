@@ -20,23 +20,23 @@ public class ErrorConnectionMessageResolver {
     public static void showErrorMessage( int error ) {
         switch ( error ) {
             case LoginError.CONNECTIONERROR:
-                GeneralAlert.show( NedResources.CONNECTION_ERROR, GeneralAlert.WARNING );
+                GeneralAlert.show( NedResources.CONNECTION_ERROR, GeneralAlert.WARNING, true );
                 break;
             case LoginError.LOCALSECURITY:
-                GeneralAlert.show( NedResources.LOCAL_SECURITY, GeneralAlert.WARNING );
+                GeneralAlert.show( NedResources.LOCAL_SECURITY, GeneralAlert.WARNING, true );
                 break;
             case LoginError.UNAUTHORIZED:
-                GeneralAlert.show( NedResources.BAD_LOGIN, GeneralAlert.WARNING );
+                GeneralAlert.show( NedResources.BAD_LOGIN, GeneralAlert.WARNING, true );
                 break;
             case LoginError.ABORTED:
-                GeneralAlert.show( NedResources.ABORTED, GeneralAlert.WARNING );
+                GeneralAlert.show( NedResources.ABORTED, GeneralAlert.WARNING, true );
                 break;
             case LoginError.OTHERCONNECTIONPROBLEM:
-                GeneralAlert.show( NedResources.OTHER_CONNECTION_PROBLEM, GeneralAlert.WARNING );
+                GeneralAlert.show( NedResources.OTHER_CONNECTION_PROBLEM, GeneralAlert.WARNING, true );
                 break;
             case LoginError.UNKNOWN:
             default:
-                GeneralAlert.show( NedResources.UNKNOWN, GeneralAlert.WARNING );
+                GeneralAlert.show( NedResources.UNKNOWN, GeneralAlert.WARNING, true );
                 break;
         }
     }

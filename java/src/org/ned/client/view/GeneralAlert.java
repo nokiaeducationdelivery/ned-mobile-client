@@ -75,6 +75,7 @@ public class GeneralAlert {
         initDialog( message, QUESTION );
         messageDialog.addCommand( yesCommand );
         messageDialog.addCommand( noCommand );
+        WaitingScreen.dispose();
         return showDialog() == yesCommand ? GeneralAlert.RESULT_YES
                : GeneralAlert.RESULT_NO;
     }
@@ -98,6 +99,8 @@ public class GeneralAlert {
         int H_Margin = hi < disH ? (disH - hi) / 2 : 0;
         int V_Margin = wi < disW ? (disW - wi) / 2 : 0;
         Command tmp = messageDialog.show( H_Margin, H_Margin, V_Margin, V_Margin, true );
+        messageDialog.setFocusable( false );
+        messageDialog.setVisible( false );
         messageDialog.dispose();
         UIManager.getInstance().getLookAndFeel().setReverseSoftButtons( isReversed );
         return tmp;
@@ -151,7 +154,7 @@ public class GeneralAlert {
                     + 1) + 2 );//to fill equally to all lines
             mMessageTextArea.setRows( textWidth
                     / mMessageTextArea.getPreferredW() + 2 );
-            int preferredH = lineHeight * mMessageTextArea.getRows() + 2;
+            int preferredH = lineHeight * Math.max( mMessageTextArea.getActualRows(),Utils.countLines( aMessage ) ) + 2;
             if ( preferredH > (displayH * 0.5) ) {
                 mMessageTextArea.setScrollVisible( true );
                 preferredH = (int)(displayH * 0.5);
