@@ -1,13 +1,13 @@
 /*******************************************************************************
-* Copyright (c) 2011 Nokia Corporation
-* All rights reserved. This program and the accompanying materials
-* are made available under the terms of the Eclipse Public License v1.0
-* which accompanies this distribution, and is available at
-* http://www.eclipse.org/legal/epl-v10.html
-*
-* Contributors:
-* Comarch team - initial API and implementation
-*******************************************************************************/
+ * Copyright (c) 2011 Nokia Corporation
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * Comarch team - initial API and implementation
+ *******************************************************************************/
 package org.ned.client.command;
 
 import com.sun.lwuit.Command;
@@ -31,26 +31,26 @@ import org.ned.client.view.WaitingScreen;
  *
  * @author damian.janicki
  */
-public class UpdateLibraryCommand extends NedCommand{
+public class UpdateLibraryCommand extends NedCommand {
 
     private static UpdateLibraryCommand instance;
 
-    public static UpdateLibraryCommand getInstance(){
-        if(instance == null){
+    public static UpdateLibraryCommand getInstance() {
+        if ( instance == null ) {
             instance = new UpdateLibraryCommand();
         }
         return instance;
     }
 
-    public  UpdateLibraryCommand(){
+    public UpdateLibraryCommand() {
         command = new Command( NedResources.CHECK_FOR_UPDATE );
     }
 
-    protected void doAction(Object param) {
-        NedLibrary lib = (NedLibrary)param;
-        UpdateLibraryRunnable ulr = new UpdateLibraryRunnable(lib);
+    protected void doAction( Object param ) {
+        NedLibrary lib = (NedLibrary) param;
+        UpdateLibraryRunnable ulr = new UpdateLibraryRunnable( lib );
 
-        Thread t = new Thread(ulr);
+        Thread t = new Thread( ulr );
         t.start();
     }
 
@@ -58,41 +58,41 @@ public class UpdateLibraryCommand extends NedCommand{
 
         private NedLibrary library;
 
-        private UpdateLibraryRunnable(NedLibrary selected) {
+        private UpdateLibraryRunnable( NedLibrary selected ) {
             this.library = selected;
         }
 
         public void run() {
-            
+
             try {
-                WaitingScreen.show(NedResources.CONNECTING);
-                NedLibrary newLibraryInfo = NedConnectionUtils.getLibraryInfo(library.getId());
+                WaitingScreen.show( NedResources.CONNECTING );
+                NedLibrary newLibraryInfo = NedConnectionUtils.getLibraryInfo( library.getId() );
                 WaitingScreen.dispose();
-                
-                if (newLibraryInfo != null) {
-                    if (NedMidlet.getSettingsManager().getAutoStatSend()) {
+
+                if ( newLibraryInfo != null ) {
+                    if ( NedMidlet.getSettingsManager().getAutoStatSend() ) {
                         StatisticsManager.uploadStats( true );
                     }
                     MotdManager.getInstance().updateMotd();
-                    if (library.getVersionInt() < newLibraryInfo.getVersionInt()) {
-                        if (GeneralAlert.RESULT_YES == GeneralAlert.showQuestion(NedResources.DOWNLOAD_NEW_LIBRARY)) {
+                    if ( library.getVersionInt() < newLibraryInfo.getVersionInt() ) {
+                        if ( GeneralAlert.RESULT_YES == GeneralAlert.showQuestion( NedResources.DOWNLOAD_NEW_LIBRARY ) ) {
                             downloadLibrary();
                         }
-                        
+
                     } else {
-                        if(GeneralAlert.RESULT_YES == GeneralAlert.showQuestion(NedResources.LIBRARY_UPTODATE)){//TODO change text
+                        if ( GeneralAlert.RESULT_YES == GeneralAlert.showQuestion( NedResources.LIBRARY_UPTODATE ) ) {//TODO change text
                             downloadLibrary();
                         }
                     }
                 }
             } catch ( UnauthorizedLibraryUsageException ex ) {
                 WaitingScreen.dispose();//to get main view not a "Connecting..." dialog by Diaplay.getCurrent
-                if ( GeneralAlert.showQuestion(NedResources.LOGIN_AGAIN ) == GeneralAlert.RESULT_YES ) {
+                if ( GeneralAlert.showQuestion( NedResources.LOGIN_AGAIN ) == GeneralAlert.RESULT_YES ) {
                     new LoginOnLineScreen( LibraryManagerScreen.class ).show();
                 }
-            } catch (ContentNotExistException ex){
+            } catch ( ContentNotExistException ex ) {
                 WaitingScreen.dispose();
-                GeneralAlert.show(NedResources.LIB_NOT_EXIST_ANY_MORE, GeneralAlert.WARNING);
+                GeneralAlert.show( NedResources.LIB_NOT_EXIST_ANY_MORE, GeneralAlert.WARNING );
             }
         }
 

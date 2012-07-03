@@ -18,6 +18,7 @@ import java.util.Vector;
 import javax.microedition.io.Connector;
 import javax.microedition.io.HttpConnection;
 import javax.microedition.io.file.FileConnection;
+import org.ned.client.NedConsts;
 import org.ned.client.NedConsts.NedLocalConst;
 import org.ned.client.NedMidlet;
 import org.ned.client.library.NedLibrary;
@@ -177,6 +178,7 @@ public class DownloadManager implements IDownloadTaskManager {
             hc = (HttpConnection) Connector.open( url );
             hc.setRequestMethod( HttpConnection.GET );
             hc.setRequestProperty( "id", library.getId() );
+            hc.setRequestProperty( NedConsts.HttpHeader.CACHECONTROL, NedConsts.HttpHeaderValue.NOCACHE );
             NedConnectionUtils.addCredentialsToConnection( hc,
                                                            NedMidlet.getAccountManager().getCurrentUser().login,
                                                            NedMidlet.getAccountManager().getCurrentUser().password );

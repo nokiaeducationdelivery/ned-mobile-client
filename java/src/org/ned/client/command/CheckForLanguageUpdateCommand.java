@@ -18,6 +18,7 @@ import javax.microedition.io.ConnectionNotFoundException;
 import javax.microedition.io.Connector;
 import javax.microedition.io.HttpConnection;
 import org.ned.client.LanguageLister;
+import org.ned.client.NedConsts;
 import org.ned.client.NedMidlet;
 import org.ned.client.NedResources;
 import org.ned.client.utils.NedConnectionUtils;
@@ -50,6 +51,8 @@ public class CheckForLanguageUpdateCommand extends NedCommandAsync {
                                                            NedMidlet.getAccountManager().getCurrentUser().login,
                                                            NedMidlet.getAccountManager().getCurrentUser().password );
             hc.setRequestMethod( HttpConnection.GET );
+            hc.setRequestProperty( NedConsts.HttpHeader.CACHECONTROL, NedConsts.HttpHeaderValue.NOCACHE );
+
             if ( hc.getResponseCode() != HttpConnection.HTTP_OK
                  && hc.getResponseCode() != HttpConnection.HTTP_UNAUTHORIZED ) {
                 throw new AsyncException( " " + hc.getResponseCode() );

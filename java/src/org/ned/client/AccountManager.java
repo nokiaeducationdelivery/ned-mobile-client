@@ -192,6 +192,7 @@ public class AccountManager {
         try {
             httpConn = (HttpConnection) Connector.open( getLoginServletUri() );
             httpConn.setRequestMethod( HttpConnection.GET );
+            httpConn.setRequestProperty( NedConsts.HttpHeader.CACHECONTROL, NedConsts.HttpHeaderValue.NOCACHE );
             NedConnectionUtils.addCredentialsToConnection( httpConn, login, password );
             httpOutput = httpConn.openDataOutputStream();
             int rspCode = httpConn.getResponseCode();

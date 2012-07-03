@@ -18,6 +18,7 @@ import javax.microedition.io.Connector;
 import javax.microedition.io.HttpConnection;
 import javax.microedition.io.file.FileConnection;
 import org.ned.client.MotdManager;
+import org.ned.client.NedConsts;
 import org.ned.client.NedConsts.NedLocalConst;
 import org.ned.client.NedMidlet;
 import org.ned.client.NedResources;
@@ -188,6 +189,7 @@ public class DownloadTask implements Runnable {
             hc = (HttpConnection) Connector.open( urlPath );
             hc.setRequestMethod( HttpConnection.GET );
             hc.setRequestProperty( "Range", "bytes=" + String.valueOf( offset ) + "-" );
+            hc.setRequestProperty( NedConsts.HttpHeader.CACHECONTROL, NedConsts.HttpHeaderValue.NOCACHE );
 
             ic = hc.openDataInputStream();
             activeConnection = ic;

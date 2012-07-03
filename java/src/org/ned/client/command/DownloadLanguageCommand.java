@@ -58,6 +58,8 @@ public class DownloadLanguageCommand extends NedCommandAsync {
                                                            NedMidlet.getAccountManager().getCurrentUser().login,
                                                            NedMidlet.getAccountManager().getCurrentUser().password );
             hc.setRequestMethod( HttpConnection.GET );
+            hc.setRequestProperty( NedConsts.HttpHeader.CACHECONTROL, NedConsts.HttpHeaderValue.NOCACHE );
+
             if ( hc.getResponseCode() != HttpConnection.HTTP_OK
                  && hc.getResponseCode() != HttpConnection.HTTP_UNAUTHORIZED ) {
                 throw new AsyncException( " " + hc.getResponseCode() );

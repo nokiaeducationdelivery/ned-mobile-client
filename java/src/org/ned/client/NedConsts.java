@@ -12,6 +12,16 @@ package org.ned.client;
 
 public class NedConsts {
 
+    public class HttpHeader {
+
+        public static final String CACHECONTROL = "Cache-Control";
+    }
+
+    public class HttpHeaderValue {
+
+        public static final String NOCACHE = "no-cache";
+    }
+
     public class NedLocalConst {
 
         public static final String SETTINGSFILE = "settings.xml";
