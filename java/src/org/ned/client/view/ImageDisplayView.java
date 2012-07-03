@@ -35,12 +35,13 @@ public class ImageDisplayView extends NedFormBase implements ActionListener {
 
     private Image img = null;
     private Label mImage;
+    private IContent mContent;
 
     public ImageDisplayView(IContent content) {
-        currentElement = content;
+        mContent = content;
         String pictureFile = content.getMediaFile();
         setLayout( new BorderLayout() );
-        setNedTitle( currentElement.getText() );
+        setNedTitle( mContent.getText() );
         setScrollable(true);
 
         FileConnection fc = null;
@@ -79,7 +80,7 @@ public class ImageDisplayView extends NedFormBase implements ActionListener {
     public void actionPerformed(ActionEvent evt) {
         Object src = evt.getSource();
         if( src == BackImageCommand.getInstance().getCommand() ) {
-            BackImageCommand.getInstance().execute( currentElement.getParentId() );
+            BackImageCommand.getInstance().execute( mContent.getParentId() );
         } else if ( src == mEnlargeCommand ) {
             mImage.setIcon(img);
             removeCommand( mEnlargeCommand );

@@ -124,6 +124,7 @@ public class UpdateLibraryCommand extends NedCommand {
                 }
                 String report = changes.getFullReport();
                 GeneralAlert.show( report.length() == 0 ? NedResources.NO_CHANGES : report.trim(), GeneralAlert.INFO );
+                changes.persistChangesInfo();
 
                 if ( Display.getInstance().getCurrent() instanceof CatalogScreen ) {//this is workaround for UpdateLibrary form CatalogScreen
                     new CatalogScreen( library.getId() ).show();

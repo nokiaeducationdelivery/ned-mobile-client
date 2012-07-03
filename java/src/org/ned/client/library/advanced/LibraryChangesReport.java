@@ -10,10 +10,16 @@
  *******************************************************************************/
 package org.ned.client.library.advanced;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.Vector;
+import javax.microedition.io.Connector;
+import javax.microedition.io.file.FileConnection;
 import org.ned.client.Localization;
+import org.ned.client.NedMidlet;
 import org.ned.client.NedResources;
 
 public class LibraryChangesReport {
@@ -23,7 +29,7 @@ public class LibraryChangesReport {
     private Vector mMediaItemsL;
     private Vector mCatalogsR;
     private Vector mCategoriesR;
-    private Vector mediaItemsR;
+    private Vector mMediaItemsR;
 
     private LibraryChangesReport() {
         mCatalogsL = new Vector( 4, 4 );
@@ -31,7 +37,7 @@ public class LibraryChangesReport {
         mMediaItemsL = new Vector( 4, 4 );
         mCatalogsR = new Vector( 4, 4 );
         mCategoriesR = new Vector( 4, 4 );
-        mediaItemsR = new Vector( 4, 4 );
+        mMediaItemsR = new Vector( 4, 4 );
     }
 
     public static LibraryChangesReport generateReport( LibraryGeneralModel aL, LibraryGeneralModel aR ) {
@@ -40,7 +46,7 @@ public class LibraryChangesReport {
             aL.getFlatList( report.mCatalogsL, report.mCategoriesL, report.mMediaItemsL );
         }
         if ( aR != null ) {
-            aR.getFlatList( report.mCatalogsR, report.mCategoriesR, report.mediaItemsR );
+            aR.getFlatList( report.mCatalogsR, report.mCategoriesR, report.mMediaItemsR );
         }
 
         return report;
@@ -64,10 +70,10 @@ public class LibraryChangesReport {
         builder.append( "\n" );
 
         builder.append( Localization.getMessage( NedResources.MEDIAITEMS_ADDED,
-                                                 new Object[]{ String.valueOf( compareVector( mMediaItemsL, mediaItemsR ) ) } ) );
+                                                 new Object[]{ String.valueOf( compareVector( mMediaItemsL, mMediaItemsR ) ) } ) );
         builder.append( "\n" );
         builder.append( Localization.getMessage( NedResources.MEDIAITEMS_REMOVED,
-                                                 new Object[]{ String.valueOf( compareVector( mediaItemsR, mMediaItemsL ) ) } ) );
+                                                 new Object[]{ String.valueOf( compareVector( mMediaItemsR, mMediaItemsL ) ) } ) );
 
         return builder.toString();
     }
@@ -91,13 +97,13 @@ public class LibraryChangesReport {
 
     public String getFullReport() {
 
-        Vector added = getDiff( mMediaItemsL, mediaItemsR );
+        Vector added = getDiff( mMediaItemsL, mMediaItemsR );
 
         Hashtable changesInCategory = new Hashtable( 4 );
 
         Enumeration en = added.elements();
         while ( en.hasMoreElements() ) {
-            LibraryElement mediaItem = (LibraryElement) en.nextElement();
+            LibraryElement mediaItem = (LibraryElement)en.nextElement();
 
             LibraryElement parentCategory = findParent( mCategoriesL, mediaItem );//search in new version of library firs
             if ( parentCategory == null ) {//not found in new version, must be in old version of library
@@ -106,7 +112,7 @@ public class LibraryChangesReport {
             }
             LibraryBranchChanges categoryChnged;
             if ( changesInCategory.containsKey( parentCategory ) ) {
-                categoryChnged = (LibraryBranchChanges) changesInCategory.get( parentCategory );
+                categoryChnged = (LibraryBranchChanges)changesInCategory.get( parentCategory );
             } else {
                 categoryChnged = new LibraryBranchChanges();
                 changesInCategory.put( parentCategory, categoryChnged );
@@ -119,7 +125,7 @@ public class LibraryChangesReport {
         Hashtable catalogs = new Hashtable( 4 );
 
         while ( en.hasMoreElements() ) {
-            LibraryElement category = (LibraryElement) en.nextElement();
+            LibraryElement category = (LibraryElement)en.nextElement();
 
             LibraryElement parentCatalog = findParent( mCatalogsL, category );
             if ( parentCatalog == null ) {
@@ -128,7 +134,7 @@ public class LibraryChangesReport {
 
             LibraryBranchChanges catalogsChanges;
             if ( catalogs.containsKey( parentCatalog ) ) {
-                catalogsChanges = (LibraryBranchChanges) catalogs.get( parentCatalog );
+                catalogsChanges = (LibraryBranchChanges)catalogs.get( parentCatalog );
             } else {
                 catalogsChanges = new LibraryBranchChanges();
                 catalogs.put( parentCatalog, catalogsChanges );
@@ -139,22 +145,34 @@ public class LibraryChangesReport {
         return serialize( catalogs, changesInCategory );
     }
 
+    public void persistChangesInfo() {
+        LibraryChanges.persistChangesInfo( getDiff( mMediaItemsL, mMediaItemsR ), NedMidlet.
+                getSettingsManager().getLibraryManager().getCurrentLibrary().
+                getFileUri(), false );
+    }
+
     private String serialize( Hashtable catalogs, Hashtable changesInCategory ) {
         StringBuffer builder = new StringBuffer();
 
         Enumeration catalogsEn = catalogs.keys();
         while ( catalogsEn.hasMoreElements() ) {
-            LibraryElement catalogElement = (LibraryElement) catalogsEn.nextElement();
-            builder.append( NedResources.CATALOG ).append( " - " ).append( catalogElement.getName() ).append( ":\n" );
+            LibraryElement catalogElement = (LibraryElement)catalogsEn.
+                    nextElement();
+            builder.append( NedResources.CATALOG ).append( " - " ).append( catalogElement.
+                    getName() ).append( ":\n" );
 
-            Enumeration categoryEnumeration = ((LibraryBranchChanges) catalogs.get( catalogElement )).getAdded().elements();
+            Enumeration categoryEnumeration = ((LibraryBranchChanges)catalogs.
+                    get( catalogElement )).getAdded().elements();
             while ( categoryEnumeration.hasMoreElements() ) {
-                LibraryElement category = (LibraryElement) categoryEnumeration.nextElement();
-                builder.append( "   " ).append( NedResources.CATEGORY ).append( " - " ).append( category.getName() ).append( ":\n" );
+                LibraryElement category = (LibraryElement)categoryEnumeration.
+                        nextElement();
+                builder.append( "   " ).append( NedResources.CATEGORY ).append( " - " ).
+                        append( category.getName() ).append( ":\n" );
 
-                Enumeration itemsEnum = ((LibraryBranchChanges) changesInCategory.get( category )).getAdded().elements();
+                Enumeration itemsEnum = ((LibraryBranchChanges)changesInCategory.
+                        get( category )).getAdded().elements();
                 while ( itemsEnum.hasMoreElements() ) {
-                    LibraryElement item = (LibraryElement) itemsEnum.nextElement();
+                    LibraryElement item = (LibraryElement)itemsEnum.nextElement();
                     builder.append( "     + " ).append( item.getName() ).append( ":\n" );
                 }
             }
@@ -167,7 +185,7 @@ public class LibraryChangesReport {
         Enumeration en = categoriesR.elements();
 
         while ( en.hasMoreElements() ) {
-            LibraryElement category = (LibraryElement) en.nextElement();
+            LibraryElement category = (LibraryElement)en.nextElement();
             if ( category.getChildern().contains( mediaItem ) ) {
                 return category;
             }

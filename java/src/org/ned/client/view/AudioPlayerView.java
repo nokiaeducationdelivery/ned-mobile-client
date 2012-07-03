@@ -40,13 +40,14 @@ public class AudioPlayerView extends NedFormBase implements ActionListener, Play
     private String audioFile;
     private Player player;
     private Image musicImage = NedMidlet.getRes().getImage( "AudioBig" );
+    private IContent mContent;
 
     public AudioPlayerView(IContent content) {
         try {
-            currentElement = content;
-            audioFile = currentElement.getMediaFile();
+            mContent = content;
+            audioFile = mContent.getMediaFile();
             setLayout(new BorderLayout());
-            setNedTitle( currentElement.getText() );
+            setNedTitle( mContent.getText() );
 
             Label musicLabel = new Label(musicImage);
             musicLabel.setAlignment(Label.CENTER);
@@ -69,7 +70,7 @@ public class AudioPlayerView extends NedFormBase implements ActionListener, Play
         Object source = evt.getSource();
 
         if (source == BackAudioCommand.getInstance().getCommand()) {
-            BackAudioCommand.getInstance().execute( currentElement.getParentId() );
+            BackAudioCommand.getInstance().execute( mContent.getParentId() );
         } else if (source == PauseAudioCommand.getInstance().getCommand()) {
             PauseAudioCommand.getInstance().execute(null);
         } else {

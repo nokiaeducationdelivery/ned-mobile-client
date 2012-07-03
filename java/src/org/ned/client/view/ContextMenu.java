@@ -188,7 +188,6 @@ public abstract class ContextMenu {
                 + optionsList.getStyle().getPadding( Component.TOP )
                 + optionsList.size() * (getSingleOptionHeight() + optionsList.getItemGap())
                 + optionsList.getBottomGap()
-
                 + 15; // magic number, could not find all height influencing factors
         return height;
     }

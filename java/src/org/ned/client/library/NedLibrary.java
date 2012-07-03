@@ -1,19 +1,19 @@
 /*******************************************************************************
-* Copyright (c) 2011 Nokia Corporation
-* All rights reserved. This program and the accompanying materials
-* are made available under the terms of the Eclipse Public License v1.0
-* which accompanies this distribution, and is available at
-* http://www.eclipse.org/legal/epl-v10.html
-*
-* Contributors:
-* Comarch team - initial API and implementation
-*******************************************************************************/
+ * Copyright (c) 2011-2012 Nokia Corporation
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * Comarch team - initial API and implementation
+ *******************************************************************************/
 package org.ned.client.library;
 
+import org.kxml2.kdom.Element;
 import org.ned.client.NedConsts.NedLocalConst;
 import org.ned.client.XmlManager;
 import org.ned.client.utils.NedIOUtils;
-import org.kxml2.kdom.Element;
 
 public class NedLibrary {
 
@@ -24,38 +24,37 @@ public class NedLibrary {
     public String version = null;
     private int catalogCount = 0;
 
-
-    public NedLibrary(String id, String title, String version) {
+    public NedLibrary( String id, String title, String version ) {
         this.id = id;
         this.title = title;
         this.version = version;
     }
 
-    public NedLibrary(String id, String title, boolean visible) {
+    public NedLibrary( String id, String title, boolean visible ) {
         this.id = id;
         this.title = title;
         this.visible = visible;
     }
 
-    public NedLibrary(Element element) {
-        for (int j = 0; j < element.getChildCount(); j++) {
-            Element pelement = element.getElement(j);
-            if(pelement == null){
+    public NedLibrary( Element element ) {
+        for ( int j = 0; j < element.getChildCount(); j++ ) {
+            Element pelement = element.getElement( j );
+            if ( pelement == null ) {
                 continue;
             }
-            if (pelement.getName().equals("title")) {
-                this.title = pelement.getText(0);
+            if ( pelement.getName().equals( "title" ) ) {
+                this.title = pelement.getText( 0 );
             }
-            if (pelement.getName().equals("id")) {
-                this.id = pelement.getText(0);
+            if ( pelement.getName().equals( "id" ) ) {
+                this.id = pelement.getText( 0 );
             }
-            if (pelement.getName().equals("visible")) {
-                if (pelement.getText(0).compareTo("0") == 0) {
+            if ( pelement.getName().equals( "visible" ) ) {
+                if ( pelement.getText( 0 ).compareTo( "0" ) == 0 ) {
                     this.visible = false;
                 }
             }
-            if(pelement.getName().equals("version")){
-                this.version = pelement.getText(0);
+            if ( pelement.getName().equals( "version" ) ) {
+                this.version = pelement.getText( 0 );
             }
 
 
@@ -63,23 +62,23 @@ public class NedLibrary {
         }
     }
 
-    public void setDownloaded(boolean val){
+    public void setDownloaded( boolean val ) {
         downloaded = val;
     }
 
-    public boolean isDownloaded(){
+    public boolean isDownloaded() {
         return downloaded;
     }
-
 
     public int getCatalogCount() {
         return catalogCount;
     }
 
-    public void setCatalogCount() {
-        if(NedIOUtils.fileExists( getFileUri())){
+    public final void setCatalogCount() {
+        if ( NedIOUtils.fileExists( getFileUri() ) ) {
             downloaded = true;
-            catalogCount = (XmlManager.getContentChilds( getId(), getFileUri() ) ).size();
+            catalogCount = (XmlManager.getContentChilds( getId(), getFileUri() )).
+                    size();
         }
     }
 
@@ -89,21 +88,21 @@ public class NedLibrary {
         return hash;
     }
 
-    public boolean equals(Object obj) {
-        if (obj == null) {
+    public boolean equals( Object obj ) {
+        if ( obj == null ) {
             return false;
         }
-        if (obj == this) {
+        if ( obj == this ) {
             return true;
         }
-        if (this.getClass() != obj.getClass()) {
+        if ( this.getClass() != obj.getClass() ) {
             return false;
         }
 
-        return id.equals(((NedLibrary) obj).id);
+        return id.equals( ((NedLibrary) obj).id );
     }
 
-    public void setTitle(String newTitle) {
+    public void setTitle( String newTitle ) {
         title = newTitle;
     }
 
@@ -111,7 +110,7 @@ public class NedLibrary {
         return title;
     }
 
-    public void setVisible(boolean visible) {
+    public void setVisible( boolean visible ) {
         this.visible = visible;
     }
 
@@ -125,32 +124,31 @@ public class NedLibrary {
 
     public final String getFileUri() {
         String file = NedIOUtils.getUserRootDirectory()
-                + id
-                + "/"
-                + NedLocalConst.LIBRARYFILE;
+                      + id
+                      + "/"
+                      + NedLocalConst.LIBRARYFILE;
         return file;
     }
 
-        public String getDirUri() {
+    public String getDirUri() {
         String dir = NedIOUtils.getUserRootDirectory()
-                + id;
+                     + id;
         return dir;
     }
 
-
-    public int getVersionInt(){
+    public int getVersionInt() {
         int retVal = 0;
-        if(version != null){
-            retVal = Integer.parseInt(version);
+        if ( version != null ) {
+            retVal = Integer.parseInt( version );
         }
         return retVal;
     }
 
-    public void setVersion(String version){
+    public void setVersion( String version ) {
         this.version = version;
     }
 
-    public String getVersion(){
+    public String getVersion() {
         return version;
     }
 }

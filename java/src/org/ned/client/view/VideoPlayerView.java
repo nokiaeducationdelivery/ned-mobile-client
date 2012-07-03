@@ -68,12 +68,13 @@ public class VideoPlayerView extends NedFormBase implements PlayerListener, Acti
     private static Command rewindCommanf = new Command( "Rew" );
     private static Command fullScreenCommand = new Command( "Full" );
     private static Command exitPlayerCommand = new Command( "Exit" );
+    private IContent mContent;
 
     public VideoPlayerView( IContent content ) {
-        currentElement = content;
-        videoFile = currentElement.getMediaFile();
+        mContent = content;
+        videoFile = mContent.getMediaFile();
         setLayout( new BorderLayout() );
-        setNedTitle( currentElement.getText() );
+        setNedTitle( mContent.getText() );
         isPortrait = Display.getInstance().isPortrait();
 
         mKeyListener = new KeyListetener();
@@ -166,7 +167,7 @@ public class VideoPlayerView extends NedFormBase implements PlayerListener, Acti
         Object source = evt.getSource();
 
         if ( source == BackVideoCommand.getInstance().getCommand() ) {
-            BackVideoCommand.getInstance().execute( currentElement.getParentId() );
+            BackVideoCommand.getInstance().execute( mContent.getParentId() );
         } else if ( source == fastForwardCommand || source == rewindCommanf ) {
             if ( frame != null ) {
                 frame.skip( 25 * (source == fastForwardCommand ? 1 : -1) );//fast forward or rew
@@ -186,7 +187,7 @@ public class VideoPlayerView extends NedFormBase implements PlayerListener, Acti
             updateProgressBar.cancelTimer();
         } else if ( source == exitPlayerCommand ) {
             updateProgressBar.cancelTimer();
-            BackVideoCommand.getInstance().execute( currentElement.getParentId() );
+            BackVideoCommand.getInstance().execute( mContent.getParentId() );
         }
     }
 

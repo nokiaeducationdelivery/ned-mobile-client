@@ -11,31 +11,33 @@
 package org.ned.client.view;
 
 import com.sun.lwuit.*;
-import org.ned.client.view.renderer.TitleBarPainter;
 import com.sun.lwuit.plaf.Style;
 import com.sun.lwuit.plaf.UIManager;
-import org.kxml2.kdom.Element;
-import org.ned.client.Content;
-import org.ned.client.IContent;
+import org.ned.client.NedMidlet;
 import org.ned.client.NedResources;
-import org.ned.client.XmlManager;
-import org.ned.client.contentdata.NedListModel;
+import org.ned.client.library.advanced.LibraryElement;
+import org.ned.client.library.advanced.LibraryGeneralModel;
+import org.ned.client.utils.NedXmlUtils;
 import org.ned.client.view.renderer.MenuCellRenderer;
+import org.ned.client.view.renderer.TitleBarPainter;
 
 public class NedFormBase extends Form {
 
     private final static int MIN_MARGIN = 30;
     private final static int LEFT_MARGIN_OFFSET = 10;
     private TitleBarPainter mTitleBar;
-    protected NedListModel listModel;
-    protected IContent currentElement;
     protected Command showFreeMem;
+    protected LibraryElement mNewLibModel;
+    protected LibraryGeneralModel mNewModel;
 
     public NedFormBase( String contentId ) {
-        this();
-        listModel = new NedListModel();
-        listModel.loadNode( contentId );
-        currentElement = XmlManager.getContentData( listModel.getContentElement() );
+
+        mNewModel = LibraryGeneralModel.getInfo(
+                NedXmlUtils.getDocFile(
+                NedMidlet.getSettingsManager().getLibraryManager().
+                getCurrentLibrary().getFileUri() ) );
+
+        mNewLibModel = mNewModel.getElement( contentId );
     }
 
     public NedFormBase() {
@@ -64,7 +66,9 @@ public class NedFormBase extends Form {
         int marginH = calculateMarginH( menu );
         marginH = marginH < 0 ? 0 : marginH;
 
-        return menu.show( marginH, 0, LEFT_MARGIN_OFFSET, marginW - 2 * LEFT_MARGIN_OFFSET, true );
+        return menu.show( marginH, 0, LEFT_MARGIN_OFFSET, marginW
+                                                          - 2
+                                                            * LEFT_MARGIN_OFFSET, true );
     }
 
     private int calculateMarginW( Dialog menuDialog ) {
@@ -87,7 +91,8 @@ public class NedFormBase extends Form {
         int f1W = mcr.getStyle().getFont().stringWidth( longestDesc );
         int f2W = mcr.getSelectedStyle().getFont().stringWidth( longestDesc );
 
-        return Display.getInstance().getDisplayWidth() - menuDialog.getStyle().getMargin( Component.LEFT )
+        return Display.getInstance().getDisplayWidth() - menuDialog.getStyle().
+                getMargin( Component.LEFT )
                - menuDialog.getStyle().getMargin( Component.RIGHT )
                - menuDialog.getStyle().getPadding( Component.LEFT )
                - menuDialog.getStyle().getPadding( Component.RIGHT )
@@ -122,11 +127,13 @@ public class NedFormBase extends Form {
                       + style.getPadding( Component.RIGHT )
                       + getCommandCount() * list.getItemGap();
         }
-        return Display.getInstance().getDisplayHeight() - menuDialog.getStyle().getMargin( Component.TOP )
+        return Display.getInstance().getDisplayHeight() - menuDialog.getStyle().
+                getMargin( Component.TOP )
                - menuDialog.getStyle().getMargin( Component.BOTTOM )
                - menuDialog.getStyle().getPadding( Component.BOTTOM )
                - menuDialog.getStyle().getPadding( Component.TOP )
-               - Display.getInstance().getCurrent().getSoftButton( 0 ).getPreferredH()
+               - Display.getInstance().getCurrent().getSoftButton( 0 ).
+                getPreferredH()
                - getCommandCount() * (fontHigh
                                       + itemTopMargin
                                       + itemBottonMargin

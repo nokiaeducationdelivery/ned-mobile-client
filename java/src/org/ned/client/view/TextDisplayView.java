@@ -26,12 +26,13 @@ import org.ned.client.lwuitExtended.NedRequestHandler;
 public class TextDisplayView extends NedFormBase implements ActionListener {
 
     private HTMLComponent comp = null;
+    private IContent mContent;
 
     public TextDisplayView(IContent content) {
-        currentElement = content;
+        mContent = content;
         String fileName = content.getMediaFile();
         setLayout( new BorderLayout() );
-        setNedTitle( currentElement.getText() );
+        setNedTitle( mContent.getText() );
         setScrollable(false);
 
         FileConnection fc = null;
@@ -53,7 +54,7 @@ public class TextDisplayView extends NedFormBase implements ActionListener {
                if( fileName.toUpperCase().endsWith("RTF")) {
                    comp.setBodyText( sb.toString() );
                } else {
-                   comp.setHTML( sb.toString(), null, currentElement.getText(), true );
+                   comp.setHTML( sb.toString(), null, mContent.getText(), true );
                }
 
             }
@@ -83,7 +84,7 @@ public class TextDisplayView extends NedFormBase implements ActionListener {
         Object src = evt.getSource();
         if (src == BackImageCommand.getInstance().getCommand()) {
             comp.cancel();
-            BackImageCommand.getInstance().execute(currentElement.getParentId());
+            BackImageCommand.getInstance().execute(mContent.getParentId());
         }
     }
 }

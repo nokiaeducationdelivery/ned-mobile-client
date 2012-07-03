@@ -10,17 +10,17 @@
  *******************************************************************************/
 package org.ned.client;
 
-import org.ned.client.transfer.DownloadTask;
 import java.util.Vector;
+import org.kxml2.kdom.Document;
+import org.kxml2.kdom.Element;
+import org.kxml2.kdom.Node;
 import org.ned.client.NedConsts.NedContentType;
 import org.ned.client.NedConsts.NedXmlTag;
+import org.ned.client.transfer.DownloadTask;
 import org.ned.client.transfer.IDownloadTaskManager;
 import org.ned.client.utils.NedIOUtils;
 import org.ned.client.utils.NedXmlUtils;
 import org.ned.client.utils.StringRepository;
-import org.kxml2.kdom.Document;
-import org.kxml2.kdom.Element;
-import org.kxml2.kdom.Node;
 
 public class XmlManager {
 
@@ -78,9 +78,11 @@ public class XmlManager {
         if ( element != null ) {
             Vector childElementVector = findChilds( element, StringRepository.TAG_CHILDS );
             if ( childElementVector.size() == 1 ) {
-                Vector childNodes = findChilds( (Element) childElementVector.elementAt( 0 ), StringRepository.TAG_NODE );
+                Vector childNodes = findChilds( (Element)childElementVector.
+                        elementAt( 0 ), StringRepository.TAG_NODE );
                 for ( int i = 0; i < childNodes.size(); i++ ) {
-                    retval.addElement( parseContent( (Element) childNodes.elementAt( i ) ) );
+                    retval.addElement( parseContent( (Element)childNodes.
+                            elementAt( i ) ) );
                 }
             }
         }
@@ -94,9 +96,11 @@ public class XmlManager {
         if ( aContentElement != null ) {
             Vector childElementVector = findChilds( aContentElement, StringRepository.TAG_CHILDS );
             if ( childElementVector.size() == 1 ) {
-                Vector childNodes = findChilds( (Element) childElementVector.elementAt( 0 ), StringRepository.TAG_NODE );
+                Vector childNodes = findChilds( (Element)childElementVector.
+                        elementAt( 0 ), StringRepository.TAG_NODE );
                 for ( int i = 0; i < childNodes.size(); i++ ) {
-                    retval.addElement( parseContent( (Element) childNodes.elementAt( i ) ) );
+                    retval.addElement( parseContent( (Element)childNodes.
+                            elementAt( i ) ) );
                 }
             }
         }
@@ -104,7 +108,8 @@ public class XmlManager {
     }
 
     public static void removeContentChild( String contentId ) {
-        String libUri = NedMidlet.getSettingsManager().getLibraryManager().getCurrentLibrary().getFileUri();
+        String libUri = NedMidlet.getSettingsManager().getLibraryManager().
+                getCurrentLibrary().getFileUri();
         Document doc = NedXmlUtils.getDocFile( libUri );
 
         if ( doc == null ) {
@@ -129,7 +134,8 @@ public class XmlManager {
     public static Vector getContentAllFiles( String contentId ) {
         Vector fileList = new Vector();
 
-        String libUri = NedMidlet.getSettingsManager().getLibraryManager().getCurrentLibrary().getFileUri();
+        String libUri = NedMidlet.getSettingsManager().getLibraryManager().
+                getCurrentLibrary().getFileUri();
         Document doc = NedXmlUtils.getDocFile( libUri );
 
         Element element = findElement( doc.getRootElement(), contentId );
@@ -156,9 +162,10 @@ public class XmlManager {
             } else {
                 Vector childElementVector = findChilds( element, StringRepository.TAG_CHILDS );
                 if ( childElementVector.size() == 1 ) {
-                    Vector childNodes = findChilds( (Element) childElementVector.elementAt( 0 ), StringRepository.TAG_NODE );
+                    Vector childNodes = findChilds( (Element)childElementVector.
+                            elementAt( 0 ), StringRepository.TAG_NODE );
                     for ( int idx = 0; idx < childNodes.size(); idx++ ) {
-                        searchContentFiles( (Element) childNodes.elementAt( idx ), fileList );
+                        searchContentFiles( (Element)childNodes.elementAt( idx ), fileList );
                     }
                 }
             }
@@ -168,7 +175,8 @@ public class XmlManager {
     public static Vector getContentAllChilds( String contentId ) {
         Vector itemList = new Vector();
 
-        String libUri = NedMidlet.getSettingsManager().getLibraryManager().getCurrentLibrary().getFileUri();
+        String libUri = NedMidlet.getSettingsManager().getLibraryManager().
+                getCurrentLibrary().getFileUri();
         Document doc = NedXmlUtils.getDocFile( libUri );
 
         Element element = findElement( doc.getRootElement(), contentId );
@@ -193,9 +201,10 @@ public class XmlManager {
             } else {
                 Vector childElementVector = findChilds( element, StringRepository.TAG_CHILDS );
                 if ( childElementVector.size() == 1 ) {
-                    Vector childNodes = findChilds( (Element) childElementVector.elementAt( 0 ), StringRepository.TAG_NODE );
+                    Vector childNodes = findChilds( (Element)childElementVector.
+                            elementAt( 0 ), StringRepository.TAG_NODE );
                     for ( int idx = 0; idx < childNodes.size(); idx++ ) {
-                        searchContentAllChilds( (Element) childNodes.elementAt( idx ), itemList );
+                        searchContentAllChilds( (Element)childNodes.elementAt( idx ), itemList );
                     }
                 }
             }
@@ -240,7 +249,8 @@ public class XmlManager {
         String title = null;
         String description = null;
         String parentId = element.getAttributeValue( "", StringRepository.ATTRIBUTE_PARENT );
-        String type = element.getAttributeValue( "", StringRepository.ATTRIBUTE_TYPE );
+        String type = element.getAttributeValue( "", StringRepository.ATTRIBUTE_TYPE ).
+                intern();
         String data = element.getAttributeValue( "", StringRepository.ATTRIBUTE_DATA );
         String id = element.getAttributeValue( "", StringRepository.ATTRIBUTE_ID );
         String version = element.getAttributeValue( "", StringRepository.ATTRIBUTE_VERSION );
@@ -261,12 +271,12 @@ public class XmlManager {
                     description = entryElement.getText( 0 );
                 } else if ( entryElement.getName().equals( StringRepository.TAG_KEYWORDS ) ) {
                     if ( keywords == null ) {
-                        keywords = new Vector();
+                        keywords = new Vector( 4, 4 );
                     }
                     keywords.addElement( entryElement.getText( 0 ) );
                 } else if ( entryElement.getName().equals( StringRepository.TAG_EXTERNAL_LINKS ) ) {
                     if ( externalLinks == null ) {
-                        externalLinks = new Vector();
+                        externalLinks = new Vector( 4, 4 );
                     }
                     externalLinks.addElement( entryElement.getText( 0 ) );
                 }
@@ -287,7 +297,8 @@ public class XmlManager {
     public static Element findElement( String contentId, String libFile ) {
         Element retVal = null;
         String libfile = (libFile == null)
-                         ? NedMidlet.getSettingsManager().getLibraryManager().getCurrentLibrary().getFileUri()
+                         ? NedMidlet.getSettingsManager().getLibraryManager().
+                getCurrentLibrary().getFileUri()
                          : libFile;
         Document doc = NedXmlUtils.getDocFile( libfile );
         if ( doc != null ) {
@@ -499,7 +510,7 @@ public class XmlManager {
             if ( element.getName().equals( "entry" ) ) {
                 String video = element.getText( 0 );
                 if ( video.equals( videoFile ) ) {
-                    String pr = String.valueOf( (int) (progress) ) + "%";
+                    String pr = String.valueOf( (int)(progress) ) + "%";
                     element.setAttribute( "", "progress", pr );
                     element.setAttribute( "", "filesize",
                                           String.valueOf( fileSize ) );
@@ -590,7 +601,8 @@ public class XmlManager {
                     Element element = rootElement.getElement( i );
                     if ( element.getName().equals( "entry" ) ) {
                         String entryVideo = element.getText( 0 );
-                        if ( (entryVideo != null) && (entryVideo.equals( video )) ) {
+                        if ( (entryVideo != null)
+                             && (entryVideo.equals( video )) ) {
                             removeId = i;
                         }
                     }

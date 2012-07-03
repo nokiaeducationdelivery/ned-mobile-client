@@ -16,6 +16,7 @@ public class NEDStyleToolbox {
     public static final int BACKGROUND_END_COLOR = 0x69b510;
 
     public static final int MAIN_FONT_COLOR = 0x7b7b7b;
+    public static final int BLUE = 0x0000FF;
 
     public static final int MAIN_BG_COLOR = 0xe1e1e1;
 
