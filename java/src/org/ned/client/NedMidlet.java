@@ -16,6 +16,7 @@ import com.sun.lwuit.animations.CommonTransitions;
 import com.sun.lwuit.plaf.UIManager;
 import com.sun.lwuit.util.Resources;
 import java.io.IOException;
+import java.util.Hashtable;
 import javax.microedition.io.ConnectionNotFoundException;
 import javax.microedition.midlet.MIDletStateChangeException;
 import org.ned.client.command.OpenLibraryManagerCommand;
@@ -177,6 +178,12 @@ public class NedMidlet extends javax.microedition.midlet.MIDlet {
         NedIOUtils.createDirectory( NedIOUtils.getLocalData() );
         NedIOUtils.createDirectory( NedIOUtils.getLocalRoot() );
         accountManager = new AccountManager();
+
+        Hashtable i18n = new Hashtable();
+        i18n.put( "select", NedResources.SELECT );
+        i18n.put( "cancel", NedResources.CANCEL );
+        UIManager.getInstance().setResourceBundle( i18n );
+
         if ( accountManager.getServerUrl() == null ) {
             new WelcomeScreen().show();
         } else {

@@ -47,7 +47,7 @@ public class LanguagesScreen extends NedFormBase implements ActionListener, Sele
 
         mCommands = new NedList( mManager.getLanguages() );
         mCommands.setContextMenu( new LanguageContextMenu( mCommands, 1 ) );
-        mCommands.setMinElementHeight( 1 );
+        mCommands.setMinElementHeight( 7 );
         mCommands.setWidth( Display.getInstance().getDisplayWidth() );
         mCommands.setRenderer(
                 new RadioButtonCellRenderer( currentLanguageName == null
@@ -123,7 +123,6 @@ public class LanguagesScreen extends NedFormBase implements ActionListener, Sele
                 while ( iter.hasMoreElements() ) {
                     mCommands.getModel().addItem( iter.nextElement() );
                 }
-                mCommands.repaint();
                 mManager.saveSetup();
             }
         }
