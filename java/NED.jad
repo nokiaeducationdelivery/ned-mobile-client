@@ -4,7 +4,7 @@ MIDlet-Jar-URL: NED.jar
 MIDlet-Name: NED
 MIDlet-Permissions: javax.microedition.io.Connector.http, javax.microedition.io.Connector.https, javax.microedition.io.Connector.file.write, javax.microedition.io.Connector.file.read
 MIDlet-Vendor: Nokia
-MIDlet-Version: 2.2.2
+MIDlet-Version: 2.2.3
 MicroEdition-Configuration: CLDC-1.1
 MicroEdition-Profile: MIDP-2.0
 Nokia-MIDlet-On-Screen-Keypad: no

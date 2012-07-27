@@ -154,9 +154,9 @@ public class XmlManager {
 
             String type = content.getType();
             if ( type.equals( NedContentType.VIDEO )
-                 || type.equals( NedContentType.IMAGE )
-                 || type.equals( NedContentType.AUDIO )
-                 || type.equals( NedContentType.TEXT ) ) {
+                    || type.equals( NedContentType.IMAGE )
+                    || type.equals( NedContentType.AUDIO )
+                    || type.equals( NedContentType.TEXT ) ) {
                 if ( content.getData() != null && content.getData().length() > 0 ) {
                     fileList.addElement( content.getMediaFile() );
                 }
@@ -197,8 +197,8 @@ public class XmlManager {
             itemList.addElement( content );
 
             if ( type.equals( NedContentType.VIDEO )
-                 || type.equals( NedContentType.IMAGE )
-                 || type.equals( NedContentType.AUDIO ) ) {
+                    || type.equals( NedContentType.IMAGE )
+                    || type.equals( NedContentType.AUDIO ) ) {
             } else {
                 Vector childElementVector = findChilds( element, StringRepository.TAG_CHILDS );
                 if ( childElementVector.size() == 1 ) {
@@ -258,6 +258,7 @@ public class XmlManager {
 
         Vector keywords = null;
         Vector externalLinks = null;
+
         for ( int j = 0; j < element.getChildCount(); j++ ) {
             if ( element.getType( j ) == Node.ELEMENT ) {
                 Element entryElement = element.getElement( j );
@@ -274,15 +275,28 @@ public class XmlManager {
                     if ( keywords == null ) {
                         keywords = new Vector( 4, 4 );
                     }
-                    keywords.addElement( entryElement.getText( 0 ) );
+                    String keyword = null;
+                    try {
+                        keyword = entryElement.getText( 0 );
+                        keywords.addElement( keyword );
+                    } catch ( Exception ex ) {
+                        //no keywords links - ignore
+                    }
                 } else if ( entryElement.getName().equals( StringRepository.TAG_EXTERNAL_LINKS ) ) {
                     if ( externalLinks == null ) {
                         externalLinks = new Vector( 4, 4 );
                     }
-                    externalLinks.addElement( entryElement.getText( 0 ) );
+                    String link = null;
+                    try {
+                        entryElement.getText( 0 );
+                        externalLinks.addElement( link );
+                    } catch ( Exception ex ) {
+                        //no external links - ignore
+                    }
                 }
             }
         }
+
         Content parsed = new Content( title, id );
         parsed.setParentId( parentId );
         parsed.setData( data );
@@ -460,7 +474,7 @@ public class XmlManager {
                     String title = element.getAttributeValue( "", "title" );
                     String progress = element.getAttributeValue( "", "progress" );
                     if ( (localPath == null) || (title == null)
-                         || (progress == null) ) {
+                            || (progress == null) ) {
                         continue;
                     }
                     String url = element.getAttributeValue( "", "url" );
@@ -603,7 +617,7 @@ public class XmlManager {
                     if ( element.getName().equals( "entry" ) ) {
                         String entryVideo = element.getText( 0 );
                         if ( (entryVideo != null)
-                             && (entryVideo.equals( video )) ) {
+                                && (entryVideo.equals( video )) ) {
                             removeId = i;
                         }
                     }
