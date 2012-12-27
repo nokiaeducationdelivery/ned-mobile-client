@@ -31,7 +31,7 @@ import org.ned.client.command.BackVideoCommand;
 
 public class VideoPlayerView extends NedFormBase implements PlayerListener, ActionListener, Runnable {
 
-    private static final int INIT_VOLUME_LEVEL = 80;
+    private static final int INIT_VOLUME_LEVEL = 100;
     private static final Image playIcon = NedMidlet.getRes().getImage( "Play" );
     private static final Image pauseIcon = NedMidlet.getRes().getImage( "Pause" );
     private static final Image ffIcon = NedMidlet.getRes().getImage( "FF" );

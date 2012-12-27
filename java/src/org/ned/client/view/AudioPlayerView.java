@@ -33,7 +33,7 @@ import org.ned.client.command.PauseAudioCommand;
  */
 public class AudioPlayerView extends NedFormBase implements ActionListener, PlayerListener, Runnable {
 
-    private static final int INIT_VOLUME_LEVEL = 80;
+    private static final int INIT_VOLUME_LEVEL = 100;
     private static int currentVolume = -1;
 
     private VolumeControl volume = null;
