@@ -30,6 +30,7 @@ public class SettingsManager {
     private LibraryManager libraryManager = null;
     int oldUrlSelection = 0;
     private int mSortBy = NedConsts.SortOrder.NONE;
+    private boolean mShowTips = true;
 
     public SettingsManager() {
         libraryManager = new LibraryManager();
@@ -173,6 +174,19 @@ public class SettingsManager {
                                 //ignore - setting default sorting method
                             }
                         }
+                    } else if ( element.getName().equals( "ShowTips" ) ) {
+                        if ( element.getAttributeValue( "", "show" ) != null ) {
+                            String valStr = element.getAttributeValue( "", "show" );
+                            try {
+                                if ( valStr != null && valStr.equals( "yes" ) ) {
+                                    setShowTips( true );
+                                } else {
+                                    setShowTips( false );
+                                }
+                            } catch ( Exception ex ) {
+                                //ignore - setting default sorting method
+                            }
+                        }
                     }
                 }
             }
@@ -188,6 +202,7 @@ public class SettingsManager {
         Element schedule = doc.createElement( "", "Schedule" );
         Element stats = doc.createElement( "", "Statistics" );
         Element sort = doc.createElement( "", "Sorting" );
+        Element showTips = doc.createElement( "", "ShowTips" );
 
         // Element thisLibrary = doc.createElement("", "ActualLibrary");
 
@@ -213,6 +228,8 @@ public class SettingsManager {
 
         sort.setAttribute( "", "by", String.valueOf( mSortBy ) );
 
+        showTips.setAttribute( "", "show", mShowTips ? "yes" : "no" );
+
         Element[] libraries = createLibraryXml( doc );
         for ( int i = 0; i < libraries.length; i++ ) {
             settings.addChild( Node.ELEMENT, libraries[i] );
@@ -220,6 +237,7 @@ public class SettingsManager {
         settings.addChild( Node.ELEMENT, schedule );
         settings.addChild( Node.ELEMENT, stats );
         settings.addChild( Node.ELEMENT, sort );
+        settings.addChild( Node.ELEMENT, showTips );
         doc.addChild( Node.ELEMENT, settings );
         NedXmlUtils.writeXmlFile( NedIOUtils.getSettingsFile(), doc );
 
@@ -282,5 +300,13 @@ public class SettingsManager {
 
     public void setSortBy( int aSortBy ) {
         mSortBy = aSortBy;
+    }
+
+    public void setShowTips( boolean showTips ) {
+        mShowTips = showTips;
+    }
+
+    public boolean getShowTips() {
+        return mShowTips;
     }
 }

@@ -169,8 +169,7 @@ public class LoginScreen extends NedFormBase implements ActionListener, FocusLis
 
     public void focusLost( Component cmpnt ) {
         if ( cmpnt == textAreaUser ) {
-            UserInfo user = NedMidlet.getAccountManager().findUser( textAreaUser.
-                    getText() );
+            UserInfo user = NedMidlet.getAccountManager().findUser( textAreaUser.getText() );
             if ( user != null ) {
                 if ( user.isPassSaved ) {
                     textAreaPassword.setText( user.password );
@@ -184,8 +183,7 @@ public class LoginScreen extends NedFormBase implements ActionListener, FocusLis
     }
 
     public void onSuccess() {
-        NedMidlet.getAccountManager().savePassword( textAreaUser.getText(), rememberCheckBox.
-                isSelected() );
+        NedMidlet.getAccountManager().savePassword( textAreaUser.getText(), rememberCheckBox.isSelected() );
         NedMidlet.getInstance().continueApploading();
     }
 

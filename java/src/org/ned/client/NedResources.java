@@ -10,9 +10,22 @@
  *******************************************************************************/
 package org.ned.client;
 
+import java.util.Random;
+import java.util.Vector;
+
 public class NedResources {
 
     static private NedResources mInstance;
+
+    private Random mTipGenerator;
+    private Vector/*<String>*/mTips;
+
+    public String getTip() {
+        if( mTips == null ) {
+            initTips();
+        }
+        return mTips.size() > 0 ? (String)mTips.elementAt( mTipGenerator.nextInt( mTips.size() ) ) : "???";
+    }
 
     public static NedResources getInstance() {
         if ( mInstance == null ) {
@@ -242,7 +255,23 @@ public class NedResources {
     public static final String ZOOM_OUT = Localization.getMessage( "ZOOM_OUT" );
     public static final String FULLSCREEN = Localization.getMessage( "FULLSCREEN" );
     public static final String MAX_ZOOM = Localization.getMessage( "MAX_ZOOM" );
+    public static final String TIPS_ON_STARTUP = Localization.getMessage( "TIPS_ON_STARTUP" );
+    public static final String SHOW_TIPS = Localization.getMessage( "SHOW_TIPS" );
+    public static final String TIPS_TRICKS = Localization.getMessage( "TIPS_TRICKS" );
+    public static final String NEXT = Localization.getMessage( "NEXT" );
+    public static final String HIDE = Localization.getMessage( "HIDE" );
 
     public NedResources() {
+    }
+
+    private void initTips() {
+        mTips = new Vector(4,4);
+        mTipGenerator = new Random();
+        int tipNo= 1;
+        String tip = Localization.getMessage("TIP_" + tipNo );
+        while( !tip.equals( Localization._DEFAULT_STRING ) ) {
+            mTips.addElement( tip );
+            tip = Localization.getMessage( "TIP_" + ++tipNo );
+        }
     }
 }

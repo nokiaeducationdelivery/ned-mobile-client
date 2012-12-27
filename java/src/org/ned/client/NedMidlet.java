@@ -130,8 +130,18 @@ public class NedMidlet extends javax.microedition.midlet.MIDlet {
             }
         } else {
             GeneralAlert.show( NedResources.DOC_NOT_SUPPORTED, GeneralAlert.WARNING );
-            StatisticsManager.logEvent( StatType.PLAY_ITEM_END, "Id=" + content.
-                    getId() + ";ERROR;" );
+            StatisticsManager.logEvent( StatType.PLAY_ITEM_END, "Id=" + content.getId() + ";ERROR;" );
+        }
+    }
+
+    public void showFirstView() {
+        if ( settingsManager.getLibraryManager().getVisibleLibrariesList()
+                == null
+                || settingsManager.getLibraryManager().getVisibleLibrariesList().
+                size() < 1 ) {
+            OpenLibraryManagerCommand.getInstance().execute( null );
+        } else {
+            new MainScreen().show();
         }
     }
 
@@ -208,8 +218,7 @@ public class NedMidlet extends javax.microedition.midlet.MIDlet {
     private void loadTheme() {
         try {
             res = Resources.open( "/org/ned/client/NEDtheme.res" );
-            UIManager.getInstance().setThemeProps( res.getTheme( res.
-                    getThemeResourceNames()[0] ) );
+            UIManager.getInstance().setThemeProps( res.getTheme( res.getThemeResourceNames()[0] ) );
 
             UIManager.getInstance().getLookAndFeel().setReverseSoftButtons( true );
             UIManager.getInstance().getLookAndFeel().setMenuBarClass( MenuBar.class );
@@ -249,8 +258,7 @@ public class NedMidlet extends javax.microedition.midlet.MIDlet {
                     // if no localized resource is found or localization is available
                     // try broader locale (i.e. instead e.g. en_US, try just en)
                     try {
-                        r = Resources.open( resourceName + "_" + locale.
-                                substring( 0, 2 ) + suffix );
+                        r = Resources.open( resourceName + "_" + locale.substring( 0, 2 ) + suffix );
                     } catch ( IOException ex3 ) {
                         // if not found or locale is not set, try default locale
                         try {
@@ -283,20 +291,17 @@ public class NedMidlet extends javax.microedition.midlet.MIDlet {
         downloadManager.init();
 
         StatisticsManager.init( NedIOUtils.getUserRootDirectory() );
-        StatisticsManager.logEvent( StatType.USER_LOGGED, accountManager.
-                getCurrentUser().login );
+        StatisticsManager.logEvent( StatType.USER_LOGGED, accountManager.getCurrentUser().login );
 
 //        if ( getSettingsManager().isSchedulerOn() ) {
 //            getScheduler().startTask();
 //        }
 
-        if ( settingsManager.getLibraryManager().getVisibleLibrariesList()
-                == null
-                || settingsManager.getLibraryManager().getVisibleLibrariesList().
-                size() < 1 ) {
-            OpenLibraryManagerCommand.getInstance().execute( null );
+
+        if ( NedMidlet.getSettingsManager().getShowTips() ) {
+            new ShowTipsView().show();
         } else {
-            new MainScreen().show();
+            showFirstView();
         }
     }
 }

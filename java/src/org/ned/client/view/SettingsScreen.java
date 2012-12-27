@@ -29,7 +29,8 @@ public class SettingsScreen extends NedFormBase implements ActionListener {
                                            DownloadOptionsCommand.getInstance(),
                                            LoginViewCommand.getInstance(),
                                            LanguagesViewCommand.getInstance(),
-                                           SortMediaItemMethodViewCommand.getInstance()
+                                           SortMediaItemMethodViewCommand.getInstance(),
+                                           ShowTipsViewCommand.getInstance()
                 } );
         mCommands.setRenderer( new SimpleListCellRenderer() );
         mCommands.addActionListener( this );
