@@ -232,6 +232,11 @@ public class NedResources {
     public static final String DEMOURL = Localization.getMessage( "DEMOURL" );
     public static final String NEDSERVICENOTPRESENT = Localization.getMessage( "NEDSERVICENOTPRESENT" );
     public static final String DEMOLIBID = Localization.getMessage( "DEMOLIBID" );
+    public static final String SORTING_OPTION = Localization.getMessage( "SORTING_OPTION" );
+    public static final String SORT_BY = Localization.getMessage( "SORT_BY" );
+    public static final String SORY_BY_NAME = Localization.getMessage( "SORT_BY_NAME" );
+    public static final String SORT_NONE = Localization.getMessage( "SORT_NONE" );
+    public static final String SORT_BY_TYPE = Localization.getMessage( "SORT_BY_TYPE" );
 
     public NedResources() {
     }

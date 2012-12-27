@@ -140,4 +140,12 @@ public class NedConsts {
         public static final int OTHERCONNECTIONPROBLEM = -5;
         public static final int UNKNOWN = -9999;
     }
+
+    public class SortOrder {
+
+        public static final int NONE = 0;
+        public static final int BY_NAME = 1;
+        public static final int BY_TYPE = 2;
+        public static final int BY_TYPE_AND_NAME = 3;
+    }
 }

@@ -17,6 +17,8 @@ import com.sun.lwuit.events.ActionListener;
 import com.sun.lwuit.events.SelectionListener;
 import java.util.Vector;
 import org.ned.client.Content;
+import org.ned.client.NedConsts;
+import org.ned.client.NedMidlet;
 import org.ned.client.command.*;
 import org.ned.client.library.advanced.LibraryElement;
 import org.ned.client.library.advanced.LibraryHelpers;
@@ -31,8 +33,8 @@ public class MediaItemsScreen extends NedFormBase implements ActionListener, Sel
         setNedTitle( mNewLibModel != null ? mNewLibModel.getName() : " " );
 
         mMediaList = new List( mNewLibModel != null
-                               ? LibraryHelpers.sortByType( mNewLibModel.
-                getChildern() ) : new Vector( 0 ) );
+                               ? LibraryHelpers.sortBy( mNewLibModel.getChildern(), NedMidlet.getSettingsManager().
+                                                        getSortBy() ) : new Vector( 0 ) );
         mMediaList.setFixedSelection( List.FIXED_NONE );
         mMediaList.setSelectedIndex( 0 );
         mMediaList.setRenderer( new MediaItemsListCellRenderer() );
@@ -54,22 +56,18 @@ public class MediaItemsScreen extends NedFormBase implements ActionListener, Sel
             BackMediaItemsCommand.getInstance().execute( mNewLibModel.getParent().
                     getId() );
         } else if ( src == ShowDetailsCommand.getInstance().getCommand() ) {
-            ShowDetailsCommand.getInstance().execute( ((LibraryElement)mMediaList.
-                    getSelectedItem()).getDetails() );
+            ShowDetailsCommand.getInstance().execute( ((LibraryElement)mMediaList.getSelectedItem()).getDetails() );
         } else if ( src == DeleteContentCommand.getInstance().getCommand() ) {
             DeleteContentCommand.getInstance().execute( mMediaList );
         } else if ( src == InstantDownloadCommand.getInstance().getCommand() ) {
-            InstantDownloadCommand.getInstance().execute( ((LibraryElement)mMediaList.
-                    getSelectedItem()).getDetails() );
+            InstantDownloadCommand.getInstance().execute( ((LibraryElement)mMediaList.getSelectedItem()).getDetails() );
             new DownloadQueueScreen( mMediaList.getSelectedItem() ).show();
         } else if ( src == GoToStartCommand.getInstance().getCommand() ) {
             GoToStartCommand.getInstance().execute( null );
         } else if ( src == AddToDownloadQueueCommand.getInstance().getCommand() ) {
-            Content content = ((LibraryElement)mMediaList.getSelectedItem()).
-                    getDetails();
+            Content content = ((LibraryElement)mMediaList.getSelectedItem()).getDetails();
             AddToDownloadQueueCommand.getInstance().execute( content );
-            new DownloadQueueScreen( (LibraryElement)mMediaList.getSelectedItem() ).
-                    show();
+            new DownloadQueueScreen( (LibraryElement)mMediaList.getSelectedItem() ).show();
         } else if ( src == PlayMediaCommand.getInstance().getCommand() ) {
             LibraryElement content = (LibraryElement)mMediaList.getSelectedItem();
             if ( content.isNew() ) {
@@ -96,8 +94,7 @@ public class MediaItemsScreen extends NedFormBase implements ActionListener, Sel
                 menu.show();
             }
         } else if ( src == ShowLinksCommand.getInstance().getCommand() ) {
-            Content content = ((LibraryElement)mMediaList.getSelectedItem()).
-                    getDetails();
+            Content content = ((LibraryElement)mMediaList.getSelectedItem()).getDetails();
             ShowLinksCommand.getInstance().execute( content );
         } else if ( src == showFreeMem ) {
             GeneralAlert.show( String.valueOf( Runtime.getRuntime().freeMemory() ), GeneralAlert.INFO );

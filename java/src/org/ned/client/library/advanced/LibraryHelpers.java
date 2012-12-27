@@ -13,10 +13,25 @@ package org.ned.client.library.advanced;
 import java.util.Enumeration;
 import java.util.Vector;
 import org.ned.client.NedConsts;
+import org.ned.client.utils.Sort;
 
 public class LibraryHelpers {
 
-    public static Vector sortByType( Vector aMediaList ) {
+    public static Vector sortBy( Vector aMediaList, int aSortBy ) {
+        switch ( aSortBy ) {
+            case NedConsts.SortOrder.BY_TYPE:
+                return sortByType( aMediaList, false );
+            case NedConsts.SortOrder.BY_TYPE_AND_NAME:
+                return sortByType( aMediaList, true );
+            case NedConsts.SortOrder.BY_NAME:
+                return sortByName( aMediaList );
+            case NedConsts.SortOrder.NONE:
+            default:
+                return aMediaList;
+        }
+    }
+
+    public static Vector sortByType( Vector aMediaList, boolean aSortByName ) {
         Vector video = new Vector( aMediaList.size(), 4 );
         Vector audio = new Vector( 4, 4 );
         Vector picture = new Vector( 4, 4 );
@@ -40,6 +55,13 @@ public class LibraryHelpers {
             } else {
                 rest.addElement( content );
             }
+        }
+
+        if ( aSortByName ) {
+            Sort.sort( video );
+            Sort.sort( audio );
+            Sort.sort( picture );
+            Sort.sort( rest );
         }
 
         addVectors( video, audio );
@@ -67,5 +89,16 @@ public class LibraryHelpers {
             }
         }
         return output;
+    }
+
+    private static Vector sortByName( Vector aMediaList ) {
+        Vector toBeSorted = new Vector( aMediaList.size() );
+        final Enumeration en = aMediaList.elements();
+        while ( en.hasMoreElements() ) {
+            toBeSorted.addElement( en.nextElement() );
+        }
+        Sort.sort( toBeSorted );
+
+        return toBeSorted;
     }
 }

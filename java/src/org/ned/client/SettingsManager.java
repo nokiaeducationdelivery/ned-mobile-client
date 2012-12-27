@@ -29,6 +29,7 @@ public class SettingsManager {
     private boolean autoStatSend = true;
     private LibraryManager libraryManager = null;
     int oldUrlSelection = 0;
+    private int mSortBy = NedConsts.SortOrder.NONE;
 
     public SettingsManager() {
         libraryManager = new LibraryManager();
@@ -51,7 +52,7 @@ public class SettingsManager {
             int tmp = Integer.parseInt( hour );
             if ( tmp < 10 ) {
                 setDlTime( "0" + String.valueOf( tmp ) + ":" + getDlMin()
-                           + getDlAmPm() );
+                        + getDlAmPm() );
             } else if ( hour.length() == 2 ) {
                 setDlTime( hour + ":" + getDlMin() + getDlAmPm() );
             }
@@ -64,7 +65,7 @@ public class SettingsManager {
             int tmp = Integer.parseInt( min );
             if ( tmp < 10 ) {
                 setDlTime( getDlHour() + ":0" + String.valueOf( tmp )
-                           + getDlAmPm() );
+                        + getDlAmPm() );
             } else if ( min.length() == 2 ) {
                 setDlTime( getDlHour() + ":" + min + getDlAmPm() );
             }
@@ -126,8 +127,7 @@ public class SettingsManager {
         if ( NedIOUtils.fileExists( NedIOUtils.getSettingsFile() ) ) {
             Element rootElement = null;
             try {
-                Document doc = NedXmlUtils.getDocFile( NedIOUtils.
-                        getSettingsFile() );
+                Document doc = NedXmlUtils.getDocFile( NedIOUtils.getSettingsFile() );
                 if ( doc == null ) {
                     NedIOUtils.removeFile( NedIOUtils.getSettingsFile() );
                     return saveSettings();
@@ -157,10 +157,21 @@ public class SettingsManager {
                         }
                     } else if ( element.getName().equals( "Statistics" ) ) {
                         if ( element.getAttributeValue( "", "auto" ) != null
-                             && element.getAttributeValue( "", "auto" ).equals( "no" ) ) {
+                                && element.getAttributeValue( "", "auto" ).equals( "no" ) ) {
                             setAutoStatSend( false );
                         } else {
                             setAutoStatSend( true );
+                        }
+                    } else if ( element.getName().equals( "Sorting" ) ) {
+                        if ( element.getAttributeValue( "", "by" ) != null ) {
+                            String valStr = element.getAttributeValue( "", "by" );
+                            int val = NedConsts.SortOrder.NONE;
+                            try {
+                                val = Integer.parseInt( valStr );
+                                setSortBy( val );
+                            } catch ( Exception ex ) {
+                                //ignore - setting default sorting method
+                            }
                         }
                     }
                 }
@@ -176,6 +187,7 @@ public class SettingsManager {
         Element settings = doc.createElement( "", "Settings" );
         Element schedule = doc.createElement( "", "Schedule" );
         Element stats = doc.createElement( "", "Statistics" );
+        Element sort = doc.createElement( "", "Sorting" );
 
         // Element thisLibrary = doc.createElement("", "ActualLibrary");
 
@@ -199,12 +211,15 @@ public class SettingsManager {
         }
         stats.setAttribute( "", "auto", autoSend );
 
+        sort.setAttribute( "", "by", String.valueOf( mSortBy ) );
+
         Element[] libraries = createLibraryXml( doc );
         for ( int i = 0; i < libraries.length; i++ ) {
             settings.addChild( Node.ELEMENT, libraries[i] );
         }
         settings.addChild( Node.ELEMENT, schedule );
         settings.addChild( Node.ELEMENT, stats );
+        settings.addChild( Node.ELEMENT, sort );
         doc.addChild( Node.ELEMENT, settings );
         NedXmlUtils.writeXmlFile( NedIOUtils.getSettingsFile(), doc );
 
@@ -223,8 +238,7 @@ public class SettingsManager {
             Element pElement = null;
 
             pElement = doc.createElement( "", "title" );
-            pElement.addChild( Node.TEXT, ((NedLibrary)librariesList.elementAt( i )).
-                    getTitle() );
+            pElement.addChild( Node.TEXT, ((NedLibrary)librariesList.elementAt( i )).getTitle() );
             pLibrary.addChild( Node.ELEMENT, pElement );
 
             pElement = doc.createElement( "", "id" );
@@ -241,8 +255,7 @@ public class SettingsManager {
             pLibrary.addChild( Node.ELEMENT, pElement );
 
             pElement = doc.createElement( "", "version" );
-            String version = ((NedLibrary)librariesList.elementAt( i )).
-                    getVersion();
+            String version = ((NedLibrary)librariesList.elementAt( i )).getVersion();
             if ( version == null || version.equals( "" ) ) {
                 pElement.addChild( Node.TEXT, "0" );
             } else {
@@ -261,5 +274,13 @@ public class SettingsManager {
 
     public void setAutoStatSend( boolean state ) {
         autoStatSend = state;
+    }
+
+    public int getSortBy() {
+        return mSortBy;
+    }
+
+    public void setSortBy( int aSortBy ) {
+        mSortBy = aSortBy;
     }
 }

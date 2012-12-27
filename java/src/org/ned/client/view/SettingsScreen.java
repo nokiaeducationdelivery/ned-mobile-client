@@ -25,10 +25,11 @@ public class SettingsScreen extends NedFormBase implements ActionListener {
         super();
         setNedTitle( NedResources.MID_SETTINGS_TITLE );
         mCommands = new List( new Object[]{
-                    StatisticsOptionsCommand.getInstance(),
+                                           StatisticsOptionsCommand.getInstance(),
                                            DownloadOptionsCommand.getInstance(),
                                            LoginViewCommand.getInstance(),
-                                           LanguagesViewCommand.getInstance()
+                                           LanguagesViewCommand.getInstance(),
+                                           SortMediaItemMethodViewCommand.getInstance()
                 } );
         mCommands.setRenderer( new SimpleListCellRenderer() );
         mCommands.addActionListener( this );
