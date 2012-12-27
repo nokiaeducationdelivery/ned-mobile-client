@@ -1,0 +1,26 @@
+<html>
+  <head>
+    <style type="text/css">
+body
+{
+background-color:#e1e1e1;
+}
+h1
+{
+color:#6225;
+text-align:left;
+}
+p
+{
+color:#69b510;
+}
+</style>
+  </head>
+  <body>
+   <p> This setting will allow to choose sorting order used in Media Item view</p>
+    <h1>None</h1> <p>Order is defined by library definition on the NED server</p>
+    <h1>by Name</h1> <p>Items are sorted by title<p>
+    <h1>by Type</h1> <p>Items are sorted by media type. Videos, Audio, Images, Text<p>
+    <h1>byNameAndType</h1><p>This combines previous two methods. Items are sorted by type and by name</p>
+  </body>
+</html>

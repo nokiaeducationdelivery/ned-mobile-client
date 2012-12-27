@@ -1,0 +1,23 @@
+<html>
+  <head>
+    <style type="text/css">
+body
+{
+background-color:#e1e1e1;
+}
+h1
+{
+color:#6225;
+text-align:left;
+}
+p
+{
+color:#69b510;
+}
+</style>
+  </head>
+  <body>
+   <p> This setting will enable/disable showing Tips&Tricks information on application startup</p>
+    <h1></h1><p></p>
+  </body>
+</html>
