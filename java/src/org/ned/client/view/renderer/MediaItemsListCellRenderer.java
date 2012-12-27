@@ -12,6 +12,7 @@ package org.ned.client.view.renderer;
 
 import com.sun.lwuit.*;
 import com.sun.lwuit.layouts.BoxLayout;
+import com.sun.lwuit.plaf.Style;
 import java.util.Vector;
 import org.ned.client.Content;
 import org.ned.client.NedMidlet;
@@ -27,6 +28,7 @@ public class MediaItemsListCellRenderer extends ListCellRendererBase implements 
     private static final int ICON_WIDTH = 32;
     private static Image local;
     private static Image remote;
+    private static Image inProgress;
     private Label mFlag;
     private Label mMediaType;
     private int displayW;
@@ -48,12 +50,15 @@ public class MediaItemsListCellRenderer extends ListCellRendererBase implements 
         setWidth( displayW );
         setFocusable( true );
         mMediaType = new Label( " " );//must set some text to render properly
-        mMediaType.getStyle().setPadding( 0, 0, 0, 0 );
-        mMediaType.getStyle().setMargin( 0, 0, 0, 0 );
-        mMediaType.getSelectedStyle().setPadding( 0, 0, 0, 0 );
-        mMediaType.getSelectedStyle().setMargin( 0, 0, 0, 0 );
-        mMediaType.setAlignment( Label.LEFT );
-        mMediaType.getStyle().setBgTransparency( 0 );
+        final Style mediaTypeStyle = mMediaType.getStyle();
+        final Style mediaTypeStyleSelected = mMediaType.getSelectedStyle();
+        mediaTypeStyle.setPadding( 0, 0, 0, 0 );
+        mediaTypeStyle.setMargin( 0, 0, 0, 0 );
+        mediaTypeStyle.setAlignment( Label.LEFT );
+        mediaTypeStyle.setBgTransparency( 0 );
+        mediaTypeStyleSelected.setPadding( 0, 0, 0, 0 );
+        mediaTypeStyleSelected.setMargin( 0, 0, 0, 0 );
+        mediaTypeStyleSelected.setAlignment( Label.LEFT );
         mMediaType.setPreferredW( ICON_WIDTH );
         mMediaType.setCellRenderer( true );
 
@@ -61,12 +66,14 @@ public class MediaItemsListCellRenderer extends ListCellRendererBase implements 
         removeComponent( mTitle );
 
         mFlag = new Label();
-        mFlag.getStyle().setPadding( 0, 0, 0, 0 );
-        mFlag.getStyle().setMargin( 0, 0, 0, 0 );
-        mFlag.getSelectedStyle().setPadding( 0, 0, 0, 0 );
-        mFlag.getSelectedStyle().setMargin( 0, 0, 0, 0 );
-        mFlag.setAlignment( Label.RIGHT );
-        mFlag.getStyle().setBgTransparency( 0 );
+        final Style flagStyle = mFlag.getStyle();
+        final Style flagSelectedStyle = mFlag.getSelectedStyle();
+        flagStyle.setPadding( 0, 0, 0, 0 );
+        flagStyle.setMargin( 0, 0, 0, 0 );
+        flagStyle.setAlignment( Label.RIGHT );
+        flagStyle.setBgTransparency( 0 );
+        flagSelectedStyle.setPadding( 0, 0, 0, 0 );
+        flagSelectedStyle.setMargin( 0, 0, 0, 0 );
         mFlag.setPreferredW( ICON_WIDTH );
         mFlag.setCellRenderer( true );
 
@@ -74,16 +81,18 @@ public class MediaItemsListCellRenderer extends ListCellRendererBase implements 
         addComponent( mTitle );
         addComponent( mFlag );
 
-        local = NedMidlet.getRes().getImage( "Local" );
-        remote = NedMidlet.getRes().getImage( "Remote" );
+        final Image downloadStage = NedMidlet.getRes().getImage( "DownloadProgressSteps" );
+        local = downloadStage.subImage( 0, 0, 32, 32, true );
+        remote = downloadStage.subImage( 64, 0, 32, 32, true );
+        inProgress = downloadStage.subImage( 32, 0, 32, 32, true );
     }
 
     public Component getListCellRendererComponent( List list, Object value, int index, boolean isSelected ) {
         if ( value == null ) {
             return this;
         }
-        boolean isNew = ((LibraryElement) value).isNew();
-        Content content = ((LibraryElement) value).getDetails();
+        boolean isNew = ((LibraryElement)value).isNew();
+        Content content = ((LibraryElement)value).getDetails();
 
         mMediaType.setText( "" );
         mMediaType.setIcon( null );
@@ -94,11 +103,13 @@ public class MediaItemsListCellRenderer extends ListCellRendererBase implements 
         if ( content instanceof Content ) {
 
             if ( mFileLists == null ) {
-                mFileLists = NedIOUtils.directoryListing( ((Content) content).getMediaFilePath() );
+                mFileLists = NedIOUtils.directoryListing( ((Content)content).getMediaFilePath() );
             }
 
-            if ( mFileLists != null && ((Content) content).isDownloaded( mFileLists ) ) {
+            if ( mFileLists != null && ((Content)content).isDownloaded( mFileLists ) ) {
                 mFlag.setIcon( local );
+            } else if ( NedMidlet.getInstance().getDownloadManager().isTransferExist( content.getMediaFile() ) ) {
+                mFlag.setIcon( inProgress );
             } else {
                 mFlag.setIcon( remote );
             }

@@ -12,6 +12,7 @@ package org.ned.client.view.renderer;
 
 import com.sun.lwuit.*;
 import com.sun.lwuit.layouts.BoxLayout;
+import com.sun.lwuit.plaf.Style;
 import org.ned.client.NedMidlet;
 import org.ned.client.utils.LanguageInfo;
 import org.ned.client.view.style.NEDStyleToolbox;
@@ -47,12 +48,16 @@ public class RadioButtonCellRenderer extends ListCellRendererBase {
         mRadioBtn.setWidth( Display.getInstance().getDisplayWidth() );
         mRadioBtn.getStyle().setPadding( 0, 0, 10, 10 );
         mFlag = new Label();
-        mFlag.getStyle().setPadding( 0, 0, 0, 0 );
-        mFlag.getStyle().setMargin( 0, 0, 0, 0 );
-        mFlag.getSelectedStyle().setPadding( 0, 0, 0, 0 );
-        mFlag.getSelectedStyle().setMargin( 0, 0, 0, 0 );
-        mFlag.setAlignment( Label.RIGHT );
-        mFlag.getStyle().setBgTransparency( 0 );
+        final Style flagStyle = mFlag.getStyle();
+        final Style flagSelectedStyle = mFlag.getSelectedStyle();
+        flagStyle.setPadding( 0, 0, 0, 0 );
+        flagStyle.setMargin( 0, 0, 0, 0 );
+        flagStyle.setAlignment( Label.RIGHT );
+        flagStyle.setBgTransparency( 0 );
+
+        flagSelectedStyle.setPadding( 0, 0, 0, 0 );
+        flagSelectedStyle.setMargin( 0, 0, 0, 0 );
+
         mFlag.setPreferredW( ICON_WIDTH );
         mFlag.setCellRenderer( true );
 
@@ -66,19 +71,21 @@ public class RadioButtonCellRenderer extends ListCellRendererBase {
         addComponent( cont );
         addComponent( spacer );
 
+        final Image downloadStage = NedMidlet.getRes().getImage( "DownloadProgressSteps" );
         if ( mLocal == null ) {
-            mLocal = NedMidlet.getRes().getImage( "Local" );
+            mLocal = downloadStage.subImage( 0, 0, 32, 32, true );
         }
         if ( mRemote == null ) {
-            mRemote = NedMidlet.getRes().getImage( "Remote" );
+            mRemote = downloadStage.subImage( 64, 0, 32, 32, true );
         }
     }
 
     public Component getListCellRendererComponent( List list, Object value, int index, boolean isSelected ) {
-        LanguageInfo langInfo = (LanguageInfo) value;
+        LanguageInfo langInfo = (LanguageInfo)value;
         if ( langInfo != null ) {
             mTitle.setText( langInfo.getLangName() );
-            mRadioBtn.setSelected( (langInfo.getLocale() == null ? mCurrentLang == null : langInfo.getLocale().equals( mCurrentLang )) );
+            mRadioBtn.setSelected( (langInfo.getLocale() == null ? mCurrentLang == null
+                                    : langInfo.getLocale().equals( mCurrentLang )) );
             mFlag.setIcon( langInfo.isLocal() ? mLocal : mRemote );
 
             if ( isSelected && list.hasFocus() ) {
