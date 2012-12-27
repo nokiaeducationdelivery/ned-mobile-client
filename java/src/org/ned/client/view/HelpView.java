@@ -44,15 +44,17 @@ public class HelpView extends NedFormBase implements ActionListener {
         classNames.put( LibraryManagerScreen.class, "LibraryManagerScreen" );
         classNames.put( MainScreen.class, "MainScreen" );
         classNames.put( LanguagesScreen.class, "LanguagesScreen" );
+        classNames.put( ShowTipsConfigView.class, "ShowTipsConfigView" );
+        classNames.put( SortingMediaItemMethodView.class, "SortingMediaItemMethodView" );
     }
 
     public HelpView( Object aParam ) {
 
         if ( aParam instanceof Class ) {
-            caller = (Class) aParam;
+            caller = (Class)aParam;
         } else {
-            Object[] params = (Object[]) aParam;
-            caller = (Class) params[0];
+            Object[] params = (Object[])aParam;
+            caller = (Class)params[0];
         }
         params = aParam;
 
@@ -95,7 +97,7 @@ public class HelpView extends NedFormBase implements ActionListener {
             sb = new StringBuffer();
             int chars = 0;
             while ( (chars = is.read()) != -1 ) {
-                sb.append( (char) chars );
+                sb.append( (char)chars );
             }
         } catch ( IOException ex ) {
             ex.printStackTrace();  // TODO?
@@ -115,6 +117,6 @@ public class HelpView extends NedFormBase implements ActionListener {
     }
 
     private String getViewNameByClass( Class caller ) {
-        return (String) classNames.get( caller );
+        return (String)classNames.get( caller );
     }
 }
