@@ -43,7 +43,7 @@ public class DownloadManager implements IDownloadTaskManager {
 
     public DownloadManager( NedMidlet _midlet ) {
         midlet = _midlet;
-        vectorDownloadTasks = new Vector(4,4);
+        vectorDownloadTasks = new Vector( 4, 4 );
     }
 
     public void init() {
@@ -67,7 +67,7 @@ public class DownloadManager implements IDownloadTaskManager {
         boolean exists = false;
 
         for ( int i = 0; i < vectorDownloadTasks.size(); i++ ) {
-            tf = (DownloadTask) vectorDownloadTasks.elementAt( i );
+            tf = (DownloadTask)vectorDownloadTasks.elementAt( i );
             if ( tf.getFile().equals( localPath ) ) {
                 exists = true;
                 break;
@@ -81,7 +81,7 @@ public class DownloadManager implements IDownloadTaskManager {
         DownloadTask ret = null;
 
         for ( int i = 0; i < vectorDownloadTasks.size(); i++ ) {
-            tf = (DownloadTask) vectorDownloadTasks.elementAt( i );
+            tf = (DownloadTask)vectorDownloadTasks.elementAt( i );
             if ( tf.getFile().equals( localFile ) ) {
                 ret = tf;
                 break;
@@ -108,9 +108,9 @@ public class DownloadManager implements IDownloadTaskManager {
             if ( countActiveDownload() >= MAX_DOWNLOADS ) {
                 return;
             }
-            tf = (DownloadTask) vectorDownloadTasks.elementAt( i );
+            tf = (DownloadTask)vectorDownloadTasks.elementAt( i );
             if ( !tf.isDownloading() && tf.getInstantDownload() ) {
-                tf.startDownload();
+                tf.startDownload( false );
             }
         }
     }
@@ -121,9 +121,9 @@ public class DownloadManager implements IDownloadTaskManager {
             if ( countActiveDownload() >= MAX_DOWNLOADS ) {
                 return;
             }
-            tf = (DownloadTask) vectorDownloadTasks.elementAt( i );
+            tf = (DownloadTask)vectorDownloadTasks.elementAt( i );
             if ( !tf.isDownloading() ) {
-                tf.startDownload();
+                tf.startDownload( false );
             }
         }
     }
@@ -131,21 +131,22 @@ public class DownloadManager implements IDownloadTaskManager {
     public int countActiveDownload() {
         int activeDownloads = 0;
         for ( int i = 0; i < vectorDownloadTasks.size(); i++ ) {
-            if ( ((DownloadTask) vectorDownloadTasks.elementAt( i )).isDownloading() ) {
+            if ( ((DownloadTask)vectorDownloadTasks.elementAt( i )).isDownloading() ) {
                 activeDownloads++;
             }
         }
         return activeDownloads;
     }
 
-    public void addDownloadToQueue( String file, String url, String title, boolean instantDownload ) {
+    public void addDownloadToQueue( String file, String url, String title, boolean instantDownload,
+                                    boolean forceDownload ) {
         if ( file == null ) {
             //todo add message
             return;
         }
         if ( isTransferExist( file ) ) {
             if ( instantDownload && !getTransfer( file ).isDownloading() ) {
-                getTransfer( file ).startDownload();
+                getTransfer( file ).startDownload( false );
             }
             return;
         }
@@ -156,7 +157,7 @@ public class DownloadManager implements IDownloadTaskManager {
         midlet.getXmlManager().addDownloadsEntry( tf );
 
         if ( midlet.getDownloadState() == NedMidlet.DOWNLOAD_AUTOMATIC || instantDownload ) {
-            tf.startDownload();
+            tf.startDownload( forceDownload );
         }
     }
 
@@ -177,7 +178,7 @@ public class DownloadManager implements IDownloadTaskManager {
                 NedIOUtils.createDirectory( library.getDirUri() + "/" + NedLocalConst.VIDEOSDIR );
             }
 
-            hc = (HttpConnection) Connector.open( url );
+            hc = (HttpConnection)Connector.open( url );
             hc.setRequestMethod( HttpConnection.GET );
             hc.setRequestProperty( "id", library.getId() );
             hc.setRequestProperty( NedConsts.HttpHeader.CACHECONTROL, NedConsts.HttpHeaderValue.NOCACHE );
@@ -189,7 +190,7 @@ public class DownloadManager implements IDownloadTaskManager {
             if ( hc.getResponseCode() == HttpConnection.HTTP_OK ) {
                 String version = hc.getHeaderField( "Version" );
 
-                fc = (FileConnection) Connector.open( library.getFileUri(), Connector.READ_WRITE );
+                fc = (FileConnection)Connector.open( library.getFileUri(), Connector.READ_WRITE );
                 if ( !fc.exists() ) {
                     fc.create();
                 } else {

@@ -237,6 +237,7 @@ public class NedResources {
     public static final String SORY_BY_NAME = Localization.getMessage( "SORT_BY_NAME" );
     public static final String SORT_NONE = Localization.getMessage( "SORT_NONE" );
     public static final String SORT_BY_TYPE = Localization.getMessage( "SORT_BY_TYPE" );
+    public static final String MAX_DOWNLOAD_REACHED_QUESTION = Localization.getMessage( "MAX_DOWNLOAD_REACHED_QUESTION" );
 
     public NedResources() {
     }

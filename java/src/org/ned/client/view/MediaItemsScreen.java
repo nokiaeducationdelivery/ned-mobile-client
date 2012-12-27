@@ -17,7 +17,6 @@ import com.sun.lwuit.events.ActionListener;
 import com.sun.lwuit.events.SelectionListener;
 import java.util.Vector;
 import org.ned.client.Content;
-import org.ned.client.NedConsts;
 import org.ned.client.NedMidlet;
 import org.ned.client.command.*;
 import org.ned.client.library.advanced.LibraryElement;

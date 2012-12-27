@@ -78,11 +78,9 @@ public class XmlManager {
         if ( element != null ) {
             Vector childElementVector = findChilds( element, StringRepository.TAG_CHILDS );
             if ( childElementVector.size() == 1 ) {
-                Vector childNodes = findChilds( (Element)childElementVector.
-                        elementAt( 0 ), StringRepository.TAG_NODE );
+                Vector childNodes = findChilds( (Element)childElementVector.elementAt( 0 ), StringRepository.TAG_NODE );
                 for ( int i = 0; i < childNodes.size(); i++ ) {
-                    retval.addElement( parseContent( (Element)childNodes.
-                            elementAt( i ) ) );
+                    retval.addElement( parseContent( (Element)childNodes.elementAt( i ) ) );
                 }
             }
         }
@@ -96,11 +94,9 @@ public class XmlManager {
         if ( aContentElement != null ) {
             Vector childElementVector = findChilds( aContentElement, StringRepository.TAG_CHILDS );
             if ( childElementVector.size() == 1 ) {
-                Vector childNodes = findChilds( (Element)childElementVector.
-                        elementAt( 0 ), StringRepository.TAG_NODE );
+                Vector childNodes = findChilds( (Element)childElementVector.elementAt( 0 ), StringRepository.TAG_NODE );
                 for ( int i = 0; i < childNodes.size(); i++ ) {
-                    retval.addElement( parseContent( (Element)childNodes.
-                            elementAt( i ) ) );
+                    retval.addElement( parseContent( (Element)childNodes.elementAt( i ) ) );
                 }
             }
         }
@@ -163,8 +159,7 @@ public class XmlManager {
             } else {
                 Vector childElementVector = findChilds( element, StringRepository.TAG_CHILDS );
                 if ( childElementVector.size() == 1 ) {
-                    Vector childNodes = findChilds( (Element)childElementVector.
-                            elementAt( 0 ), StringRepository.TAG_NODE );
+                    Vector childNodes = findChilds( (Element)childElementVector.elementAt( 0 ), StringRepository.TAG_NODE );
                     for ( int idx = 0; idx < childNodes.size(); idx++ ) {
                         searchContentFiles( (Element)childNodes.elementAt( idx ), fileList );
                     }
@@ -202,8 +197,7 @@ public class XmlManager {
             } else {
                 Vector childElementVector = findChilds( element, StringRepository.TAG_CHILDS );
                 if ( childElementVector.size() == 1 ) {
-                    Vector childNodes = findChilds( (Element)childElementVector.
-                            elementAt( 0 ), StringRepository.TAG_NODE );
+                    Vector childNodes = findChilds( (Element)childElementVector.elementAt( 0 ), StringRepository.TAG_NODE );
                     for ( int idx = 0; idx < childNodes.size(); idx++ ) {
                         searchContentAllChilds( (Element)childNodes.elementAt( idx ), itemList );
                     }
@@ -496,7 +490,7 @@ public class XmlManager {
                         tf.setPercentDownloaded();
                     }
                     if ( midlet.getSettingsManager().getDlAutomatic() ) {
-                        tf.startDownload();
+                        tf.startDownload( false );
                     }
                     continue;
                 }

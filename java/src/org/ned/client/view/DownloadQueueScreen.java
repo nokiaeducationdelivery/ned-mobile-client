@@ -22,7 +22,6 @@ import org.ned.client.NedMidlet;
 import org.ned.client.NedResources;
 import org.ned.client.command.BackDownloadCommand;
 import org.ned.client.command.HelpCommand;
-import org.ned.client.library.advanced.LibraryElement;
 import org.ned.client.statistics.StatType;
 import org.ned.client.statistics.StatisticsManager;
 import org.ned.client.transfer.DownloadManager;
@@ -82,23 +81,21 @@ public class DownloadQueueScreen extends NedFormBase implements ActionListener, 
         } else if ( src == mRemoveCommand ) {
             if ( mTransfersList.getSelectedIndex() >= 0 ) {
                 if ( GeneralAlert.showQuestion( NedResources.TRA_REMOVE_DOWNLOAD_DIALOG )
-                     == GeneralAlert.RESULT_YES ) {
+                        == GeneralAlert.RESULT_YES ) {
                     DownloadTask tr = (DownloadTask)mTransfersList.getModel().
                             getItemAt( mTransfersList.getSelectedIndex() );
                     if ( tr != null ) {
                         tr.CancelAndRemove();
                         StatisticsManager.logEvent( StatType.DOWNLOAD_REMOVE, "Url="
-                                                                              + tr.
-                                getUrlPath()
-                                                                              + "Progress="
-                                                                              + tr.
-                                getPercentDownloaded() + ";" );
+                                + tr.getUrlPath()
+                                + "Progress="
+                                + tr.getPercentDownloaded() + ";" );
                     }
                 }
             }
         } else if ( src == mRemoveAllCommand ) {
             if ( GeneralAlert.showQuestion( NedResources.REMOVEALL_DOWNLOAD_DIALOG )
-                 == GeneralAlert.RESULT_YES ) {
+                    == GeneralAlert.RESULT_YES ) {
                 int size = mTransfersList.getModel().getSize();
                 for ( int i = size - 1; i >= 0; i-- ) {
                     DownloadTask tr = (DownloadTask)mTransfersList.getModel().
@@ -106,11 +103,9 @@ public class DownloadQueueScreen extends NedFormBase implements ActionListener, 
                     if ( tr != null ) {
                         tr.CancelAndRemove();
                         StatisticsManager.logEvent( StatType.DOWNLOAD_REMOVE, "Url="
-                                                                              + tr.
-                                getUrlPath()
-                                                                              + "Progress="
-                                                                              + tr.
-                                getPercentDownloaded() + ";" );
+                                + tr.getUrlPath()
+                                + "Progress="
+                                + tr.getPercentDownloaded() + ";" );
                     }
                 }
             }
@@ -119,13 +114,11 @@ public class DownloadQueueScreen extends NedFormBase implements ActionListener, 
                 DownloadTask tr = (DownloadTask)mTransfersList.getModel().
                         getItemAt( mTransfersList.getSelectedIndex() );
                 if ( tr != null ) {
-                    if ( tr.startDownload() ) {
+                    if ( tr.startDownload( false ) ) {
                         StatisticsManager.logEvent( StatType.DOWNLOAD_START, "Url="
-                                                                             + tr.
-                                getUrlPath()
-                                                                             + "Progress="
-                                                                             + tr.
-                                getPercentDownloaded() + ";" );
+                                + tr.getUrlPath()
+                                + "Progress="
+                                + tr.getPercentDownloaded() + ";" );
                     } else {
                         GeneralAlert.show( NedResources.TOO_MANY_DOWNLOADS, GeneralAlert.INFO );
                     }
@@ -138,11 +131,9 @@ public class DownloadQueueScreen extends NedFormBase implements ActionListener, 
                 if ( tr != null ) {
                     tr.stopDownload();
                     StatisticsManager.logEvent( StatType.DOWNLOAD_END, "Url="
-                                                                       + tr.
-                            getUrlPath()
-                                                                       + "Progress="
-                                                                       + tr.
-                            getPercentDownloaded() + ";" );
+                            + tr.getUrlPath()
+                            + "Progress="
+                            + tr.getPercentDownloaded() + ";" );
                 }
             }
         } else if ( src instanceof List ) {
@@ -152,19 +143,15 @@ public class DownloadQueueScreen extends NedFormBase implements ActionListener, 
                 if ( tr != null && tr.isDownloading() ) {
                     tr.stopDownload();
                     StatisticsManager.logEvent( StatType.DOWNLOAD_END, "Url="
-                                                                       + tr.
-                            getUrlPath()
-                                                                       + "Progress="
-                                                                       + tr.
-                            getPercentDownloaded() + ";" );
+                            + tr.getUrlPath()
+                            + "Progress="
+                            + tr.getPercentDownloaded() + ";" );
                 } else {
-                    if ( tr.startDownload() ) {
+                    if ( tr.startDownload( false ) ) {
                         StatisticsManager.logEvent( StatType.DOWNLOAD_START, "Url="
-                                                                             + tr.
-                                getUrlPath()
-                                                                             + "Progress="
-                                                                             + tr.
-                                getPercentDownloaded() + ";" );
+                                + tr.getUrlPath()
+                                + "Progress="
+                                + tr.getPercentDownloaded() + ";" );
                     } else {
                         GeneralAlert.show( NedResources.TOO_MANY_DOWNLOADS, GeneralAlert.INFO );
                     }
@@ -180,8 +167,7 @@ public class DownloadQueueScreen extends NedFormBase implements ActionListener, 
         addCommand( BackDownloadCommand.getInstance().getCommand() );
         addCommand( HelpCommand.getInstance().getCommand() );
         if ( mTransfersList.size() > 0 && mTransfersList.getSelectedIndex() >= 0 ) {
-            DownloadTask tr = (DownloadTask)mTransfersList.getModel().getItemAt( mTransfersList.
-                    getSelectedIndex() );
+            DownloadTask tr = (DownloadTask)mTransfersList.getModel().getItemAt( mTransfersList.getSelectedIndex() );
             if ( tr != null && tr.isDownloading() ) {
                 addCommand( mRemoveCommand );
                 addCommand( mRemoveAllCommand );

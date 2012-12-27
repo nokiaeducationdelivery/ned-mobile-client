@@ -13,6 +13,8 @@ package org.ned.client.transfer;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.Enumeration;
+import java.util.Vector;
 import javax.microedition.io.ConnectionNotFoundException;
 import javax.microedition.io.Connector;
 import javax.microedition.io.HttpConnection;
@@ -262,15 +264,34 @@ public class DownloadTask implements Runnable {
         }
     }
 
-    public boolean startDownload() {
+    public boolean startDownload( boolean aForceStart ) {
         boolean result = false;
         if ( NedMidlet.getInstance().getDownloadManager().countActiveDownload() < DownloadManager.MAX_DOWNLOADS ) {
-            mTransferThread = new Thread( this );
-            mTransferThread.setPriority( Thread.MIN_PRIORITY );
-            stopped = false;
-            mTransferThread.start();
-            result = true;
+            result = startDownload();
         }
+        if ( aForceStart ) {
+            //pause active downalod
+            Vector/*<DownloadTask>*/ queue = NedMidlet.getInstance().getDownloadManager().getMainDownloadQueue();
+            final Enumeration en = queue.elements();
+            while( en.hasMoreElements() ) {
+                DownloadTask dt = (DownloadTask)en.nextElement();
+                if ( dt.isDownloading() ) {
+                    dt.stopDownload();
+                    break;
+                }
+            }
+            result = startDownload();
+        }
+        return result;
+    }
+
+    private boolean startDownload() {
+        boolean result;
+        mTransferThread = new Thread( this );
+        mTransferThread.setPriority( Thread.MIN_PRIORITY );
+        stopped = false;
+        mTransferThread.start();
+        result = true;
         return result;
     }
 
