@@ -1,13 +1,13 @@
 /*******************************************************************************
-* Copyright (c) 2011 Nokia Corporation
-* All rights reserved. This program and the accompanying materials
-* are made available under the terms of the Eclipse Public License v1.0
-* which accompanies this distribution, and is available at
-* http://www.eclipse.org/legal/epl-v10.html
-*
-* Contributors:
-* Comarch team - initial API and implementation
-*******************************************************************************/
+ * Copyright (c) 2011 Nokia Corporation
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * Comarch team - initial API and implementation
+ *******************************************************************************/
 package org.ned.client.library;
 
 import com.sun.lwuit.events.DataChangedListener;
@@ -25,34 +25,34 @@ public class LibraryManager implements ListModel {
     public LibraryManager() {
     }
 
-    public boolean addLibrary(NedLibrary lib) {
+    public boolean addLibrary( NedLibrary lib ) {
         boolean retval = false;
-        if (findLibrary(lib.getId()) == null) {
-            addItem(lib);
+        if ( findLibrary( lib.getId() ) == null ) {
+            addItem( lib );
             retval = true;
         }
         //todo check duplicates;
         return retval;
     }
 
-    public NedLibrary getLibraryByUrl(String url) {
+    public NedLibrary getLibraryByUrl( String url ) {
         //find libraries
         return null;
     }
 
-    public NedLibrary findLibrary(String id) {
-        for (int i = 0; i < librariesList.size(); i++) {
-            if (((NedLibrary) librariesList.elementAt(i)).getId().equals(id)) {
-                return (NedLibrary) librariesList.elementAt(i);
+    public NedLibrary findLibrary( String id ) {
+        for ( int i = 0; i < librariesList.size(); i++ ) {
+            if ( ((NedLibrary)librariesList.elementAt( i )).getId().equals( id ) ) {
+                return (NedLibrary)librariesList.elementAt( i );
             }
         }
         return null;
     }
 
-    void selectLibrary(String id) {
-        for (int i = 0; i < librariesList.size(); i++) {
-            if (((NedLibrary) librariesList.elementAt(i)).getId().equals(id)) {
-                setSelectedIndex(i);
+    void selectLibrary( String id ) {
+        for ( int i = 0; i < librariesList.size(); i++ ) {
+            if ( ((NedLibrary)librariesList.elementAt( i )).getId().equals( id ) ) {
+                setSelectedIndex( i );
             }
         }
     }
@@ -63,18 +63,18 @@ public class LibraryManager implements ListModel {
 
     public Vector getVisibleLibrariesList() {
         Vector vLibraries = new Vector();
-        for (int i = 0; i < librariesList.size(); i++) {
-            if (((NedLibrary) librariesList.elementAt(i)).getVisible() == true) {
-                vLibraries.addElement((NedLibrary) librariesList.elementAt(i));
+        for ( int i = 0; i < librariesList.size(); i++ ) {
+            if ( ((NedLibrary)librariesList.elementAt( i )).getVisible() == true ) {
+                vLibraries.addElement( (NedLibrary)librariesList.elementAt( i ) );
             }
         }
         return vLibraries;
     }
 
-    public Object getItemAt(int i) {
+    public Object getItemAt( int i ) {
         return (i < librariesList.size() && i >= 0)
-                ? librariesList.elementAt(i)
-                : null;
+               ? librariesList.elementAt( i )
+               : null;
     }
 
     public int getSize() {
@@ -86,51 +86,51 @@ public class LibraryManager implements ListModel {
     }
 
     public NedLibrary getCurrentLibrary() {
-        if (librariesList.size() > 0) {
-            return (NedLibrary) librariesList.elementAt(selectedIndex);
+        if ( librariesList.size() > 0 ) {
+            return (NedLibrary)librariesList.elementAt( selectedIndex );
         } else {
             return null;
         }
     }
 
-    public void setSelectedIndex(int i) {
-        for (int j=0; j<selectionListeners.size(); j++) {
-            ((SelectionListener)selectionListeners.elementAt(j)).selectionChanged(selectedIndex, i);
+    public void setSelectedIndex( int i ) {
+        for ( int j = 0; j < selectionListeners.size(); j++ ) {
+            ((SelectionListener)selectionListeners.elementAt( j )).selectionChanged( selectedIndex, i );
         }
         selectedIndex = i;
     }
 
-    public void addDataChangedListener(DataChangedListener dl) {
-        dataChangeListeners.addElement(dl);
+    public void addDataChangedListener( DataChangedListener dl ) {
+        dataChangeListeners.addElement( dl );
 
     }
 
-    public void removeDataChangedListener(DataChangedListener dl) {
-        dataChangeListeners.removeElement(dl);
+    public void removeDataChangedListener( DataChangedListener dl ) {
+        dataChangeListeners.removeElement( dl );
     }
 
-    public void addSelectionListener(SelectionListener sl) {
-        selectionListeners.addElement(sl);
+    public void addSelectionListener( SelectionListener sl ) {
+        selectionListeners.addElement( sl );
     }
 
-    public void removeSelectionListener(SelectionListener sl) {
-        selectionListeners.removeElement(sl);
+    public void removeSelectionListener( SelectionListener sl ) {
+        selectionListeners.removeElement( sl );
     }
 
-    public void addItem(Object o) {
-        librariesList.addElement(o);
-        for (int i = 0; i < dataChangeListeners.size(); i++) {
-            ((DataChangedListener) dataChangeListeners.elementAt(i)).dataChanged(DataChangedListener.ADDED, librariesList.size() - 1);
+    public void addItem( Object o ) {
+        librariesList.addElement( o );
+        for ( int i = 0; i < dataChangeListeners.size(); i++ ) {
+            ((DataChangedListener)dataChangeListeners.elementAt( i )).dataChanged( DataChangedListener.ADDED, librariesList.
+                    size() - 1 );
         }
     }
 
-    public void removeItem(int index) {
-        if(index >= 0 && index < librariesList.size() )
-        {
-        librariesList.removeElementAt(index);
-        for (int i = 0; i < dataChangeListeners.size(); i++) {
-            ((DataChangedListener) dataChangeListeners.elementAt(i)).dataChanged(DataChangedListener.REMOVED, index);
-        }
+    public void removeItem( int index ) {
+        if ( index >= 0 && index < librariesList.size() ) {
+            librariesList.removeElementAt( index );
+            for ( int i = 0; i < dataChangeListeners.size(); i++ ) {
+                ((DataChangedListener)dataChangeListeners.elementAt( i )).dataChanged( DataChangedListener.REMOVED, index );
+            }
         }
     }
 }

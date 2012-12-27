@@ -22,13 +22,14 @@ import org.ned.client.view.GeneralAlert;
 
 public class SettingsManager {
 
+    private static final String NO = "no";
+    private static final String YES = "yes";
     private String userName = null;
     private String dlTime = "06:30AM";
     private boolean dlOn = false;
     private boolean dlAutomatic = false;
     private boolean autoStatSend = true;
     private LibraryManager libraryManager = null;
-    int oldUrlSelection = 0;
     private int mSortBy = NedConsts.SortOrder.NONE;
     private boolean mShowTips = true;
 
@@ -151,14 +152,14 @@ public class SettingsManager {
                             setDlState( false );
                         }
                         String auto = element.getAttributeValue( "", "automatic" );
-                        if ( (auto != null) && (auto.equals( "yes" )) ) {
+                        if ( (auto != null) && (auto.equals( YES )) ) {
                             setDlAutomatic( true );
                         } else {
                             setDlAutomatic( false );
                         }
                     } else if ( element.getName().equals( "Statistics" ) ) {
                         if ( element.getAttributeValue( "", "auto" ) != null
-                                && element.getAttributeValue( "", "auto" ).equals( "no" ) ) {
+                                && element.getAttributeValue( "", "auto" ).equals( NO ) ) {
                             setAutoStatSend( false );
                         } else {
                             setAutoStatSend( true );
@@ -166,7 +167,7 @@ public class SettingsManager {
                     } else if ( element.getName().equals( "Sorting" ) ) {
                         if ( element.getAttributeValue( "", "by" ) != null ) {
                             String valStr = element.getAttributeValue( "", "by" );
-                            int val = NedConsts.SortOrder.NONE;
+                            int val;
                             try {
                                 val = Integer.parseInt( valStr );
                                 setSortBy( val );
@@ -178,7 +179,7 @@ public class SettingsManager {
                         if ( element.getAttributeValue( "", "show" ) != null ) {
                             String valStr = element.getAttributeValue( "", "show" );
                             try {
-                                if ( valStr != null && valStr.equals( "yes" ) ) {
+                                if ( valStr != null && valStr.equals( YES ) ) {
                                     setShowTips( true );
                                 } else {
                                     setShowTips( false );
@@ -213,22 +214,22 @@ public class SettingsManager {
         if ( getDlState() ) {
             state = "on";
         }
-        String automatic = "no";
+        String automatic = NO;
         if ( getDlAutomatic() ) {
-            automatic = "yes";
+            automatic = YES;
         }
         schedule.setAttribute( "", "state", state );
         schedule.setAttribute( "", "automatic", automatic );
 
-        String autoSend = "yes";
+        String autoSend = YES;
         if ( !getAutoStatSend() ) {
-            autoSend = "no";
+            autoSend = NO;
         }
         stats.setAttribute( "", "auto", autoSend );
 
         sort.setAttribute( "", "by", String.valueOf( mSortBy ) );
 
-        showTips.setAttribute( "", "show", mShowTips ? "yes" : "no" );
+        showTips.setAttribute( "", "show", mShowTips ? YES : NO );
 
         Element[] libraries = createLibraryXml( doc );
         for ( int i = 0; i < libraries.length; i++ ) {
@@ -253,7 +254,7 @@ public class SettingsManager {
         Element[] retval = new Element[librariesList.size()];
         for ( int i = 0; i < librariesList.size(); i++ ) {
             Element pLibrary = doc.createElement( "", "Library" );
-            Element pElement = null;
+            Element pElement;
 
             pElement = doc.createElement( "", "title" );
             pElement.addChild( Node.TEXT, ((NedLibrary)librariesList.elementAt( i )).getTitle() );

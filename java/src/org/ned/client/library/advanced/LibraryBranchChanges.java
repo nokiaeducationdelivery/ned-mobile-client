@@ -15,7 +15,6 @@ import java.util.Vector;
 public class LibraryBranchChanges {
 
     private Vector mAddedElem;
-    //private Vector removed = new Vector( 4, 4 );
 
     public LibraryBranchChanges() {
         mAddedElem = new Vector( 4, 4 );

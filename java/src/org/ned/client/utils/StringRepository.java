@@ -19,7 +19,7 @@ public class StringRepository {
     public static final String TAG_TEXT = "TEXT";
     public static final String TAG_FILE = "FILEEX";
     public static final String TAG_CHILDS = "CHILDS";
-    public static final String  ATTRIBUTE_TYPE = "type";
+    public static final String ATTRIBUTE_TYPE = "type";
     public static final String ATTRIBUTE_ID = "id";
     public static final String ATTRIBUTE_PARENT = "parentid";
     public static final String HEADER_NONRECURSIVE = "nonrecursive";

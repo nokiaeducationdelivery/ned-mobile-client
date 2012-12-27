@@ -88,7 +88,7 @@ public class LibraryChanges {
                 is = fc.openInputStream();
 
                 byte[] buffer = new byte[1024];
-                int bytesRead = -1;
+                int bytesRead;
                 while ( (bytesRead = is.read( buffer )) > 0 ) {
                     builder.append( new String( buffer, 0, bytesRead, "UTF-8" ) );
                 }

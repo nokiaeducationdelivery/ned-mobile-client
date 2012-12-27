@@ -167,9 +167,9 @@ public class NedMidlet extends javax.microedition.midlet.MIDlet {
         } catch ( InterruptedException ex ) {
         }
         imei = System.getProperty( "com.nokia.mid.imei" );
-        xm = new XmlManager( this );
+        xm = new XmlManager();
 
-        boolean isOk = false;
+        boolean isOk;
         try {
             isOk = NedIOUtils.fileExists( NedIOUtils.getStorage() );
         } catch ( Exception ex ) {
@@ -292,11 +292,6 @@ public class NedMidlet extends javax.microedition.midlet.MIDlet {
 
         StatisticsManager.init( NedIOUtils.getUserRootDirectory() );
         StatisticsManager.logEvent( StatType.USER_LOGGED, accountManager.getCurrentUser().login );
-
-//        if ( getSettingsManager().isSchedulerOn() ) {
-//            getScheduler().startTask();
-//        }
-
 
         if ( NedMidlet.getSettingsManager().getShowTips() ) {
             new ShowTipsView().show();

@@ -38,8 +38,8 @@ public class LibraryHelpers {
         Vector text = new Vector( 4, 4 );
         Vector rest = new Vector( 4, 4 );
 
-        LibraryElement content = null;
-        String type = null;
+        LibraryElement content;
+        String type;
         Enumeration en = aMediaList.elements();
         while ( en.hasMoreElements() ) {
             content = (LibraryElement)en.nextElement();
