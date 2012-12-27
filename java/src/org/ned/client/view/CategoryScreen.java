@@ -29,8 +29,7 @@ public class CategoryScreen extends NedFormBase implements ActionListener {
         super( id );
         setNedTitle( this.mNewLibModel != null ? mNewLibModel.getName() : " " );
 
-        mCategoryList = new NedList( this.mNewLibModel != null ? mNewLibModel.
-                getChildern() : new Vector( 0 ) );
+        mCategoryList = new NedList( this.mNewLibModel != null ? mNewLibModel.getChildern() : new Vector( 0 ) );
         mCategoryList.setContextMenu( new CategoryContextMenu( mCategoryList, 2 ) );
         mCategoryList.setRenderer( new CategoryListCellRenderer() );
         mCategoryList.setSelectedIndex( 0 );
@@ -56,15 +55,13 @@ public class CategoryScreen extends NedFormBase implements ActionListener {
         if ( src == BackCategoryCommand.getInstance().getCommand()
                 || evt.getKeyEvent() == Display.GAME_LEFT ) {
             if ( mNewLibModel != null ) {
-                BackCategoryCommand.getInstance().execute( mNewLibModel.
-                        getParent().getId() );
+                BackCategoryCommand.getInstance().execute( mNewLibModel.getParent().getId() );
             } else {
                 BackToMainScreenCommand.getInstance().execute( null );
             }
         } else if ( src instanceof List || evt.getKeyEvent()
                 == Display.GAME_RIGHT ) {
-            LibraryElement content = (LibraryElement)mCategoryList.
-                    getSelectedItem();
+            LibraryElement content = (LibraryElement)mCategoryList.getSelectedItem();
             if ( content != null ) {
                 BrowseCategoryCommand.getInstance().execute( content.getId() );
             }
@@ -74,8 +71,7 @@ public class CategoryScreen extends NedFormBase implements ActionListener {
                 getCommand() ) {
             DownloadAllCategoryScreenCommand.getInstance().execute( mCategoryList );
         } else if ( src == SearchDialogCommand.getInstance().getCommand() ) {
-            Content content = ((LibraryElement)mCategoryList.getSelectedItem()).
-                    getDetails();
+            Content content = ((LibraryElement)mCategoryList.getSelectedItem()).getDetails();
             if ( content != null ) {
                 SearchDialogCommand.getInstance().execute( content.getId() );
             }
@@ -87,5 +83,9 @@ public class CategoryScreen extends NedFormBase implements ActionListener {
         } else if ( src == DownloadsQueueViewCommand.getInstance().getCommand() ) {
             DownloadsQueueViewCommand.getInstance().execute( mNewLibModel );
         }
+    }
+
+    protected void sizeChanged( int w, int h ) {
+        mCategoryList.setPreferredW( w );
     }
 }

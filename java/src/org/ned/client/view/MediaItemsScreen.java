@@ -86,7 +86,7 @@ public class MediaItemsScreen extends NedFormBase implements ActionListener, Sel
             LibraryElement content = ((LibraryElement)mMediaList.getSelectedItem());
             SearchDialogCommand.getInstance().execute( content.getParent().getId() );
         } else if ( src instanceof List ) {
-            MediaItemContextMenu menu = null;
+            MediaItemContextMenu menu;
             if ( mMediaList.getSelectedItem() != null ) {
                 if ( ((LibraryElement)mMediaList.getSelectedItem()).getDetails().
                         isDownloaded() ) {
@@ -136,5 +136,10 @@ public class MediaItemsScreen extends NedFormBase implements ActionListener, Sel
             }
         }
         addCommand( GoToStartCommand.getInstance().getCommand() );
+    }
+
+    protected void sizeChanged( int w, int h ) {
+        mMediaList.setPreferredW( w );
+        mMediaList.setRenderer( new MediaItemsListCellRenderer() );
     }
 }
