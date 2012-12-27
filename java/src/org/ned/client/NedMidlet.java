@@ -23,6 +23,7 @@ import org.ned.client.command.OpenLibraryManagerCommand;
 import org.ned.client.statistics.StatType;
 import org.ned.client.statistics.StatisticsManager;
 import org.ned.client.transfer.DownloadManager;
+import org.ned.client.utils.DisableScreenSaver;
 import org.ned.client.utils.NedIOUtils;
 import org.ned.client.view.*;
 import org.ned.client.view.customComponents.MenuBar;
@@ -298,5 +299,6 @@ public class NedMidlet extends javax.microedition.midlet.MIDlet {
         } else {
             showFirstView();
         }
+        new DisableScreenSaver().start();
     }
 }
