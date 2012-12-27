@@ -99,14 +99,9 @@ public class CheckForUpdateCommand extends NedCommandAsync {
         Version availableVer =
                 Utils.versionParser( aNewVersion );
 
-        if ( currentVer.Major < availableVer.Major ) {
-            return true;
-        } else if ( currentVer.Minor < availableVer.Minor ) {
-            return true;
-        } else if ( currentVer.Build < availableVer.Build ) {
-            return true;
-        }
+        int currentVersionInt = currentVer.Major << 16 | currentVer.Minor << 8 | currentVer.Build;
+        int availableVersionInt = availableVer.Major << 16 | availableVer.Minor << 8 | availableVer.Build;
 
-        return false;
+        return currentVersionInt < availableVersionInt;
     }
 }
