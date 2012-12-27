@@ -45,7 +45,7 @@ public class BackDownloadCommand extends BackNedCommand {
         } else if ( currentContent.getType().equals( NedConsts.NedContentType.CATEGORY ) ) {
             new MediaItemsScreen( currentContent.getId() ).showBack();
         } else if ( currentContent.isMediaType() ) {
-            new MediaItemsScreen( currentContent.getParent().getId() ).showBack();
+            new MediaItemsScreen( currentContent ).showBack();
         }
     }
 }

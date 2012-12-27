@@ -33,7 +33,7 @@ public class MediaItemsScreen extends NedFormBase implements ActionListener, Sel
 
         mMediaList = new List( mNewLibModel != null
                                ? LibraryHelpers.sortBy( mNewLibModel.getChildern(), NedMidlet.getSettingsManager().
-                                                        getSortBy() ) : new Vector( 0 ) );
+                getSortBy() ) : new Vector( 0 ) );
         mMediaList.setFixedSelection( List.FIXED_NONE );
         mMediaList.setSelectedIndex( 0 );
         mMediaList.setRenderer( new MediaItemsListCellRenderer() );
@@ -45,6 +45,11 @@ public class MediaItemsScreen extends NedFormBase implements ActionListener, Sel
         addGameKeyListener( Display.GAME_FIRE, this );
         mMediaList.addActionListener( this );
         addCommandListener( this );
+    }
+
+    public MediaItemsScreen( LibraryElement mediaElement ) {
+        this( mediaElement.getParent().getId() );
+        mMediaList.setSelectedItem( mediaElement );
     }
 
     public void actionPerformed( ActionEvent evt ) {
