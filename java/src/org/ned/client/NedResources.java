@@ -238,6 +238,10 @@ public class NedResources {
     public static final String SORT_NONE = Localization.getMessage( "SORT_NONE" );
     public static final String SORT_BY_TYPE = Localization.getMessage( "SORT_BY_TYPE" );
     public static final String MAX_DOWNLOAD_REACHED_QUESTION = Localization.getMessage( "MAX_DOWNLOAD_REACHED_QUESTION" );
+    public static final String ZOOM_IN = Localization.getMessage( "ZOOM_IN" );
+    public static final String ZOOM_OUT = Localization.getMessage( "ZOOM_OUT" );
+    public static final String FULLSCREEN = Localization.getMessage( "FULLSCREEN" );
+    public static final String MAX_ZOOM = Localization.getMessage( "MAX_ZOOM" );
 
     public NedResources() {
     }
