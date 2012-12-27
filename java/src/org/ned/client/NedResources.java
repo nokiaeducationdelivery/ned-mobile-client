@@ -260,6 +260,8 @@ public class NedResources {
     public static final String TIPS_TRICKS = Localization.getMessage( "TIPS_TRICKS" );
     public static final String NEXT = Localization.getMessage( "NEXT" );
     public static final String HIDE = Localization.getMessage( "HIDE" );
+    public static final String LIBRARY_TO_BIG = Localization.getMessage( "LIBRARY_TO_BIG" );
+    public static final String LOADING = Localization.getMessage( "LOADING" );
 
     public NedResources() {
     }

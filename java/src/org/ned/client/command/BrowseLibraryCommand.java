@@ -16,6 +16,7 @@ import org.ned.client.NedConsts.NedLocalConst;
 import org.ned.client.NedMidlet;
 import org.ned.client.NedResources;
 import org.ned.client.library.NedLibrary;
+import org.ned.client.library.VisibleLibraryModel;
 import org.ned.client.statistics.StatType;
 import org.ned.client.statistics.StatisticsManager;
 import org.ned.client.utils.ContentNotExistException;
@@ -43,10 +44,12 @@ public class BrowseLibraryCommand extends NedCommand {
 
         NedLibrary selected = NedMidlet.getSettingsManager().getLibraryManager().
                 findLibrary( id );
-        if ( NedIOUtils.fileExists( selected.getFileUri() ) ) {
+        if ( selected == null ) {
+           GeneralAlert.show( NedResources.LIBRARY_TO_BIG, GeneralAlert.ERROR, true);
+        } else if ( NedIOUtils.fileExists( selected.getFileUri() ) ) {
             NedIOUtils.createDirectory( selected.getDirUri() + "/"
                     + NedLocalConst.VIDEOSDIR );
-            new CatalogScreen( id ).show();
+                new CatalogScreen( id ).show();
         } else {
             WaitingScreen.show( NedResources.GLOBAL_CONNECTING );
             LoadLibraryRunnable vrr = new LoadLibraryRunnable( selected );
@@ -93,8 +96,15 @@ public class BrowseLibraryCommand extends NedCommand {
                 return;
             }
             if ( success ) {
-                library.setCatalogCount();
-                new CatalogScreen( library.getId() ).show();
+                try{
+                    library.setCatalogCount();
+                    new CatalogScreen( library.getId() ).show();
+                } catch (OutOfMemoryError ex) {
+                    GeneralAlert.show( NedResources.LIBRARY_TO_BIG, GeneralAlert.ERROR, true);
+                    NedMidlet.getSettingsManager().getLibraryManager().removeItem(
+                            NedMidlet.getSettingsManager().getLibraryManager().findLibraryIndex(library.getId()));
+                    NedIOUtils.removeFile( library.getFileUri() );
+                }
             } else {
                 GeneralAlert.show( NedResources.DLM_CONNECTION_FAILED, GeneralAlert.WARNING, true );
             }

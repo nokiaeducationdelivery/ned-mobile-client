@@ -56,9 +56,6 @@ public class NedLibrary {
             if ( pelement.getName().equals( "version" ) ) {
                 this.version = pelement.getText( 0 );
             }
-
-
-            setCatalogCount();
         }
     }
 

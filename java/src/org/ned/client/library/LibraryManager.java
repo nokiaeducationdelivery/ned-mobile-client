@@ -49,6 +49,15 @@ public class LibraryManager implements ListModel {
         return null;
     }
 
+    public int findLibraryIndex( String id ) {
+        for ( int i = 0; i < librariesList.size(); i++ ) {
+            if ( ((NedLibrary)librariesList.elementAt( i )).getId().equals( id ) ) {
+                return i;
+            }
+        }
+        return -1;
+    }
+
     void selectLibrary( String id ) {
         for ( int i = 0; i < librariesList.size(); i++ ) {
             if ( ((NedLibrary)librariesList.elementAt( i )).getId().equals( id ) ) {

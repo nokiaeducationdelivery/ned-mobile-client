@@ -93,9 +93,18 @@ public class MainScreen extends NedFormBase implements ActionListener {
         if ( src == librariesList || evt.getKeyEvent() == Display.GAME_RIGHT ) {
             NedLibrary selectedLibrary = (NedLibrary)librariesList.
                     getSelectedItem();
-            if ( selectedLibrary != null ) {
-                BrowseLibraryCommand.getInstance().execute( selectedLibrary.
-                        getId() );
+            if (selectedLibrary != null) {
+                try {
+                    BrowseLibraryCommand.getInstance().execute(selectedLibrary.getId());
+                } catch (OutOfMemoryError ex) {
+                    GeneralAlert.show( NedResources.LIBRARY_TO_BIG, GeneralAlert.ERROR, true);
+                    NedMidlet.getSettingsManager().getLibraryManager().removeItem(
+                            NedMidlet.getSettingsManager().getLibraryManager().findLibraryIndex(selectedLibrary.getId()));
+                    NedIOUtils.removeFile( selectedLibrary.getFileUri() );
+                    librariesList.setModel(new VisibleLibraryModel(
+                                                    NedMidlet.getSettingsManager().getLibraryManager()));
+                    librariesList.repaint();
+                }
             } else {
                 GeneralAlert.show( NedResources.LIBRARY_NOT_EXISTS, GeneralAlert.INFO );
             }

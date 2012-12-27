@@ -143,7 +143,17 @@ public class SettingsManager {
                 if ( rootElement.getType( i ) == Node.ELEMENT ) {
                     Element element = rootElement.getElement( i );
                     if ( element.getName().equals( "Library" ) ) {
-                        libraryManager.addLibrary( new NedLibrary( element ) );
+                        NedLibrary lib = null;
+                        try {
+                            lib = new NedLibrary(element);
+                            lib.setCatalogCount();
+                            libraryManager.addLibrary( lib );
+                        } catch (OutOfMemoryError ex) {
+                            GeneralAlert.show(
+                                    NedResources.LIBRARY_TO_BIG + ( lib!= null ? ("\n" + lib.getTitle()) : "" ),
+                                               GeneralAlert.ERROR, true);
+                            NedIOUtils.removeFile( lib.getFileUri() );
+                        }
                     } else if ( element.getName().equals( "Schedule" ) ) {
                         setDlTime( element.getText( 0 ) );
                         if ( element.getAttributeValue( "", "state" ).equals( "on" ) ) {

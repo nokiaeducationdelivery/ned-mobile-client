@@ -286,7 +286,8 @@ public class NedMidlet extends javax.microedition.midlet.MIDlet {
     }
 
     public void continueApploading() {
-        NedIOUtils.createDirectory( NedIOUtils.getUserRootDirectory() );
+        WaitingScreen.show(NedResources.LOADING);
+        NedIOUtils.createDirectory(NedIOUtils.getUserRootDirectory());
         settingsManager.loadSettings();
         downloadManager = new DownloadManager( this );
         downloadManager.init();
@@ -294,11 +295,11 @@ public class NedMidlet extends javax.microedition.midlet.MIDlet {
         StatisticsManager.init( NedIOUtils.getUserRootDirectory() );
         StatisticsManager.logEvent( StatType.USER_LOGGED, accountManager.getCurrentUser().login );
 
-        if ( NedMidlet.getSettingsManager().getShowTips() ) {
+        new DisableScreenSaver().start();
+        if (NedMidlet.getSettingsManager().getShowTips()) {
             new ShowTipsView().show();
         } else {
             showFirstView();
         }
-        new DisableScreenSaver().start();
     }
 }
