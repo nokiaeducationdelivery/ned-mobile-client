@@ -10,14 +10,14 @@
 *******************************************************************************/
 package org.ned.client.utils;
 
-import com.sun.lwuit.Display;
+import com.nokia.mid.ui.DeviceControl;
 
 public class DisableScreenSaver extends Thread {
   public void run() {
     while(true) {
-            Display.getInstance().flashBacklight( 1 );
+            DeviceControl.setLights(0, 100);
       try {
-            Thread.sleep(4000);   // minimum screen saver timeout in UI is 5 seconds
+            Thread.sleep(4500);   // minimum screen saver timeout in UI is 5 seconds
       } catch (InterruptedException e) {
       }
     }
